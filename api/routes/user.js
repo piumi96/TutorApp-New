@@ -168,7 +168,8 @@ router.post('/login', (req, res) => {
             else {
                 if (result.length == 0) {
                     res.send({
-                        msg: 'Email does not exist'
+                        success: false, 
+                        token: null
                     });
                 }
                 else {
@@ -222,12 +223,14 @@ router.post('/login', (req, res) => {
                                     console.log(token);
 
                                     res.json({
-                                        token: token,
+                                        success: true,
+                                        token: token
                                     });
                                 }
                                 else {
                                     res.send({
-                                        token: null,
+                                        success: false,
+                                        token: null
                                     })
                                 }
 
@@ -252,7 +255,8 @@ router.post('/login', (req, res) => {
             else {
                 if (result.length == 0) {
                     res.send({
-                        msg: 'Email does not exist'
+                        success: false,
+                        token: null
                     });
                 }
                 else {
@@ -296,11 +300,13 @@ router.post('/login', (req, res) => {
                                     console.log(token);
 
                                     res.json({
-                                        token: token,
+                                        success: true,
+                                        token: token
                                     });
                                 }
                                 else {
                                     res.send({
+                                        success: false,
                                         token: null
                                     })
                                 }
@@ -330,9 +336,14 @@ router.post('/google-login', passport.authenticate('google-login', {
 
     if(role==="tutor"){
         var sql = "select * from Tutor where email='"+user.email+"'";
-        var token = null;
         con.query(sql, (err, result) => {
-            if(err) throw err; 
+            if(err) {
+                throw err;
+                res.json({
+                    success: false,
+                    token: null
+                });
+            } 
             else{  
                 var fname = result[0].FirstName;
                 var lname = result[0].LastName;
@@ -371,21 +382,27 @@ router.post('/google-login', passport.authenticate('google-login', {
                     status: status
                 }
 
-                token = jwt.sign({ tutor }, 'secret_key');
+                var token = jwt.sign({ tutor }, 'secret_key');
+                res.json({
+                    success: true,
+                    token: token
+                });
             }
 
-            res.json({
-                token: token
-            });
         });
     }
 
     else if(role==="student"){
         var sql = "select * from Tutor where email='"+user.email+"'";
-        var token = null;
         
         con.query(sql, (err, result) => {
-            if(err) throw err;
+            if(err) {
+                throw err;
+                res.json({
+                    success: false,
+                    token: null
+                });
+            }
             else{
                 var name = result[0].name;
                 var status =result[0].acc_status;
@@ -413,13 +430,13 @@ router.post('/google-login', passport.authenticate('google-login', {
                     acc_status: status,
                     role: role
                 };
-                token = jwt.sign({ student }, 'secret_key');
-
+                var token = jwt.sign({ student }, 'secret_key');
+                res.json({
+                    success: true,
+                    token: token
+                });
             }
 
-            res.json({
-                token: token
-            });
         });
     }
 });

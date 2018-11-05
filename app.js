@@ -10,6 +10,7 @@ const keys = require('./config/keys');
 const userRoutes = require('./api/routes/user');
 const profileEdit = require('./api/routes/profileEdit');
 const searchRoutes = require('./api/routes/search');
+const reviews = require('./api/routes/review');
 const passportSetup = require('./config/passport-setup');
 
 const app = express();
@@ -31,29 +32,6 @@ con.connect((err) => {
 
 });
 
-//app.use(cors());
-
-
-/* app.use(function (req, res, next) {
-
-    // Website you wish to allow to connect
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200/');
-
-    // Request methods you wish to allow
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-
-    // Request headers you wish to allow
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-
-    // Set to true if you need the website to include cookies in the requests sent
-    // to the API (e.g. in case you use sessions)
-    res.setHeader('Access-Control-Allow-Credentials', true);
-
-    // Pass to next layer of middleware
-    next();
-}); */
-
-//app.use(session);
 app.use(cookieSession({
     maxAge: 24*60*60*1000,
     keys: [keys.session.cookieKey]
@@ -65,6 +43,7 @@ app.use(passport.session());
 app.use('/', userRoutes);
 app.use('/', profileEdit);
 app.use('/', searchRoutes);
+app.use('/', reviews);
 
 app.use((req, res, next)=>{
     const error = {
