@@ -4,7 +4,6 @@ const jwt = require('jsonwebtoken');
 const cookieSession = require('cookie-session');
 const passport = require('passport');
 const cors = require('cors');
-const session = require("express-session");
 
 const con = require('./databse/db');
 const keys = require('./config/keys');

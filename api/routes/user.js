@@ -60,9 +60,8 @@ router.post('/register', (req, res) => {
     });
 });
 
-router.get('/google-student', passport.authenticate('google', {
+/* router.get('/google-tutor', passport.authenticate('google'),{
     scope: ['email']
-    //redirected to search
 }), (req, res) => {
     req.session.email = req.user.email;
     req.session.has = req.user.has;
@@ -71,7 +70,91 @@ router.get('/google-student', passport.authenticate('google', {
         has: req.user.has,
         success: req.user.success
     });
+} */
+
+router.get('/google-reg', passport.authenticate('google', {
+    scope: ['email']
     
+}), (req, res) => {
+    var role = "tutor";
+    req.session.email = req.user.email;
+    var email = req.session.email;
+    const user = {
+        fname: email.name.givenName,
+        lname: email.name.familyName,
+        email: email.emails[0].value 
+    };
+    
+    console.log(email);
+
+    if(role === "tutor"){
+
+        var sql = "insert into Tutor(FirstName, LastName, email) values('"+ user.fname+"','"+user.lname+"','"+user.email+"')";
+        var sql1 = "select * from Tutor where email='"+user.email+"'";
+
+        con.query(sql1, (err, result) => {
+            if(err) throw err;
+            else{
+                if (result.length > 0) {
+                    res.json({
+                        has: true,
+                        success: false
+                    });
+                }
+                else{
+                    con.query(sql, (err, result) => {
+                        if(err){
+                            res.json({
+                                has: false,
+                                success: false
+                            });
+                        }
+                        else{
+                            res.json({
+                                has: false,
+                                success: true
+                            });
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    else if(role === "student"){
+
+        var sql = "insert into Student(name, email) values('" + user.fname + " " + user.lname + "', '" + user.email + "')"
+        var sql1 = "select * from Student where email='" + user.email + "'";
+
+        con.query(sql1, (err, result) => {
+            if(err) throw err;
+            else{
+                if (result.length > 0) {
+                    res.json({
+                        has: true,
+                        success: false
+                    });
+                }
+                else{
+                    con.query(sql, (err, result) => {
+                        if(err){
+                            res.json({
+                                has: false,
+                                success: false
+                            });
+                        }
+                        else{
+                            res.json({
+                                has: false,
+                                success: true
+                            });
+                        }
+                    });
+                }
+            }
+        });
+    }
+   
 });
 
 
