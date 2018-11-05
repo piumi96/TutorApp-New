@@ -8,7 +8,6 @@ const user = require('../../config/passport-setup');
 const router = express.Router();
 var saltRounds = 10;
 
-
 router.get('/', (req, res) => {
     res.json({
         response: 'It works!'
