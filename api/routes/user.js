@@ -318,7 +318,7 @@ router.get('/google-login', passport.authenticate('google-login', {
     scope: ['email']
     
 }), (req, res) => {
-    var role = "tutor";
+    var role = "student";
 
     req.session.email = req.user.email;
     var email = req.session.email;
@@ -370,6 +370,49 @@ router.get('/google-login', passport.authenticate('google-login', {
                 }
 
                 token = jwt.sign({ tutor }, 'secret_key');
+            }
+
+            res.json({
+                token: token
+            });
+        });
+    }
+
+    else if(role==="student"){
+        var sql = "select * from Tutor where email='"+user.email+"'";
+        var token = null;
+        
+        con.query(sql, (err, result) => {
+            if(err) throw err;
+            else{
+                var name = result[0].name;
+                var status =result[0].acc_status;
+                var location, mobile;
+
+                if (result[0].location) {
+                    location = result[0].location;
+                }
+                else {
+                    location = '';
+                }
+
+                if (result[0].mobile) {
+                    mobile = result[0].mobile;
+                }
+                else {
+                    mobile = '';
+                } 
+
+                var student = {
+                    name: name,
+                    location: location,
+                    mobile: mobile,
+                    email: user.email,
+                    acc_status: status,
+                    role: role
+                };
+                token = jwt.sign({ student }, 'secret_key');
+
             }
 
             res.json({
