@@ -60,17 +60,7 @@ router.post('/register', (req, res) => {
     });
 });
 
-/* router.get('/google-tutor', passport.authenticate('google'),{
-    scope: ['email']
-}), (req, res) => {
-    req.session.email = req.user.email;
-    req.session.has = req.user.has;
-    req.session.success = req.user.success;
-    res.json({
-        has: req.user.has,
-        success: req.user.success
-    });
-} */
+
 
 router.get('/google-reg', passport.authenticate('google', {
     scope: ['email']
@@ -322,6 +312,71 @@ router.post('/login', (req, res) => {
         });
     }
 
+});
+
+router.get('/google-login', passport.authenticate('google-login', {
+    scope: ['email']
+    
+}), (req, res) => {
+    var role = "tutor";
+
+    req.session.email = req.user.email;
+    var email = req.session.email;
+    var user = {
+        email: email.emails[0].value
+    };
+
+    if(role==="tutor"){
+        var sql = "select * from Tutor where email='"+user.email+"'";
+        var token = null;
+        con.query(sql, (err, result) => {
+            if(err) throw err; 
+            else{  
+                var fname = result[0].FirstName;
+                var lname = result[0].LastName;
+                var status = result[0].acc_status;
+                var location, mobile, subject;
+    
+                if (result[0].Location) {
+                    location = result[0].Location;
+                }
+                else {
+                    location = '';
+                }
+    
+                if (result[0].Mobile) {
+                    mobile = result[0].Mobile;
+                }
+                else {
+                    mobile = '';
+                }
+    
+                if (result[0].Subject) {
+                    subject = result[0].Subject;
+                }
+                else {
+                    subject = '';
+                }
+
+                const tutor = {
+                    fname: fname,
+                    lname: lname,
+                    mobile: mobile,
+                    subject: subject,
+                    location: location,
+                    role: role,
+                    email: user.email,
+                    status: status
+                }
+
+                token = jwt.sign({ tutor }, 'secret_key');
+            }
+
+            res.json({
+                token: token
+            });
+        });
+    }
 });
 
 module.exports = router;

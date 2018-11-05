@@ -12,7 +12,7 @@
         done(null, user);
     });
     
-    passport.use(
+    passport.use('google',
         new GoogleStrategy({
             //options for google strategy
             callbackURL: '/google-reg',
@@ -25,6 +25,21 @@
                 });     
         
         })
+    );
+
+    passport.use('google-login',
+        new GoogleStrategy({
+             //options for google strategy
+             callbackURL: '/google-login',
+             clientID: keys.google.clientID,
+             clientSecret: keys.google.clientSecret
+         }, (accessToken, refreshToken, email, done) => {
+             //passport callback function                
+                 done(null, {
+                     email: email
+                 });     
+         
+         })
     )
 
 
