@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const cookieSession = require('cookie-session');
 const passport = require('passport');
-const cors = require('cors');
+//const cors = require('cors');
 
 const con = require('./databse/db');
 const keys = require('./config/keys');
@@ -15,11 +15,11 @@ const passportSetup = require('./config/passport-setup');
 
 const app = express();
 
-app.use(function(req, res, next) {
+/* app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
-});
+}); */
 
 app.use(bodyParser.urlencoded({ extends: false }));
 app.use(bodyParser.json());

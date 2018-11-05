@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const con = require('../../databse/db');
+const mySQLEvents = require('mysql-events');
 
 router.post('/review', (req, res) => {
     var student = req.body.student;
@@ -11,7 +12,7 @@ router.post('/review', (req, res) => {
     con.query(sql, (err, result) => {
         if(err) throw err;
         else{
-            var sql1 = "select*from Review";
+            var sql1 = "select*from Review where tutor='"+tutor+"'";
             con.query(sql1, (err, result) => {
                 if(err) throw err;
                 else{
