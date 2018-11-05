@@ -64,13 +64,14 @@ router.get('/google-student', passport.authenticate('google', {
     scope: ['email']
     //redirected to search
 }), (req, res) => {
-    const user = require('../../config/passport-setup')
-    console.log(user);
+    req.session.email = req.user.email;
+    req.session.has = req.user.has;
+    req.session.success = req.user.success;
     res.json({
-        has: user.has,
-        success: user.success
-    }); 
-    //console.log("inside function\n" + has);
+        has: req.user.has,
+        success: req.user.success
+    });
+    
 });
 
 

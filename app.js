@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const cookieSession = require('cookie-session');
 const passport = require('passport');
 const cors = require('cors');
+const session = require("express-session");
 
 const con = require('./databse/db');
 const keys = require('./config/keys');
@@ -25,6 +26,7 @@ con.connect((err) => {
 
 });
 
+//app.use(session);
 app.use(cookieSession({
     maxAge: 24*60*60*1000,
     keys: [keys.session.cookieKey]

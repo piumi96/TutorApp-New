@@ -1,6 +1,7 @@
 
     const passport = require('passport');
     const GoogleStrategy = require('passport-google-oauth20');
+    const session = require('express-session');
     const keys = require('./keys');
     const con = require('../databse/db');
     
@@ -9,7 +10,6 @@
     });
     
     passport.deserializeUser((user, done) => {
-        
         done(null, user);
     });
     //var response = {};
@@ -52,11 +52,17 @@
                         }
                     });
                 }}
-                done(null, user);
                 var res = {
                     has: has,
                     success: success
-                }
+                };
+                
+                done(null, {
+                    email: email,
+                    has: has,
+                    success: success
+                });
+                
                 //console.log(pass);
                
             });  
