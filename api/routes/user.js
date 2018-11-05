@@ -37,7 +37,8 @@ router.post('/register', (req, res) => {
             else{
             if (result.length > 0) {
                 res.json({
-                    has: true
+                    has: true,
+                    success: false
                 });
             }
             else {
@@ -45,11 +46,13 @@ router.post('/register', (req, res) => {
                     console.log(result);
                     if (err) {
                         res.json({
+                            has: false,
                             success: false
                         });
                     }
                     else {
                         res.json({
+                            has: false,
                             success: true
                         });
                     }
