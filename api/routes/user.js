@@ -62,11 +62,11 @@ router.post('/register', (req, res) => {
 
 
 
-router.get('/google-reg', passport.authenticate('google', {
+router.post('/google-reg', passport.authenticate('google', {
     scope: ['email']
     
 }), (req, res) => {
-    var role = "tutor";
+    var role = req.body.role;
     req.session.email = req.user.email;
     var email = req.session.email;
     const user = {
@@ -314,11 +314,11 @@ router.post('/login', (req, res) => {
 
 });
 
-router.get('/google-login', passport.authenticate('google-login', {
+router.post('/google-login', passport.authenticate('google-login', {
     scope: ['email']
     
 }), (req, res) => {
-    var role = "student";
+    var role = req.body.role;
 
     req.session.email = req.user.email;
     var email = req.session.email;
