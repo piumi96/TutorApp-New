@@ -18,13 +18,14 @@ router.get('/search', (req, res) => {
                     location: result[i].Location,
                     mobile: result[i].Mobile,
                     subject: result[i].Subject,
-                    email: result[i].email,
-                    role: result[i].role
+                    rate: result[i].Rate,
+                    email: result[i].email
                 }
             }
             res.send({
                 user: user
             });
+            //console.log(result);
         }
     });
 });

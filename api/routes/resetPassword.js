@@ -19,8 +19,6 @@ router.post('/reset', (req, res) => {
             if(err) throw err;
             else{
                 var pass = result[0].password;
-                /* console.log(pass);
-                console.log(oldPassword); */
 
                 bcrypt.compare(oldPassword, pass, (err, response)=> {
                     if(err) throw err;
@@ -64,9 +62,7 @@ router.post('/reset', (req, res) => {
             if(err) throw err;
             else{
                 var pass = result[0].pword;
-                /* console.log(pass);
-                console.log(oldPassword); */
-
+                
                 bcrypt.compare(oldPassword, pass, (err, response)=> {
                     if(err) throw err;
                     else if(response){
