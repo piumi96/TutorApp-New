@@ -22,7 +22,9 @@ router.get('/search', (req, res) => {
                     role: result[i].role
                 }
             }
-            res.send(user);
+            res.send({
+                user: user
+            });
         }
     });
 });
