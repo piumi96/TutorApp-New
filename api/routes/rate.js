@@ -7,12 +7,22 @@ router.post('/rate', (req, res) => {
     var tutor = req.body.tutor;
     var student = req.body.student;
 
+    var rating;
+    var sql2 = "select rate from Tutor where Tutor.email='"+tutor+"'";
+    con.query(sql2, (err, result) => {
+        if(err) throw err;
+        else{
+            rating = result[0].rate;
+        }
+    })
+
     var sql = "insert into Rate(tutor, student, rating) values('"+tutor+"', '"+student+"', '"+rate+"')";
     con.query(sql, (err, result) => {
         if(err){
             throw err;
             res.json({
-                success: false
+                success: false,
+                rating: rating
             });            
         } 
         else{
@@ -21,13 +31,22 @@ router.post('/rate', (req, res) => {
                 if(err){
                     throw err;
                     res.json({
-                        success: false
+                        success: false,
+                        rating: rating
                     });
                 }
                 else{
-                    console.log(result);
+                    var sql2 = "select rate from Tutor where Tutor.email='"+tutor+"'";
+                    con.query(sql2, (err, result) => {
+                    if(err) throw err;
+                    else{
+                        rating = result[0].rate;
+                        }
+                    });
+
                     res.json({
-                        success: true
+                        success: true,
+                        rating: rating
                     });
                 }
             })

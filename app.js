@@ -10,7 +10,8 @@ const keys = require('./config/keys');
 const userRoutes = require('./api/routes/user');
 const profileEdit = require('./api/routes/profileEdit');
 const searchRoutes = require('./api/routes/search');
-const reviews = require('./api/routes/review');
+const reviewsRoute = require('./api/routes/review');
+const rateRoute = require('./api/routes/rate');
 const passportSetup = require('./config/passport-setup');
 
 const app = express();
@@ -43,7 +44,8 @@ app.use(passport.session());
 app.use('/', userRoutes);
 app.use('/', profileEdit);
 app.use('/', searchRoutes);
-app.use('/', reviews);
+app.use('/', reviewsRoute);
+app.use('/', rateRoute);
 
 app.use((req, res, next)=>{
     const error = {

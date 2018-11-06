@@ -229,7 +229,7 @@ router.post('/login', (req, res) => {
                                     });
                                 }
                                 else {
-                                    res.send({
+                                    res.json({
                                         success: false,
                                         token: null
                                     })
