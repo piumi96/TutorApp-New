@@ -19,6 +19,7 @@ router.get('/search', (req, res) => {
                     mobile: result[i].Mobile,
                     subject: result[i].Subject,
                     rate: result[i].Rate,
+                    imgURL: result[i].ImgURL,
                     email: result[i].email
                 }
             }
@@ -47,7 +48,8 @@ router.get('/searchbydistrict', (req, res) => {
                     mobile: result[i].Mobile,
                     subject: result[i].Subject,
                     email: result[i].email,
-                    role: result[i].role
+                    imgURL: result[i].ImgURL,
+                    rate: result[i].Rate
                 }
             }
             res.send({
