@@ -69,6 +69,7 @@ router.post('/google-reg', passport.authenticate('google', {
     
 }), (req, res) => {
     var role = req.body.role;
+    //var role = "student"
     req.session.email = req.user.email;
     var email = req.session.email;
     const user = {
