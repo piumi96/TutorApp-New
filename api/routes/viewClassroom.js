@@ -12,7 +12,7 @@ const callback = "http://localhost:3000";
 
 router.get('/class', (req, res) =>{
     console.log(googleClass);
-    authorize(JSON.parse(googleClass), listCourses);
+    authorize(JSON.parse(googleClass));
     console.log(listCourses);
 
     function authorize(googleClass) {

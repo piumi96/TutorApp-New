@@ -1,8 +1,6 @@
 const express = require('express');
-const passport = require('passport');
 const router = express.Router();
 const con = require('../../databse/db');
-const passportSetup = require('../../config/passport-setup');
 
 router.post('/search', (req, res) => {
     var district =req.body.district;
