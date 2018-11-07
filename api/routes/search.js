@@ -4,59 +4,63 @@ const router = express.Router();
 const con = require('../../databse/db');
 const passportSetup = require('../../config/passport-setup');
 
-router.get('/search', (req, res) => {
-    var sql = "select * from Tutor";
+router.post('/search', (req, res) => {
+    var district =req.body.district;
 
-    con.query(sql, function(err, result){
-        if (err) throw err;
-        else{
-            var user = [];
-            for(var i=0; i<result.length; i++){
-                user[i] = {
-                    fname: result[i].FirstName,
-                    lname: result[i].LastName,
-                    location: result[i].Location,
-                    mobile: result[i].Mobile,
-                    subject: result[i].Subject,
-                    rate: result[i].Rate,
-                    imgURL: result[i].ImgURL,
-                    email: result[i].email
+    if(district === "all"){
+
+        var sql = "select * from Tutor";
+    
+        con.query(sql, function(err, result){
+            if (err) throw err;
+            else{
+                var user = [];
+                for(var i=0; i<result.length; i++){
+                    user[i] = {
+                        fname: result[i].FirstName,
+                        lname: result[i].LastName,
+                        location: result[i].Location,
+                        mobile: result[i].Mobile,
+                        subject: result[i].Subject,
+                        rate: result[i].Rate,
+                        imgURL: result[i].ImgURL,
+                        email: result[i].email
+                    }
                 }
+                res.send({
+                    user: user
+                });
+                //console.log(result);
             }
-            res.send({
-                user: user
-            });
-            //console.log(result);
-        }
-    });
-});
+        });
+    }
 
-router.get('/searchbydistrict', (req, res) => {
-    var district = req.body.district;
-    //var district = 'gampaha';
-    var sql = "select * from Tutor where Location like '%"+district+"%'";
+    else{
 
-    con.query(sql, function(err, result){
-        if(err) throw err;
-        else{
-            var user = [];
-            for(var i=0; i<result.length; i++){
-                user[i] = {
-                    fname: result[i].FirstName,
-                    lname: result[i].LastName,
-                    location: result[i].Location,
-                    mobile: result[i].Mobile,
-                    subject: result[i].Subject,
-                    email: result[i].email,
-                    imgURL: result[i].ImgURL,
-                    rate: result[i].Rate
+        var sql = "select * from Tutor where Location like '%"+district+"%'";
+        
+        con.query(sql, function(err, result){
+            if(err) throw err;
+            else{
+                var user = [];
+                for(var i=0; i<result.length; i++){
+                    user[i] = {
+                        fname: result[i].FirstName,
+                        lname: result[i].LastName,
+                        location: result[i].Location,
+                        mobile: result[i].Mobile,
+                        subject: result[i].Subject,
+                        email: result[i].email,
+                        imgURL: result[i].ImgURL,
+                        rate: result[i].Rate
+                    }
                 }
+                res.send({
+                    user: user
+                });
             }
-            res.send({
-                user: user
-            });
-        }
-    })
+        })
+    }
 });
 
 module.exports = router;
