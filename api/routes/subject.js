@@ -12,6 +12,7 @@ router.get('/subject', (req, res) => {
             for(var i=0; i<result.length; i++){
                 subject[i] = result[i].Name;
             }
+            subject[result.length] = "all";
             res.json({
                 subject: subject
             });
