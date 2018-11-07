@@ -14,5 +14,10 @@ module.exports = {
 
     session: {
         cookieKey: 'thisistheTutorAppbackendAnditsawesome'
+    },
+
+    googleClassroom: {
+        clientID: "455962200397-qqa3aqnhrcl6v5f1908nn8tj170bl16q.apps.googleusercontent.com",
+        clientSecret: "wGWbjsmwzwEjEdGFdUVQuR-H"
     }
 };

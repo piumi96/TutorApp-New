@@ -13,6 +13,7 @@ const searchRoutes = require('./api/routes/search');
 const reviewsRoute = require('./api/routes/review');
 const rateRoute = require('./api/routes/rate');
 const resetPassword = require('./api/routes/resetPassword');
+//const viewClass = require('./api/routes/viewClassroom');
 const passportSetup = require('./config/passport-setup');
 
 const app = express();
@@ -48,6 +49,7 @@ app.use('/', searchRoutes);
 app.use('/', reviewsRoute);
 app.use('/', rateRoute);
 app.use('/', resetPassword);
+//app.use('/', viewClass);
 
 app.use((req, res, next)=>{
     const error = {
