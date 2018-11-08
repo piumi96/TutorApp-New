@@ -204,7 +204,8 @@ router.post('/login', (req, res) => {
                     con.query(sql2, function (err, result) {
                         if (err) throw err;
                         else {
-                            var pass = result[0].pword;
+                            console.log(result);
+                            var pass = result[0].password;
                             bcrypt.compare(pword, pass, function (err, response) {
                                 if (err) throw err;
                                 else if (response) {
@@ -283,6 +284,7 @@ router.post('/login', (req, res) => {
                     con.query(sql2, function (err, result) {
                         if (err) throw err;
                         else {
+                            console.log(result);
                             var pass = result[0].pword;
                             bcrypt.compare(pword, pass, function (err, response) {
                                 if (err) throw err;
