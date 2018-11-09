@@ -64,4 +64,20 @@ router.put('/acceptRequest', (req, res) => {
     });
 });
 
+router.put('/rejectRequest', (req, res) => {
+    var id = req.body.id;
+    var sql = "update Requests set status='REJECTED' where reqID = '"+id+"'";
+
+    con.query(sql, (err, result) => {
+        if(err) throw err;
+        else{
+            console.log(result);
+            res.json({
+                success: true
+            });
+        }
+    });
+});
+
+
 module.exports = router;
