@@ -49,4 +49,19 @@ router.post('/makeRequest', (req, res) => {
     });
 });
 
+router.put('/acceptRequest', (req, res) => {
+    var id = req.body.id;
+    var sql = "update Requests set status='ACCEPTED' where reqID = '"+id+"'";
+
+    con.query(sql, (err, result) => {
+        if(err) throw err;
+        else{
+            console.log(result);
+            res.json({
+                success: true
+            });
+        }
+    });
+});
+
 module.exports = router;
