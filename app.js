@@ -14,6 +14,7 @@ const reviewsRoute = require('./api/routes/review');
 const rateRoute = require('./api/routes/rate');
 const resetPassword = require('./api/routes/resetPassword');
 const subjectRoutes = require('./api/routes/subject');
+const requestRoutes = require('./api/routes/request');
 //const viewClass = require('./api/routes/viewClassroom');
 const passportSetup = require('./config/passport-setup');
 
@@ -51,6 +52,7 @@ app.use('/', reviewsRoute);
 app.use('/', rateRoute);
 app.use('/', resetPassword);
 app.use('/', subjectRoutes);
+app.use('/', requestRoutes);
 //app.use('/', viewClass);
 
 app.use((req, res, next)=>{
