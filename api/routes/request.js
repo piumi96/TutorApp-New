@@ -5,11 +5,11 @@ const con = require('../../databse/db');
 router.get('/viewRequests', (req, res) => {
     var tutor = req.body.tutor;
 
-    var sql = "select * from Requests where tutor = '"+tutor+"'";
+    var sql = "select * from Requests where tutor = '"+tutor+"' and status='SENT'";
     con.query(sql, (err, result) => {
         if(err) throw err;
         else{
-            console.log(result);
+            //console.log(result);
             var request = [];
             for(var i=0; i<result.length; i++){
                 request[i] = {
@@ -41,7 +41,7 @@ router.post('/makeRequest', (req, res) => {
     con.query(sql, (err, result) => {
         if(err) throw err;
         else{
-            console.log(result);
+            //console.log(result);
             res.json({
                 success: true
             });
@@ -56,7 +56,7 @@ router.put('/acceptRequest', (req, res) => {
     con.query(sql, (err, result) => {
         if(err) throw err;
         else{
-            console.log(result);
+            //console.log(result);
             res.json({
                 success: true
             });
@@ -71,7 +71,7 @@ router.put('/rejectRequest', (req, res) => {
     con.query(sql, (err, result) => {
         if(err) throw err;
         else{
-            console.log(result);
+            //console.log(result);
             res.json({
                 success: true
             });
