@@ -1,6 +1,7 @@
 
     const passport = require('passport');
     const GoogleStrategy = require('passport-google-oauth20');
+    const FacebookStrategy = require('passport-facebook');
     const keys = require('./keys');
     const con = require('../databse/db');
     
@@ -40,7 +41,37 @@
                  });     
          
          })
-    )
+    );
+
+
+    passport.use('facebook',
+      new FacebookStrategy({
+        callbackURL: '/facebook-reg',
+        clientID: keys.facebook.clientID,
+        clientSecret: keys.facebook.clientSecret,
+        profileFields: ['email', 'first_name', 'last_name']
+      }, (accessToken, refreshToken, email, done) => {
+              
+            done(null, {
+               email: email,
+        
+            });     
+      })
+    );
+
+    passport.use('facebook-login',
+       new FacebookStrategy({
+         callbackURL: '/facebook-login',
+         clientID: keys.facebook.clientID,
+         clientSecret: keys.facebook.clientSecret,
+         profileFields: ['email']
+       }, (accessToken, refreshToken, email, done) => {
+                      
+             done(null, {
+                 email: email
+             });     
+       })
+    );
 
 
 
