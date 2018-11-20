@@ -20,7 +20,7 @@ router.post('/rate', (req, res) => {
     con.query(sql3, (err, result) => {
         if(err) throw err;
         else if(result.length != 0){
-            console.log(result);
+            //console.log(result);
             var sql = "insert into Rate(tutor, student, rating) values('"+tutor+"', '"+student+"', '"+rate+"')";
             con.query(sql, (err, result) => {
                 if(err){
