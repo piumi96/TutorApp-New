@@ -152,6 +152,93 @@ router.post('/google-reg', passport.authenticate('google', {
 
 
 
+router.get('/facebook-reg', passport.authenticate('facebook', { 
+    scope: ['email']
+    
+}), (req, res) => {
+    //var role = req.body.role;
+    var role = "student";
+    req.session.email = req.user.email;
+    var email = req.session.email;
+     const user = {
+      fname: email.name.givenName,
+      lname: email.name.familyName,
+      email: email.emails[0].value 
+    };
+   
+    
+    if(role === "tutor"){
+         var sql = "insert into Tutor(FirstName, LastName, email) values('"+ user.fname+"','"+user.lname+"','"+user.email+"')";
+        var sql1 = "select * from Tutor where email='"+user.email+"'";
+         con.query(sql1, (err, result) => {
+            if(err) throw err;
+            else{
+                if (result.length > 0) {
+                    res.json({
+                        has: true,
+                        success: false
+                    });
+                }
+                else{
+                    con.query(sql, (err, result) => {
+                        if(err){
+                            res.json({
+                                has: false,
+                                success: false
+                            });
+                        }
+                        else{
+                            res.json({
+                                has: false,
+                                success: true
+                            });
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    else if(role === "student"){
+        var sql = "insert into Student(name, email) values('" + user.fname + " " + user.lname + "', '" + user.email + "')"
+        var sql1 = "select * from Student where email='" + user.email + "'";
+         con.query(sql1, (err, result) => {
+            if(err) throw err;
+            else{
+                if (result.length > 0) {
+                    res.json({
+                        has: true,
+                        success: false
+                    });
+                }
+
+                else{
+                    con.query(sql, (err, result) => {
+                        if(err){
+                            res.json({
+                                has: false,
+                                success: false
+                            });
+                        }
+
+                        else{
+                            res.json({
+                                has: false,
+                                success: true
+                            });
+                        }
+                    });
+                }
+            }
+        });
+    }
+   
+});
+
+
+
+
+
 //Login routes------------------------------------------------------------------
 router.post('/login', (req, res) => {
     var email = req.body.username;
@@ -443,5 +530,125 @@ router.post('/google-login', passport.authenticate('google-login', {
         });
     }
 });
+
+
+
+router.post('/facebook-login', passport.authenticate('facebook-login', {
+    scope: ['email']
+    
+}), (req, res) => {
+    var role = req.body.role;
+    //var role = 'tutor';
+    req.session.email = req.user.email;
+    var email = req.session.email;
+    var user = {
+        email: email.emails[0].value
+    };
+
+
+    if(role==="tutor"){
+        var sql = "select * from Tutor where email='"+user.email+"'";
+        con.query(sql, (err, result) => {
+            if(err) {
+                throw err;
+                res.json({
+                    success: false,
+                    token: null
+                });
+            } 
+            else{  
+                var fname = result[0].first_name;
+                var lname = result[0].last_name;
+                var status = result[0].acc_status;
+                var location, mobile, subject;
+    
+                if (result[0].Location) {
+                    location = result[0].Location;
+                }
+                else {
+                    location = '';
+                }
+    
+                if (result[0].Mobile) {
+                    mobile = result[0].Mobile;
+                }
+                else {
+                    mobile = '';
+                }
+    
+                if (result[0].Subject) {
+                    subject = result[0].Subject;
+                }
+                else {
+                    subject = '';
+                }
+                 const tutor = {
+                    fname: fname,
+                    lname: lname,
+                    mobile: mobile,
+                    subject: subject,
+                    location: location,
+                    role: role,
+                    email: user.email,
+                    status: status
+                }
+               
+                
+                 var token = jwt.sign({ tutor }, 'secret_key');
+                res.json({
+                    success: true,
+                    token: token
+                });
+            }
+         });
+    }
+
+    else if(role==="student"){
+        var sql = "select * from Tutor where email='"+user.email+"'";
+        
+        con.query(sql, (err, result) => {
+            if(err) {
+                throw err;
+                res.json({
+                    success: false,
+                    token: null
+                });
+            }
+            else{
+                var name = result[0].fname;
+                var status =result[0].acc_status;
+                var location, mobile;
+                 if (result[0].location) {
+                    location = result[0].location;
+                }
+                else {
+                    location = '';
+                }
+                 if (result[0].mobile) {
+                    mobile = result[0].mobile;
+                }
+                else {
+                    mobile = '';
+                } 
+                 var student = {
+                    name: name,
+                    location: location,
+                    mobile: mobile,
+                    email: user.email,
+                    acc_status: status,
+                    role: role
+                };
+                var token = jwt.sign({ student }, 'secret_key');
+                res.json({
+                    success: true,
+                    token: token
+                });
+            }
+         });
+    }
+});
+
+
+
 
 module.exports = router;

@@ -28,6 +28,7 @@
     "mysql": "^2.16.0",
     "mysql-events": "0.0.11",
     "passport": "^0.4.0",
+    "passport-facebook": "^2.1.1",
     "passport-google-oauth20": "^1.0.0"
   }
 }

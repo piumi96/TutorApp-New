@@ -5,6 +5,11 @@ module.exports = {
 
     },
 
+    facebook: {
+        clientID: '352542408827644',
+        clientSecret: '4522170290825fc4f9c1d965327d47a3'
+    },
+
     db: {
         host: 'sql12.freemysqlhosting.net',
         user: 'sql12264188',
