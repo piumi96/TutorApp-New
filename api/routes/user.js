@@ -152,12 +152,12 @@ router.post('/google-reg', passport.authenticate('google', {
 
 
 
-router.get('/facebook-reg', passport.authenticate('facebook', { 
+router.post('/facebook-reg', passport.authenticate('facebook', { 
     scope: ['email']
     
 }), (req, res) => {
-    //var role = req.body.role;
-    var role = "student";
+    var role = req.body.role;
+    //var role = "student";
     req.session.email = req.user.email;
     var email = req.session.email;
      const user = {
