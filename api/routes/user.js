@@ -25,10 +25,11 @@ router.post('/register', (req, res) => {
     bcrypt.hash(pword, saltRounds, function (err, hash) {
         if (role === 'tutor') {
             var sql = "insert into Tutor(FirstName, LastName, email, password) values('" + fname + "', '" + lname + "', '" + email + "', '" + hash + "')";
-
+            var sql3 = "select email, FirstName, LastName, Location, Mobile, Subject, Rate, ImgUrl from Tutor where email='"+email+"'";
         }
         else if (role === 'student') {
             var sql = "insert into Student(name, email, pword) values('" + fname + " " + lname + "', '" + email + "', '" + hash + "')";
+            var sql3 = "select email, name, location, mobile from Student where email='"+email+"'";
         }
 
         var sql2 = "select * from Tutor, Student where Tutor.email='" + email + "' or Student.email='" + email + "'";
@@ -38,7 +39,8 @@ router.post('/register', (req, res) => {
             if (result.length > 0) {
                 res.json({
                     has: true,
-                    success: false
+                    success: false,
+                    token: null
                 });
             }
             else {
@@ -47,14 +49,46 @@ router.post('/register', (req, res) => {
                     if (err) {
                         res.json({
                             has: false,
-                            success: false
+                            success: false,
+                            token: null
                         });
                     }
                     else {
-                        res.json({
-                            has: false,
-                            success: true
-                        });
+                        con.query(sql3, (err, result) => {
+                            if(err) throw err;
+                            else{
+                                if(role==='tutor'){
+                                    var user = {
+                                        email: result[0].email,
+                                        FirstName: result[0].FirstName,
+                                        LastName: result[0].LastName,
+                                        Location: result[0].Location,
+                                        Mobile: result[0].Mobile,
+                                        Subject: result[0].Subject,
+                                        Rate: result[0].Rate,
+                                        ImgUrl: result[0].ImgUrl,
+                                        role: role
+                                    }
+                                }
+                                else if(role==='student'){
+                                    var user = {
+                                        email: result[0].email,
+                                        name: result[0].name,
+                                        location: result[0].location,
+                                        mobile: result[0].mobile,
+                                        role: role
+                                    }
+                                }
+                                //console.log(user);
+                                const token = jwt.sign({ user }, 'secret_key');
+
+                                res.json({
+                                    has: false,
+                                    success: true,
+                                    token: token
+                                });
+                            }
+                        })
                     }
                 });
             }}
@@ -84,6 +118,7 @@ router.post('/google-reg', passport.authenticate('google', {
 
         var sql = "insert into Tutor(FirstName, LastName, email) values('"+ user.fname+"','"+user.lname+"','"+user.email+"')";
         var sql1 = "select * from Tutor where email='"+user.email+"'";
+        var sql3 = "select email, FirstName, LastName, Location, Mobile, Subject, Rate, ImgUrl from Tutor where email='"+email+"'";
 
         con.query(sql1, (err, result) => {
             if(err) throw err;
@@ -91,7 +126,8 @@ router.post('/google-reg', passport.authenticate('google', {
                 if (result.length > 0) {
                     res.json({
                         has: true,
-                        success: false
+                        success: false,
+                        token: null
                     });
                 }
                 else{
@@ -99,13 +135,34 @@ router.post('/google-reg', passport.authenticate('google', {
                         if(err){
                             res.json({
                                 has: false,
-                                success: false
+                                success: false,
+                                token: null
                             });
                         }
                         else{
-                            res.json({
-                                has: false,
-                                success: true
+                            con.query(sql3, (err, result) => {
+                                if(err) throw err;
+                                else{
+                                    var reg_user = {
+                                        email: result[0].email,
+                                        FirstName: result[0].FirstName,
+                                        LastName: result[0].LastName,
+                                        Location: result[0].Location,
+                                        Mobile: result[0].Mobile,
+                                        Subject: result[0].Subject,
+                                        Rate: result[0].Rate,
+                                        ImgUrl: result[0].ImgUrl,
+                                        role: role
+                                    }
+
+                                    const token = jwt.sign({ reg_user }, 'secret_key');
+
+                                    res.json({
+                                        has: false,
+                                        success: true,
+                                        token: token
+                                    });
+                                }
                             });
                         }
                     });
@@ -118,6 +175,7 @@ router.post('/google-reg', passport.authenticate('google', {
 
         var sql = "insert into Student(name, email) values('" + user.fname + " " + user.lname + "', '" + user.email + "')"
         var sql1 = "select * from Student where email='" + user.email + "'";
+        var sql3 = "select email, name, location, mobile from Student where email='"+email+"'";
 
         con.query(sql1, (err, result) => {
             if(err) throw err;
@@ -137,10 +195,26 @@ router.post('/google-reg', passport.authenticate('google', {
                             });
                         }
                         else{
-                            res.json({
-                                has: false,
-                                success: true
-                            });
+                            con.query(sql3, (err, result) => {
+                                if(err) throw err;
+                                else{
+                                    var reg_user = {
+                                        email: result[0].email,
+                                        name: result[0].name,
+                                        location: result[0].location,
+                                        mobile: result[0].mobile,
+                                        role: role
+                                    }
+                                    
+                                    const token = jwt.sign({ reg_user }, 'secret_key');
+
+                                    res.json({
+                                        has: false,
+                                        success: true,
+                                        token: token
+                                    });
+                                }
+                            })
                         }
                     });
                 }
@@ -157,10 +231,10 @@ router.post('/facebook-reg', passport.authenticate('facebook', {
     
 }), (req, res) => {
     var role = req.body.role;
-    //var role = "student";
     req.session.email = req.user.email;
     var email = req.session.email;
-     const user = {
+
+    const user = {
       fname: email.name.givenName,
       lname: email.name.familyName,
       email: email.emails[0].value 
@@ -168,15 +242,18 @@ router.post('/facebook-reg', passport.authenticate('facebook', {
    
     
     if(role === "tutor"){
-         var sql = "insert into Tutor(FirstName, LastName, email) values('"+ user.fname+"','"+user.lname+"','"+user.email+"')";
+        var sql = "insert into Tutor(FirstName, LastName, email) values('"+ user.fname+"','"+user.lname+"','"+user.email+"')";
         var sql1 = "select * from Tutor where email='"+user.email+"'";
+        var sql3 = "select email, FirstName, LastName, Location, Mobile, Subject, Rate, ImgUrl from Tutor where email='"+email+"'";
+        
          con.query(sql1, (err, result) => {
             if(err) throw err;
             else{
                 if (result.length > 0) {
                     res.json({
                         has: true,
-                        success: false
+                        success: false,
+                        token: null
                     });
                 }
                 else{
@@ -184,14 +261,35 @@ router.post('/facebook-reg', passport.authenticate('facebook', {
                         if(err){
                             res.json({
                                 has: false,
-                                success: false
+                                success: false,
+                                token: null
                             });
                         }
                         else{
-                            res.json({
-                                has: false,
-                                success: true
-                            });
+                            con.query(sql3, (err, result) => {
+                                if(err) throw err;
+                                else{
+                                    var reg_user = {
+                                        email: result[0].email,
+                                        FirstName: result[0].FirstName,
+                                        LastName: result[0].LastName,
+                                        Location: result[0].Location,
+                                        Mobile: result[0].Mobile,
+                                        Subject: result[0].Subject,
+                                        Rate: result[0].Rate,
+                                        ImgUrl: result[0].ImgUrl,
+                                        role: role
+                                    }
+
+                                    const token = jwt.sign({ reg_user }, 'secret_key');
+  
+                                    res.json({
+                                        has: false,
+                                        success: true,
+                                        token: token
+                                    });
+                                }
+                            })
                         }
                     });
                 }
@@ -202,13 +300,16 @@ router.post('/facebook-reg', passport.authenticate('facebook', {
     else if(role === "student"){
         var sql = "insert into Student(name, email) values('" + user.fname + " " + user.lname + "', '" + user.email + "')"
         var sql1 = "select * from Student where email='" + user.email + "'";
-         con.query(sql1, (err, result) => {
+        var sql3 = "select email, name, location, mobile from Student where email='"+email+"'";
+
+        con.query(sql1, (err, result) => {
             if(err) throw err;
             else{
                 if (result.length > 0) {
                     res.json({
                         has: true,
-                        success: false
+                        success: false,
+                        token: null
                     });
                 }
 
@@ -217,15 +318,32 @@ router.post('/facebook-reg', passport.authenticate('facebook', {
                         if(err){
                             res.json({
                                 has: false,
-                                success: false
+                                success: false,
+                                token: null
                             });
                         }
 
                         else{
-                            res.json({
-                                has: false,
-                                success: true
-                            });
+                            con.query(sql3, (err, result) => {
+                                if(err) throw err;
+                                else{
+                                    var reg_user = {
+                                        email: result[0].email,
+                                        name: result[0].name,
+                                        location: result[0].location,
+                                        mobile: result[0].mobile,
+                                        role: role
+                                    }
+                                    
+                                    const token = jwt.sign({ reg_user }, 'secret_key');
+                                    
+                                    res.json({
+                                        has: false,
+                                        success: true,
+                                        token: token
+                                    });
+                                }
+                            })
                         }
                     });
                 }

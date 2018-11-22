@@ -22,8 +22,8 @@ module.exports = {
     },
 
     googleClassroom: {
-        clientID: "455962200397-qqa3aqnhrcl6v5f1908nn8tj170bl16q.apps.googleusercontent.com",
-        clientSecret: "wGWbjsmwzwEjEdGFdUVQuR-H"
+        clientID: "947360852424-ftgdl272lk8tnbb61jr9u82grosdcbnd.apps.googleusercontent.com",
+        clientSecret: "epfbaZNeiGGfSaMnixFmxNIy"
     },
 
 };
