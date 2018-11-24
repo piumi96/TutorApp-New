@@ -2,7 +2,6 @@
     const passport = require('passport');
     const GoogleStrategy = require('passport-google-oauth20');
     const FacebookStrategy = require('passport-facebook');
-    const passportStrategy = require('passport-oauth2');
     const keys = require('./keys');
     const con = require('../databse/db');
     
@@ -93,7 +92,7 @@
 
 passport.use('googleClass',
     new GoogleStrategy({
-        callbackURL: '/class',
+        callbackURL: 'class/v1/courses',
         clientID: keys.googleClassroom.clientID,
         clientSecret: keys.googleClassroom.clientSecret
     }, (accessToken, refreshToken, email, courses, done) => {
