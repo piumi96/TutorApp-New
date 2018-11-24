@@ -132,5 +132,24 @@ router.put('/rejectRequest', (req, res) => {
     });
 });
 
+router.delete('/cancelRequest', (req, res) => {
+    var id = req.body.id;
+
+    var sql = "delete from Requests where reqID='"+id+"'";
+    con.query(sql, (err, result) => {
+        if(err){
+            throw err;
+            res.json({
+                success: false
+            });
+        }
+        else{
+            res.json({
+                success: true
+            });
+        }
+    })
+})
+
 
 module.exports = router;
