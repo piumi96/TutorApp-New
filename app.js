@@ -17,6 +17,7 @@ const requestRoutes = require('./api/routes/request');
 //const viewClass = require('./api/routes/viewClassroom');
 const profileRoutes = require('./api/routes/profile');
 const blockRoute = require('./api/routes/block');
+const suggestionRoutes = require('./api/routes/suggestions');
 const passportSetup = require('./config/passport-setup');
 
 const app = express();
@@ -55,6 +56,7 @@ app.use('/', subjectRoutes);
 app.use('/', requestRoutes);
 app.use('/', profileRoutes);
 app.use('/', blockRoute);
+app.use('/', suggestionRoutes);
 //app.use('/', viewClass);
 
 app.use((req, res, next)=>{
