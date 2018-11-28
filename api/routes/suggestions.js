@@ -31,8 +31,30 @@ router.get('/viewAllSuggestions', (req, res) => {
 })
 
 router.get('/mySuggestions', (req, res) => {
-    var role = req.body.role;
     var email = req.body.email;
+
+    var sql="select*from Suggestions where Sender='"+email+"'";
+    con.query(sql, (err, result) => {
+        if(err){
+            res.json({
+                suggestions: null
+            });
+        }
+        else{
+            for (var i = 0; i < result.length; i++) {
+                suggestion[i] = {
+                    ID: result[i].SuggestionID,
+                    Sender: result[i].Sender,
+                    Date: result[i].Date,
+                    Content: result[i].Content
+                }
+            }
+
+            res.json({
+                suggestions: suggestions
+            });
+        }
+    })
 })
 
 module.exports = router;
