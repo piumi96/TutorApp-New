@@ -25,7 +25,6 @@ router.put('/block', (req, res) => {
     else if(role==='student'){
         var sql = "update Student set acc_status='0' where email='"+email+"'";
         con.query(sql, (err, result) => {
-            console.log(result);
             if(err){
                 res.json({
                     success: false
@@ -40,7 +39,7 @@ router.put('/block', (req, res) => {
     }
 })
 
-/* router.put('/unblock', (req, res) => {
+router.put('/unblock', (req, res) => {
     var role = req.body.role;
     var email = req.body.email;
 
@@ -74,6 +73,6 @@ router.put('/block', (req, res) => {
             }
         })
     }
-}) */
+})
 
 module.exports = router;
