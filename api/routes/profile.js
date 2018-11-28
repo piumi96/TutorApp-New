@@ -5,15 +5,19 @@ const con = require('../../databse/db');
 router.get('/viewProfile', (req, res) => {
     var email = req.body.email;
     var sql = "select FirstName, LastName, Location, Mobile, Subject, Rate, ImgURL from Tutor where email='"+email+"'";
+    var sql1 = "select * from Review where tutor='"+email+"'";
+    var profile;
+    var reviews = [];
 
     con.query(sql, (err, result) => {
         if(err) {
             res.json({
-                profile: null
+                profile: null,
+                reviews: null
             }) ;        
         }
         else{
-            var profile = {
+            profile = {
                email: email,
                FirstName: result[0].FirstName,
                LastName: result[0].LastName,
@@ -23,10 +27,26 @@ router.get('/viewProfile', (req, res) => {
                Rate: result[0].Rate,
                ImgUrl: result[0].ImgURL
            }
-           
-            res.json({
-                profile: profile
-            });
+
+           con.query(sql1, (err, response) => {
+               if(err){
+                   console.log(err);
+               }
+               else{
+                   for(var i=response.length-1; i>=0; i--){
+                        reviews[i - (response.length - 1)] = {
+                           date: response[i].date,
+                           tutor: response[i].tutor,
+                           student: response[i].student,
+                           content: response[i].content, 
+                       }
+                   } 
+                   res.json({
+                       profile: profile,
+                       reviews: reviews
+                   });
+               }
+           })
            
         }
     })   
