@@ -17,6 +17,8 @@ router.get('/viewAllSuggestions', (req, res) => {
             for(var i=0; i<result.length; i++){
                 suggestion[i] = {
                     ID: result[i].SuggestionID,
+                    Sender: result[i].Sender,
+                    Date: result[i].Date,
                     Content: result[i].Content
                 }
             }
@@ -26,6 +28,11 @@ router.get('/viewAllSuggestions', (req, res) => {
             });
         }
     })
+})
+
+router.get('/mySuggestions', (req, res) => {
+    var role = req.body.role;
+    var email = req.body.email;
 })
 
 module.exports = router;
