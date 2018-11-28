@@ -73,34 +73,24 @@
        })
     );
 
-    /* passport.use('authorization',
-        new passportStrategy({
-            authorizationURL: '/class',
-            tokenURL: 'http://localhost:3000',
-            clientID: keys.googleClassroom.clientID,
-            clientSecret: keys.googleClassroom.clientSecret,
-            callbackURL: '/class'
-        }, (accessToken, refreshToken, scope, done) => {
-            console.log(scope);
-            done(null, {
-                scope: scope
-            });
-        })
-    ) */
-
-
-
 passport.use('googleClass',
     new GoogleStrategy({
-        callbackURL: 'class/v1/courses',
+        callbackURL: '/class/courses',
         clientID: keys.googleClassroom.clientID,
         clientSecret: keys.googleClassroom.clientSecret
+
     }, (accessToken, refreshToken, email, courses, done) => {
         console.log(email);
-        //console.log(courses);
+        console.log(" ");
+       // console.log(courses);
         
+        var access_token = accessToken;
+        var refresh_token = refreshToken;
+
         done(null, {
-            scope: email
+            scope: email,
+            access_token: access_token,
+            refresh_token: refresh_token
         });
     })
 )

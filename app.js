@@ -8,14 +8,14 @@ const cors = require('cors');
 const con = require('./databse/db');
 const keys = require('./config/keys');
 const userRoutes = require('./api/routes/user');
-const profileEdit = require('./api/routes/profileEdit');
 const searchRoutes = require('./api/routes/search');
 const reviewsRoute = require('./api/routes/review');
 const rateRoute = require('./api/routes/rate');
 const resetPassword = require('./api/routes/resetPassword');
 const subjectRoutes = require('./api/routes/subject');
 const requestRoutes = require('./api/routes/request');
-const viewClass = require('./api/routes/viewClassroom');
+//const viewClass = require('./api/routes/viewClassroom');
+const profileRoutes = require('./api/routes/profile');
 const passportSetup = require('./config/passport-setup');
 
 const app = express();
@@ -46,14 +46,14 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('/', userRoutes);
-app.use('/', profileEdit);
 app.use('/', searchRoutes);
 app.use('/', reviewsRoute);
 app.use('/', rateRoute);
 app.use('/', resetPassword);
 app.use('/', subjectRoutes);
 app.use('/', requestRoutes);
-app.use('/', viewClass);
+app.use('/', profileRoutes);
+//app.use('/', viewClass);
 
 app.use((req, res, next)=>{
     const error = {

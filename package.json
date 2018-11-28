@@ -23,6 +23,7 @@
     "cors": "^2.8.4",
     "express": "^4.16.4",
     "express-session": "^1.15.6",
+    "google-classroom": "^2.1.0",
     "googleapis": "^34.0.0",
     "jsonwebtoken": "^8.3.0",
     "mysql": "^2.16.0",
@@ -30,6 +31,8 @@
     "passport": "^0.4.0",
     "passport-facebook": "^2.1.1",
     "passport-google-oauth20": "^1.0.0",
-    "passport-oauth2": "^1.4.0"
+    "passport-oauth2": "^1.4.0",
+    "request": "^2.88.0",
+    "superagent": "^4.0.0"
   }
 }

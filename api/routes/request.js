@@ -138,7 +138,7 @@ router.delete('/cancelRequest', (req, res) => {
     var sql = "delete from Requests where reqID='"+id+"'";
     con.query(sql, (err, result) => {
         if(err){
-            throw err;
+            //throw err;
             res.json({
                 success: false
             });
