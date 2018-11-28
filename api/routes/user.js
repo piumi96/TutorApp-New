@@ -375,11 +375,11 @@ router.post('/login', (req, res) => {
                 if (result.length == 0) {
                     res.send({
                         success: false, 
-                        token: null
+                        token: null,
+                        block: false
                     });
                 }
-                else {
-
+                else if(result[0].acc_status != 0) {
                     var fname = result[0].FirstName;
                     var lname = result[0].LastName;
                     var status = result[0].acc_status;
@@ -431,13 +431,22 @@ router.post('/login', (req, res) => {
 
                                     res.json({
                                         success: true,
-                                        token: token
+                                        token: token,
+                                        block: false
                                     });
                                 }
-                                else {
+                                else if(result[0].acc_status==0){
                                     res.json({
                                         success: false,
-                                        token: null
+                                        token: null,
+                                        block: true
+                                    })
+                                }
+                                else{
+                                    res.json({
+                                        success: false,
+                                        token: null,
+                                        block: false
                                     })
                                 }
 
@@ -463,10 +472,11 @@ router.post('/login', (req, res) => {
                 if (result.length == 0) {
                     res.send({
                         success: false,
-                        token: null
+                        token: null,
+                        block: false
                     });
                 }
-                else {
+                else if(result[0].acc_status != 0){
                     console.log(result);
                     var name = result[0].name;
                     var status =result[0].acc_status;
@@ -509,13 +519,22 @@ router.post('/login', (req, res) => {
 
                                     res.json({
                                         success: true,
-                                        token: token
+                                        token: token,
+                                        block: false
                                     });
                                 }
-                                else {
+                                else if(result.acc_status == 0){
                                     res.send({
                                         success: false,
-                                        token: null
+                                        token: null,
+                                        block: true
+                                    })
+                                }
+                                else{
+                                    res.send({
+                                        success: false,
+                                        token: null,
+                                        block: false
                                     })
                                 }
 
@@ -546,13 +565,13 @@ router.post('/google-login', passport.authenticate('google-login', {
         var sql = "select * from Tutor where email='"+user.email+"'";
         con.query(sql, (err, result) => {
             if(err) {
-                throw err;
                 res.json({
                     success: false,
-                    token: null
+                    token: null,
+                    block: false
                 });
             } 
-            else{  
+            else if(result[0].acc_status != 0){  
                 var fname = result[0].FirstName;
                 var lname = result[0].LastName;
                 var status = result[0].acc_status;
@@ -593,8 +612,17 @@ router.post('/google-login', passport.authenticate('google-login', {
                 var token = jwt.sign({ tutor }, 'secret_key');
                 res.json({
                     success: true,
-                    token: token
+                    token: token,
+                    block: false
                 });
+            }
+
+            else if(result[0].acc_status == 0){
+                res.json({
+                    success: false,
+                    token: null,
+                    block: true
+                })
             }
 
         });
@@ -605,13 +633,13 @@ router.post('/google-login', passport.authenticate('google-login', {
         
         con.query(sql, (err, result) => {
             if(err) {
-                throw err;
                 res.json({
                     success: false,
-                    token: null
+                    token: null,
+                    block: false
                 });
             }
-            else{
+            else if(result[0].acc_status != 0){
                 var name = result[0].name;
                 var status =result[0].acc_status;
                 var location, mobile;
@@ -641,7 +669,16 @@ router.post('/google-login', passport.authenticate('google-login', {
                 var token = jwt.sign({ student }, 'secret_key');
                 res.json({
                     success: true,
-                    token: token
+                    token: token,
+                    block: false
+                });
+            }
+
+            else if(result[0].acc_status == 0){
+                res.json({
+                    success: false,
+                    token: null,
+                    block: true
                 });
             }
 
@@ -656,7 +693,6 @@ router.post('/facebook-login', passport.authenticate('facebook-login', {
     
 }), (req, res) => {
     var role = req.body.role;
-    //var role = 'tutor';
     req.session.email = req.user.email;
     var email = req.session.email;
     var user = {
@@ -668,13 +704,13 @@ router.post('/facebook-login', passport.authenticate('facebook-login', {
         var sql = "select * from Tutor where email='"+user.email+"'";
         con.query(sql, (err, result) => {
             if(err) {
-                throw err;
                 res.json({
                     success: false,
-                    token: null
+                    token: null,
+                    block: false
                 });
             } 
-            else{  
+            else if(result[0].acc_status != 0){  
                 var fname = result[0].first_name;
                 var lname = result[0].last_name;
                 var status = result[0].acc_status;
@@ -712,11 +748,19 @@ router.post('/facebook-login', passport.authenticate('facebook-login', {
                 }
                
                 
-                 var token = jwt.sign({ tutor }, 'secret_key');
+                var token = jwt.sign({ tutor }, 'secret_key');
                 res.json({
                     success: true,
-                    token: token
+                    token: token, 
+                    block: false
                 });
+            }
+            else if(result[0].acc_status == 0){
+                res.json({
+                    success: false,
+                    token: false,
+                    block: false
+                })
             }
          });
     }
@@ -726,17 +770,17 @@ router.post('/facebook-login', passport.authenticate('facebook-login', {
         
         con.query(sql, (err, result) => {
             if(err) {
-                throw err;
                 res.json({
                     success: false,
-                    token: null
+                    token: null,
+                    block: null
                 });
             }
-            else{
+            else if(result[0].acc_status != 0){
                 var name = result[0].fname;
                 var status =result[0].acc_status;
                 var location, mobile;
-                 if (result[0].location) {
+                if (result[0].location) {
                     location = result[0].location;
                 }
                 else {
@@ -759,8 +803,17 @@ router.post('/facebook-login', passport.authenticate('facebook-login', {
                 var token = jwt.sign({ student }, 'secret_key');
                 res.json({
                     success: true,
-                    token: token
+                    token: token,
+                    block: true
                 });
+            }
+
+            else if(result[0].acc_status == 0){
+                res.json({
+                    success: false,
+                    token: null,
+                    block: false
+                })
             }
          });
     }
