@@ -23,8 +23,7 @@ router.get('/viewProfile', (req, res) => {
                Rate: result[0].Rate,
                ImgUrl: result[0].ImgURL
            }
-
-            //console.log(profile);
+           
             res.json({
                 profile: profile
             });
@@ -88,7 +87,5 @@ router.put('/editProfile', (req, res) => {
         });
     }
 });
-
-
 
 module.exports = router;
