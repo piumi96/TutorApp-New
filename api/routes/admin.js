@@ -12,7 +12,47 @@ router.get('/allStudents', (req, res) => {
                 count: null
             })
         }
-        else{
+        else{   
+            res.json({
+                count: result.length
+            })
+
+
+        }
+    })
+})
+
+router.get('/allTutors', (req, res) => {
+    var sql = "select * from Tutor";
+
+    con.query(sql, (err, result) => {
+        if (err) {
+            console.log(err);
+            res.json({
+                count: null
+            })
+        }
+        else {
+            res.json({
+                count: result.length
+            })
+
+
+        }
+    })
+});
+
+router.get('/allMessages', (req, res) => {
+    var sql = "select * from Suggestions";
+
+    con.query(sql, (err, result) => {
+        if (err) {
+            console.log(err);
+            res.json({
+                count: null
+            })
+        }
+        else {
             res.json({
                 count: result.length
             })
