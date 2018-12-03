@@ -523,25 +523,26 @@ router.post('/login', (req, res) => {
                                         block: false
                                     });
                                 }
-                                else if(result.acc_status == 0){
-                                    res.send({
-                                        success: false,
-                                        token: null,
-                                        block: true
-                                    })
-                                }
-                                else{
-                                    res.send({
-                                        success: false,
-                                        token: null,
-                                        block: false
-                                    })
-                                }
-
+                                
                             });
                         }
                     });
-
+                    
+                }
+                else if(result[0].acc_status == 0){
+                    console.log(result);
+                        res.send({
+                            success: false,
+                            token: null,
+                            block: true
+                        })
+                    }
+                else{
+                    res.send({
+                        success: false,
+                        token: null,
+                        block: false
+                    })
                 }
             }
         });

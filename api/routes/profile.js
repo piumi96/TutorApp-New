@@ -94,10 +94,9 @@ router.put('/editProfile', (req, res) => {
         var mobile = req.body.mobile;
         var subject = req.body.subject;
         var location = req.body.location;
-        var rate = req.body.rate;
         var imgUrl = req.body.imgUrl;
 
-        var sql = "update Tutor set FirstName='" + fname + "', LastName='" + lname + "', Mobile='" + mobile + "', Subject='" + subject + "', Location='" + location + "', Rate='" + rate + "', ImgURL='" + imgUrl + "' where email='" + email + "'";
+        var sql = "update Tutor set FirstName='" + fname + "', LastName='" + lname + "', Mobile='" + mobile + "', Subject='" + subject + "', Location='" + location + "', ImgURL='" + imgUrl + "' where email='" + email + "'";
 
         con.query(sql, function (err, result) {
             if (err) {
