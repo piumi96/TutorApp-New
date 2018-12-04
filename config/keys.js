@@ -12,9 +12,9 @@ module.exports = {
 
     db: {
         host: 'sql12.freemysqlhosting.net',
-        user: 'sql12264188',
-        password: 'WQ5c2uhQBs',
-        database: 'sql12264188'
+        user: 'sql12268166',
+        password: '7BBdhmeSjL',
+        database: 'sql12268166'
     },
 
     session: {

@@ -2,64 +2,68 @@ const express = require('express');
 const router = express.Router();
 const con = require('../../databse/db');
 
-router.get('/allStudents', (req, res) => {
+router.get('/adminDash', (req, res) => {
     var sql = "select * from Student";
+    var sql1 = "select * from Tutor";
+    var sql2 = "select * from Suggestions";
+
+    var Studentcount = null;
+    var Tutorcount = null;
+    var Msgcount = null;
 
     con.query(sql, (err, result) => {
         if(err){
             console.log(err);
-            res.json({
-                count: null
-            })
+            Studentcount = null;
         }
         else{   
-            res.json({
-                count: result.length
+            Studentcount = result.length;
+            con.query(sql1, (err, result) => {
+                if (err) {
+                    console.log(err);
+                    Tutorcount = null;
+                }
+                else {
+                   Tutorcount = result.length;
+                   con.query(sql2, (err, response) => {
+                       if (err) {
+                           console.log(err);
+                           Msgcount = null
+                       }
+                       else {
+                           Msgcount = response.length;
+                           con.query(sql3, (err, result) => {
+                               if(err){
+                                   throw err;
+                               }
+                               else{
+                                   res.json({
+                                       Studentcount: Studentcount,
+                                       Tutorcount: Tutorcount,
+                                       Msgcount: Msgcount
+                                   });
+                               }
+                           })
+                       }
+                   })
+               
+                }
             })
-
-
         }
     })
-})
 
-router.get('/allTutors', (req, res) => {
-    var sql = "select * from Tutor";
-
-    con.query(sql, (err, result) => {
-        if (err) {
-            console.log(err);
-            res.json({
-                count: null
-            })
-        }
-        else {
-            res.json({
-                count: result.length
-            })
-
-
-        }
-    })
 });
 
-router.get('/allMessages', (req, res) => {
-    var sql = "select * from Suggestions";
+router.get('/districtCount', (req, res) => {
+    var district = [];
+    var count = 0;
 
-    con.query(sql, (err, result) => {
-        if (err) {
-            console.log(err);
-            res.json({
-                count: null
-            })
-        }
-        else {
-            res.json({
-                count: result.length
-            })
-
-
-        }
-    })
+    var sql = "select * from District";
+    var sql1 = "select * from Tutor where location = '"+district+"'"
 })
+
+
+
+
 
 module.exports = router;
