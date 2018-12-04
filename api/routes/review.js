@@ -3,7 +3,7 @@ const router = express.Router();
 const con = require('../../databse/db');
 const mySQLEvents = require('mysql-events');
 
-router.post('/review', (req, res) => {
+router.post('/writeReview', (req, res) => {
     var student = req.body.student;
     var tutor = req.body.tutor;
     var content = req.body.content;
@@ -35,4 +35,32 @@ router.post('/review', (req, res) => {
     })
 });
 
+router.get('/viewMyReviews', (req, res) => {
+    var tutor = req.body.tutor;
+    var sql = "select * from Review where tutor='"+tutor+"'";
+
+    con.query(sql, (err, result) => {
+        if (err){
+            res.json({
+                review: null
+            })
+        }
+        else {
+            var review = [];
+            for (var i = 0; i < result.length; i++) {
+                review[i] = {
+                    date: result[i].date,
+                    tutor: result[i].tutor,
+                    student: result[i].student,
+                    content: result[i].content,
+                }
+            }
+
+            res.json({
+                review: review
+            });
+        }
+    })
+
+})
 module.exports = router;
