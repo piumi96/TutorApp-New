@@ -1,16 +1,16 @@
-#Routes
+# Routes
 
-##Suggestions
+## Suggestions
 ### get /viewAllSuggestions
 output: suggestions array
         ID, Sender, Date, Content
 
-###get /mySuggestions
+### get /mySuggestions
 input:  email
 output: suggestions array
         ID, Sender, Date, Content
 
-###post /makeSuggestion
+### post /makeSuggestion
 input: email, content
 output: json success: true/false
 
