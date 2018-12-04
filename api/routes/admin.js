@@ -24,28 +24,23 @@ router.get('/adminDash', (req, res) => {
                     Tutorcount = null;
                 }
                 else {
-                   Tutorcount = result.length;
-                   con.query(sql2, (err, response) => {
-                       if (err) {
+                    Tutorcount = result.length;
+                    con.query(sql2, (err, response) => {
+                        if (err) {
                            console.log(err);
                            Msgcount = null
-                       }
-                       else {
-                           Msgcount = response.length;
-                           con.query(sql3, (err, result) => {
-                               if(err){
-                                   throw err;
-                               }
-                               else{
-                                   res.json({
-                                       Studentcount: Studentcount,
-                                       Tutorcount: Tutorcount,
-                                       Msgcount: Msgcount
-                                   });
-                               }
-                           })
-                       }
-                   })
+                        }
+                        else {
+                            Msgcount = response.length;
+
+                            
+                            res.json({
+                               Studentcount: Studentcount,
+                               Tutorcount: Tutorcount,
+                               Msgcount: Msgcount
+                            });
+                        }
+                    })
                
                 }
             })
@@ -53,6 +48,8 @@ router.get('/adminDash', (req, res) => {
     })
 
 });
+
+
 
 
 
