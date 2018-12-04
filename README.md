@@ -41,17 +41,17 @@ output: request array
 
 id, tutor, sent_date, day, location, subject, status
 
-## put /acceptRequest
+### put /acceptRequest
 input: id
 
 output: json success: true/false
 
-## put /rejectRequest
+### put /rejectRequest
 input: id
 
 output: json success: true/false
 
-## delete /cancelRequest
+### delete /cancelRequest
 input: id
 
 output: json success: true/false
@@ -64,7 +64,7 @@ output: review array
 
 date, tutor, student, content
 
-## get /myReviews
+### get /myReviews
 input: tutor
 
 output: review array
