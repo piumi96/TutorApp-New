@@ -19,6 +19,7 @@ const profileRoutes = require('./api/routes/profile');
 const blockRoute = require('./api/routes/block');
 const suggestionRoutes = require('./api/routes/suggestions');
 const adminRoutes = require('./api/routes/admin');
+const districtRoutes = require('./api/routes/district');
 const passportSetup = require('./config/passport-setup');
 
 const app = express();
@@ -59,6 +60,7 @@ app.use('/', profileRoutes);
 app.use('/', blockRoute);
 app.use('/', suggestionRoutes);
 app.use('/', adminRoutes);
+app.use('/', districtRoutes);
 //app.use('/', viewClass);
 
 app.use((req, res, next)=>{
