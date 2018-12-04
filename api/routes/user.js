@@ -432,6 +432,7 @@ router.post('/login', (req, res) => {
                                     res.json({
                                         success: true,
                                         token: token,
+                                        user: user,
                                         block: false
                                     });
                                 }
@@ -520,6 +521,7 @@ router.post('/login', (req, res) => {
                                     res.json({
                                         success: true,
                                         token: token,
+                                        user: user,
                                         block: false
                                     });
                                 }
@@ -671,6 +673,7 @@ router.post('/google-login', passport.authenticate('google-login', {
                 res.json({
                     success: true,
                     token: token,
+                    user: user,
                     block: false
                 });
             }
@@ -752,7 +755,8 @@ router.post('/facebook-login', passport.authenticate('facebook-login', {
                 var token = jwt.sign({ tutor }, 'secret_key');
                 res.json({
                     success: true,
-                    token: token, 
+                    token: token,
+                    user: user, 
                     block: false
                 });
             }
@@ -805,6 +809,7 @@ router.post('/facebook-login', passport.authenticate('facebook-login', {
                 res.json({
                     success: true,
                     token: token,
+                    user: user,
                     block: true
                 });
             }

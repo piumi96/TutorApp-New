@@ -22,7 +22,9 @@ router.post('/search', (req, res) => {
                         subject: result[i].Subject,
                         rate: result[i].Rate,
                         imgURL: result[i].ImgURL,
-                        email: result[i].email
+                        email: result[i].email,
+                        price: result[i].Price,
+                        available: result[i].Available_time
                     }
                 }
                 res.send({
@@ -49,7 +51,9 @@ router.post('/search', (req, res) => {
                         subject: result[i].Subject,
                         email: result[i].email,
                         imgURL: result[i].ImgURL,
-                        rate: result[i].Rate
+                        rate: result[i].Rate,
+                        price: result[i].Price,
+                        available: result[i].Available_time
                     }
                 }
                 res.send({
@@ -74,7 +78,9 @@ router.post('/search', (req, res) => {
                         subject: result[i].Subject,
                         email: result[i].email,
                         imgURL: result[i].ImgURL,
-                        rate: result[i].Rate
+                        rate: result[i].Rate,
+                        price: result[i].Price,
+                        available: result[i].Available_time
                     }
                 }
                 res.send({
@@ -99,7 +105,9 @@ router.post('/search', (req, res) => {
                         subject: result[i].Subject,
                         email: result[i].email,
                         imgURL: result[i].ImgURL,
-                        rate: result[i].Rate
+                        rate: result[i].Rate,
+                        price: result[i].Price,
+                        available: result[i].Available_time
                     }
                 }
                 res.send({
@@ -109,5 +117,7 @@ router.post('/search', (req, res) => {
         })
     }
 });
+
+
 
 module.exports = router;

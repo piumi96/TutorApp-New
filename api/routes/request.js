@@ -40,7 +40,7 @@ router.get('/viewMyRequests', (req, res) => {
             for(var i=0; i<result.length; i++){
                 request[i] = {
                     id: result[i].reqID,
-                    student: result[i].student,
+                    tutor: result[i].tutor,
                     sent_date: result[i].sent_date,
                     day: result[i].day,
                     location: result[i].location,
