@@ -29,7 +29,7 @@ router.get('/viewAllRequests', (req, res) => {
     });
 })
 
-router.get('/viewMyRequests', (req, res) => {
+router.post('/viewMyRequests', (req, res) => {
     var student = req.body.student;
 
     var sql = "select * from Requests where student='"+student+"'";
