@@ -8,7 +8,7 @@ router.post('/search', (req, res) => {
 
     if(district === "all" && subject=="all"){
 
-        var sql = "select * from Tutor where acc_status='1'";
+        var sql = "select * from Tutor where acc_status='1' order by boostPriority DESC";
         con.query(sql, function(err, result){
             if (err) throw err;
             else{
@@ -37,7 +37,7 @@ router.post('/search', (req, res) => {
 
     else if(subject=="all" && district != "all"){
 
-        var sql = "select * from Tutor where Location like '%"+district+"%' and acc_status='1'";
+        var sql = "select * from Tutor where Location like '%"+district+"%' and acc_status='1' order by boostPriority DESC";
         con.query(sql, function(err, result){
             if(err) throw err;
             else{
@@ -64,7 +64,7 @@ router.post('/search', (req, res) => {
     }
 
     else if(district=="all" && subject != "all"){
-        var sql = "select * from Tutor where Subject like '%"+subject+"%' and acc_status='1'";
+        var sql = "select * from Tutor where Subject like '%"+subject+"%' and acc_status='1' order by boostPriority DESC";
         con.query(sql, function(err, result){
             if(err) throw err;
             else{
@@ -91,7 +91,7 @@ router.post('/search', (req, res) => {
     }
 
     else if(subject != "all" && district != "all"){
-        var sql = "select * from Tutor where (Location like '%"+district+"%' and Subject like '%"+subject+"%' and acc_status='1')";
+        var sql = "select * from Tutor where (Location like '%" + district + "%' and Subject like '%" + subject +"%' and acc_status='1' )order by boostPriority DESC";
         con.query(sql, function(err, result){
             if(err) throw err;
             else{
