@@ -24,7 +24,7 @@
     "express": "^4.16.4",
     "express-session": "^1.15.6",
     "google-classroom": "^2.1.0",
-    "googleapis": "^34.0.0",
+    "googleapis": "^27.0.0",
     "jsonwebtoken": "^8.3.0",
     "mysql": "^2.16.0",
     "mysql-events": "0.0.11",

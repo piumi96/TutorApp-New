@@ -14,7 +14,7 @@ const rateRoute = require('./api/routes/rate');
 const resetPassword = require('./api/routes/resetPassword');
 const subjectRoutes = require('./api/routes/subject');
 const requestRoutes = require('./api/routes/request');
-//const viewClass = require('./api/routes/viewClassroom');
+const viewClass = require('./api/routes/viewClassroom');
 const profileRoutes = require('./api/routes/profile');
 const blockRoute = require('./api/routes/block');
 const suggestionRoutes = require('./api/routes/suggestions');
@@ -52,7 +52,7 @@ app.use(passport.session());
 app.use('/', userRoutes);
 app.use('/', searchRoutes);
 app.use('/', reviewsRoute);
-//app.use('/', rateRoute);
+app.use('/', rateRoute);
 app.use('/', resetPassword);
 app.use('/', subjectRoutes);
 app.use('/', requestRoutes);
@@ -61,7 +61,7 @@ app.use('/', blockRoute);
 app.use('/', suggestionRoutes);
 app.use('/', adminRoutes);
 app.use('/', districtRoutes);
-//app.use('/', viewClass);
+app.use('/', viewClass);
 
 app.use((req, res, next)=>{
     const error = {
