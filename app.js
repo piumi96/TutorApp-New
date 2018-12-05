@@ -52,7 +52,7 @@ app.use(passport.session());
 app.use('/', userRoutes);
 app.use('/', searchRoutes);
 app.use('/', reviewsRoute);
-app.use('/', rateRoute);
+//app.use('/', rateRoute);
 app.use('/', resetPassword);
 app.use('/', subjectRoutes);
 app.use('/', requestRoutes);
