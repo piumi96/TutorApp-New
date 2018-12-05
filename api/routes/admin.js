@@ -7,37 +7,37 @@ router.get('/adminDash', (req, res) => {
     var sql1 = "select * from Tutor";
     var sql2 = "select * from Suggestions";
 
-    var Studentcount = null;
-    var Tutorcount = null;
-    var Msgcount = null;
+    var studentCount = null;
+    var tutorCount = null;
+    var msgCount = null;
 
     con.query(sql, (err, result) => {
         if(err){
             console.log(err);
-            Studentcount = null;
+            studentCount = null;
         }
         else{   
-            Studentcount = result.length;
+            studentCount = result.length;
             con.query(sql1, (err, result) => {
                 if (err) {
                     console.log(err);
-                    Tutorcount = null;
+                    tutorCount = null;
                 }
                 else {
-                    Tutorcount = result.length;
+                    tutorCount = result.length;
                     con.query(sql2, (err, response) => {
                         if (err) {
                            console.log(err);
-                           Msgcount = null
+                           msgCount = null
                         }
                         else {
-                            Msgcount = response.length;
+                            msgCount = response.length;
 
                             
                             res.json({
-                               Studentcount: Studentcount,
-                               Tutorcount: Tutorcount,
-                               Msgcount: Msgcount
+                               studentCount: studentCount,
+                               tutorCount: tutorCount,
+                               msgCount: msgCount
                             });
                         }
                     })
