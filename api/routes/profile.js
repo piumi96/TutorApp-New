@@ -6,7 +6,7 @@ router.get('/viewProfile', (req, res) => {
     var email = req.body.email;
     var role = req.body.role;
 
-    if(role=='tutor'){
+    if(role==='tutor'){
         var sql = "select FirstName, LastName, Location, Mobile, Subject, Rate, ImgURL from Tutor where email='"+email+"'";
         var sql1 = "select * from Review where tutor='"+email+"'";
         var profile;
@@ -55,7 +55,7 @@ router.get('/viewProfile', (req, res) => {
         })   
 
     }
-    else if(role=='student'){
+    else if(role==='student'){
         var sql = "select * from Student where email='"+email+"'";
 
         con.query(sql, (err, result) => {
