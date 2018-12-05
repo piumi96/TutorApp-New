@@ -137,19 +137,46 @@ router.put('/rejectRequest', (req, res) => {
 
 router.delete('/cancelRequest', (req, res) => {
     var id = req.body.id;
+    var student = req.body.student;
 
-    var sql = "delete from Requests where reqID='"+id+"'";
-    con.query(sql, (err, result) => {
+    var sql1 = "delete from Requests where reqID='"+id+"'";
+    var sql = "select reqID, sent_date, day, Requests.location, Requests.subject, tutor, status, FirstName, LastName from Requests, Tutor where Requests.student='" + student + "' and Requests.tutor = Tutor.email";
+
+    con.query(sql1, (err, result) => {
         if(err){
             //throw err;
             res.json({
-                success: false
+                success: false,
+                request: null
             });
         }
         else{
-            res.json({
-                success: true
-            });
+            con.query(sql, (err, result) => {
+                if (err) throw err;
+                else {
+                    var request = [];
+                    for (var i = 0; i < result.length; i++) {
+                        //console.log(result)
+                        request[i] = {
+                            id: result[i].reqID,
+                            tutor: result[i].tutor,
+                            FirstName: result[i].FirstName,
+                            LastName: result[i].LastName,
+                            sent_date: result[i].sent_date,
+                            day: result[i].day,
+                            location: result[i].location,
+                            subject: result[i].subject,
+                            status: result[i].status
+                        }
+                    }
+
+                    res.json({
+                        success: true,
+                        request: request
+                    });
+
+                }
+            })
         }
     })
 })
