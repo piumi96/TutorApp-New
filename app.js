@@ -17,6 +17,8 @@ const subjectRoutes = require('./api/routes/subject');
 const requestRoutes = require('./api/routes/request');
 //const viewClass = require('./api/routes/viewClassroom');
 const passportSetup = require('./config/passport-setup');
+const profileBoostRoute = require('./api/routes/boostProfile');
+//const boostPaymentRoute = require('./api/routes/boostPayment');
 
 const app = express();
 
@@ -30,7 +32,10 @@ app.use(bodyParser.urlencoded({ extends: false }));
 app.use(bodyParser.json());
 
 con.connect((err) => {
-    if(err) throw err;
+    if(err) {
+        console.log(err);
+        throw err;
+    }
     else{
         console.log('Database connected');  
     }
@@ -54,6 +59,8 @@ app.use('/', resetPassword);
 app.use('/', subjectRoutes);
 app.use('/', requestRoutes);
 //app.use('/', viewClass);
+app.use('/', profileBoostRoute);
+//app.use('/', boostPaymentRoute );
 
 app.use((req, res, next)=>{
     const error = {

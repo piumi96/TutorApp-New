@@ -20,7 +20,7 @@ router.post('/register', (req, res) => {
     var fname = req.body.fname;
     var lname = req.body.lname;
     var email = req.body.email;
-    var pword = req.body.password;
+    var pword = req.body.password; 
     
     bcrypt.hash(pword, saltRounds, function (err, hash) {
         if (role === 'tutor') {
@@ -69,7 +69,7 @@ router.post('/google-reg', passport.authenticate('google', {
     
 }), (req, res) => {
     var role = req.body.role;
-    //var role = "student"
+    //var role = "tutor";
     req.session.email = req.user.email;
     var email = req.session.email;
     const user = {
@@ -157,7 +157,7 @@ router.post('/facebook-reg', passport.authenticate('facebook', {
     
 }), (req, res) => {
     var role = req.body.role;
-    //var role = "student";
+    //var role = "tutor";
     req.session.email = req.user.email;
     var email = req.session.email;
      const user = {

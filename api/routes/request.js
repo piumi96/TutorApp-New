@@ -34,7 +34,13 @@ router.post('/makeRequest', (req, res) => {
     var tutor = req.body.tutor;
     var day = req.body.day;
     var time = req.body.time;
-    var subject = req.body.subject;
+    var subject = req.body.subject;  
+
+   /* var student = "rangana@gmail.com";
+    var tutor = "geethya1995@gmail.com";
+    var day = "2018/12/4";
+    var time = "11:07";
+    var subject = "Flutter"; */
 
     var sql = "insert into Requests(tutor, student, sent_date, day, time, subject, status) values('"+tutor+"', '"+student+"', CURDATE()+1, '"+day+"', '"+time+"', '"+subject+"', 'SENT')";
 
@@ -50,8 +56,8 @@ router.post('/makeRequest', (req, res) => {
 });
 
 router.put('/acceptRequest', (req, res) => {
-    var id = req.body.id;
-    var sql = "update Requests set status='ACCEPTED' where reqID = '"+id+"'";
+   var id = req.body.id;
+   var sql = "update Requests set status='ACCEPTED' where reqID = '"+id+"'";
 
     con.query(sql, (err, result) => {
         if(err) throw err;
