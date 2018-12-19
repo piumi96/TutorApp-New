@@ -5,6 +5,7 @@ const passport = require('passport');
 const con = require('../../databse/db');
 const user = require('../../config/passport-setup');
 
+
 const router = express.Router();
 var saltRounds = 10;
 

@@ -8,24 +8,16 @@ const {google} = require('googleapis');
 
 router.get('/viewCourses', (req, res) => {
 
-    //var action = req.body.action;
-    action = 'viewCourse';
+    //action = 'viewCourse';
 
     const SCOPES = ['https://www.googleapis.com/auth/classroom.courses'];
     const TOKEN_PATH = 'token.json';
 
-    if (action === 'viewCourse') { 
-        fs.readFile('credentials.json', (err, content) => {
-            if(err) return console.log('Error loading client secret file:', err);
-            authorize(JSON.parse(content), listCourses);
-        });
-    }
-    else if(action==='createCourse'){
-        fs.readFile('credentials.json', (err, content) => {
-            if (err) return console.log('Error loading client secret file:', err);
-            authorize(JSON.parse(content), createCourses);
-        });
-    }
+    
+    fs.readFile('credentials.json', (err, content) => {
+        if(err) return console.log('Error loading client secret file:', err);
+        authorize(JSON.parse(content), createCourses, listCourses);
+    });
     
     function authorize(credentials, callback){
         const {client_secret, client_id, redirect_uris} = credentials.installed;
@@ -93,16 +85,38 @@ router.get('/viewCourses', (req, res) => {
         })
     }
 
-   /*  function createCourses(auth){
-        const classsroom = google.classroom({ version: 'v1', auth });
+    function createCourses(auth){
+        const classroom = google.classroom({ version: 'v1', auth });
         var newCourse = {
-            name: 'abc',
-            ownerId: 'me',
-            courseState: 'PROVISIONED'
+            Name: 'abc',
+            OwnerId: 'me',
+            CourseState: 'PROVISIONED'
         }
-        classroom.courses.create(newCourse);
     
-    } */
+        course = service.courses().create(newCourse).execute();
+        var displayCourse = {
+            name: course.getName(),
+            id: course.getId
+        }
+        res.json({
+            success: true,
+            displayCourse: displayCourse 
+        });
+    
+    }
+
+   /*  Course course = new Course()
+        .setName("10th Grade Biology")
+        .setSection("Period 2")
+        .setDescriptionHeading("Welcome to 10th Grade Biology")
+        .setDescription("We'll be learning about about the structure of living creatures "
+            + "from a combination of textbooks, guest lectures, and lab work. Expect "
+            + "to be excited!")
+        .setRoom("301")
+        .setOwnerId("me")
+        .setCourseState("PROVISIONED");
+    course = service.courses().create(course).execute();
+    System.out.printf("Course created: %s (%s)\n", course.getName(), course.getId()); */
 })
 
 

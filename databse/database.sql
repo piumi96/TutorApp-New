@@ -16,7 +16,7 @@ create table Tutor(
 		ImgURL varchar(200),
 		Price float,
 		Available_time date,
-		status boolean
+		acc_status boolean set default '1'
 );
 
 create table Student(
@@ -26,7 +26,7 @@ create table Student(
 		name varchar(50),
 		mobile varchar(10),
 		location varchar(30),
-		status boolean
+		acc_status boolean set default '1'
 )
 
 create table Rate(

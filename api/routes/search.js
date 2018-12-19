@@ -17,15 +17,38 @@ router.post('/search', (req, res) => {
                     user[i] = {
                         fname: result[i].FirstName,
                         lname: result[i].LastName,
-                        location: result[i].Location,
-                        mobile: result[i].Mobile,
-                        subject: result[i].Subject,
-                        rate: result[i].Rate,
-                        imgURL: result[i].ImgURL,
                         email: result[i].email,
-                        price: result[i].Price,
-                        available: result[i].Available_time
+                        location: '',
+                        mobile: '',
+                        subject: '',
+                        rate: '',
+                        imgURL: '',
+                        price: '',
+                        available: ''
+
                     }
+                    if (result[i].Location) {
+                        user[i].location = result[i].Location;
+                    }
+                    if (result[i].Mobile) {
+                        user[i].mobile = result[i].Mobile;
+                    }
+                    if (result[i].Subject) {
+                        user[i].subject = result[i].Subject;
+                    }
+                    if (result[i].Rate) {
+                        user[i].rate = result[i].Rate;
+                    }
+                    if (result[i].ImgURL) {
+                        user[i].imgURL = result[i].ImgURL;
+                    }
+                    if (result[i].Price) {
+                        user[i].price = result[i].Price;
+                    }
+                    if (result[i].Available_time) {
+                        user[i].available = result[i].Available_time;
+                    }
+                   
                 }
                 res.send({
                     user: user
@@ -46,15 +69,38 @@ router.post('/search', (req, res) => {
                     user[i] = {
                         fname: result[i].FirstName,
                         lname: result[i].LastName,
-                        location: result[i].Location,
-                        mobile: result[i].Mobile,
-                        subject: result[i].Subject,
                         email: result[i].email,
-                        imgURL: result[i].ImgURL,
-                        rate: result[i].Rate,
-                        price: result[i].Price,
-                        available: result[i].Available_time
+                        location: '',
+                        mobile: '',
+                        subject: '',
+                        rate: '',
+                        imgURL: '',
+                        price: '',
+                        available: ''
+
                     }
+                    if (result[i].Location) {
+                        user[i].location = result[i].Location;
+                    }
+                    if (result[i].Mobile) {
+                        user[i].mobile = result[i].Mobile;
+                    }
+                    if (result[i].Subject) {
+                        user[i].subject = result[i].Subject;
+                    }
+                    if (result[i].Rate) {
+                        user[i].rate = result[i].Rate;
+                    }
+                    if (result[i].ImgURL) {
+                        user[i].imgURL = result[i].ImgURL;
+                    }
+                    if (result[i].Price) {
+                        user[i].price = result[i].Price;
+                    }
+                    if (result[i].Available_time) {
+                        user[i].available = result[i].Available_time;
+                    }
+
                 }
                 res.send({
                     user: user
@@ -73,15 +119,38 @@ router.post('/search', (req, res) => {
                     user[i] = {
                         fname: result[i].FirstName,
                         lname: result[i].LastName,
-                        location: result[i].Location,
-                        mobile: result[i].Mobile,
-                        subject: result[i].Subject,
                         email: result[i].email,
-                        imgURL: result[i].ImgURL,
-                        rate: result[i].Rate,
-                        price: result[i].Price,
-                        available: result[i].Available_time
+                        location: '',
+                        mobile: '',
+                        subject: '',
+                        rate: '',
+                        imgURL: '',
+                        price: '',
+                        available: ''
+
                     }
+                    if (result[i].Location) {
+                        user[i].location = result[i].Location;
+                    }
+                    if (result[i].Mobile) {
+                        user[i].mobile = result[i].Mobile;
+                    }
+                    if (result[i].Subject) {
+                        user[i].subject = result[i].Subject;
+                    }
+                    if (result[i].Rate) {
+                        user[i].rate = result[i].Rate;
+                    }
+                    if (result[i].ImgURL) {
+                        user[i].imgURL = result[i].ImgURL;
+                    }
+                    if (result[i].Price) {
+                        user[i].price = result[i].Price;
+                    }
+                    if (result[i].Available_time) {
+                        user[i].available = result[i].Available_time;
+                    }
+
                 }
                 res.send({
                     user: user
@@ -100,14 +169,37 @@ router.post('/search', (req, res) => {
                     user[i] = {
                         fname: result[i].FirstName,
                         lname: result[i].LastName,
-                        location: result[i].Location,
-                        mobile: result[i].Mobile,
-                        subject: result[i].Subject,
                         email: result[i].email,
-                        imgURL: result[i].ImgURL,
-                        rate: result[i].Rate,
-                        price: result[i].Price,
-                        available: result[i].Available_time
+                        location: '',
+                        mobile: '',
+                        subject: '',
+                        rate: '',
+                        imgURL: '',
+                        price: '',
+                        available: ''
+
+                    }
+
+                    if (result[i].Location) {
+                        user[i].location = result[i].Location;
+                    }
+                    if (result[i].Mobile) {
+                        user[i].mobile = result[i].Mobile;
+                    }
+                    if (result[i].Subject) {
+                        user[i].subject = result[i].Subject;
+                    }
+                    if (result[i].Rate) {
+                        user[i].rate = result[i].Rate;
+                    }
+                    if (result[i].ImgURL) {
+                        user[i].imgURL = result[i].ImgURL;
+                    }
+                    if (result[i].Price) {
+                        user[i].price = result[i].Price;
+                    }
+                    if (result[i].Available_time) {
+                        user[i].available = result[i].Available_time;
                     }
                 }
                 res.send({
