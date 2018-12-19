@@ -2,13 +2,13 @@ const express = require('express');
 const router = express.Router();
 const con = require('../../databse/db');
 
-router.get('/viewProfile', (req, res) => {
+router.post('/viewProfile', (req, res) => {
     var email = req.body.email;
     var role = req.body.role;
 
     if(role==='tutor'){
         var sql = "select FirstName, LastName, Location, Mobile, Subject, Rate, ImgURL from Tutor where email='"+email+"'";
-        var sql1 = "select * from Review where tutor='"+email+"'";
+        var sql1 = "select date, content, name from Review, Student where tutor='"+email+"' and Student.email=Review.student";
         var profile;
         var reviews = [];
     
@@ -20,15 +20,16 @@ router.get('/viewProfile', (req, res) => {
                 }) ;        
             }
             else{
+                console.log(result);
                 profile = {
                    email: email,
-                   FirstName: result[0].FirstName,
-                   LastName: result[0].LastName,
-                   Location: result[0].Location,
-                   Mobile: result[0].Mobile,
-                   Subject: result[0].Subject,
-                   Rate: result[0].Rate,
-                   ImgUrl: result[0].ImgURL
+                   firstName: result[0].FirstName,
+                   lastName: result[0].LastName,
+                   location: result[0].Location,
+                   mobile: result[0].Mobile,
+                   subject: result[0].Subject,
+                   rate: result[0].Rate,
+                   imgUrl: result[0].ImgURL 
                }
     
                con.query(sql1, (err, response) => {
@@ -36,11 +37,12 @@ router.get('/viewProfile', (req, res) => {
                        console.log(err);
                    }
                    else{
+                       console.log(response);
                        for(var i=response.length-1; i>=0; i--){
                             reviews[i - (response.length - 1)] = {
                                date: response[i].date,
                                tutor: response[i].tutor,
-                               student: response[i].student,
+                               student: response[i].name,
                                content: response[i].content, 
                            }
                        } 
