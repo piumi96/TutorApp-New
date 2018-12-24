@@ -75,13 +75,13 @@
 
 passport.use('googleClass',
     new GoogleStrategy({
-        callbackURL: '/class/courses',
+        callbackURL: '/courses',
         clientID: keys.googleClassroom.clientID,
         clientSecret: keys.googleClassroom.clientSecret
 
     }, (accessToken, refreshToken, email, courses, done) => {
-        console.log(email);
-        console.log(" ");
+        //console.log(email);
+        //console.log(" ");
        // console.log(courses);
         
         var access_token = accessToken;

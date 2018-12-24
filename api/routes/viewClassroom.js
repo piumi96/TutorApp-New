@@ -1,12 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const con = require('../../databse/db');
+const passport = require('passport');
+const user = require('../../config/passport-setup');
+const Client = require('google-classroom');
+const keys = require('../../config/keys');
 
-const fs = require('fs');
+/* const fs = require('fs');
 const readline = require('readline');
 const {google} = require('googleapis');
 
-router.get('/viewCourses', (req, res) => {
+router.get('/courses', (req, res) => {
 
     //action = 'viewCourse';
 
@@ -16,7 +20,7 @@ router.get('/viewCourses', (req, res) => {
     
     fs.readFile('credentials.json', (err, content) => {
         if(err) return console.log('Error loading client secret file:', err);
-        authorize(JSON.parse(content), createCourses, listCourses);
+        authorize(JSON.parse(content), createCourses);
     });
     
     function authorize(credentials, callback){
@@ -93,32 +97,46 @@ router.get('/viewCourses', (req, res) => {
             CourseState: 'PROVISIONED'
         }
     
-        course = service.courses().create(newCourse).execute();
-        var displayCourse = {
-            name: course.getName(),
-            id: course.getId
-        }
-        res.json({
-            success: true,
-            displayCourse: displayCourse 
+        classroom.courses.create(newCourse, (err, result) => {
+            if(err){
+                console.log(err);
+                res.json({
+                    success: false,
+                    displaycourse: null
+                })
+            }
+            else{
+                listCourses;
+            }
         });
+        
     
     }
+}) */
 
-   /*  Course course = new Course()
-        .setName("10th Grade Biology")
-        .setSection("Period 2")
-        .setDescriptionHeading("Welcome to 10th Grade Biology")
-        .setDescription("We'll be learning about about the structure of living creatures "
-            + "from a combination of textbooks, guest lectures, and lab work. Expect "
-            + "to be excited!")
-        .setRoom("301")
-        .setOwnerId("me")
-        .setCourseState("PROVISIONED");
-    course = service.courses().create(course).execute();
-    System.out.printf("Course created: %s (%s)\n", course.getName(), course.getId()); */
+
+router.get('/courses', passport.authenticate('googleClass', {
+    scope: ['email', 'https://www.googleapis.com/auth/classroom.courses']
+}), (req, res) => {
+    req.session.access_token = req.user.access_token;
+    var access_token = req.session.access_token;
+    req.session.refresh_token = req.session.refresh_token;
+    var refresh_token = req.session.resfresh_token;
+    req.session.scope = req.user.scope;
+    var email = req.session.scope;
+
+    console.log(email.id_token);
+
+    const client = new Client({
+        clientId: keys.googleClassroom.clientID,
+        clientSecret: keys.googleClassroom.clientSecret,
+        refreshToken: email.id_token
+    })
+
+    console.log(client.getCourses());
+
+    res.send("google classroom works");
 })
-
 
 
 module.exports = router; 
