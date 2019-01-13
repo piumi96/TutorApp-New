@@ -48,6 +48,7 @@ router.post('/register', (req, res) => {
                 con.query(sql, function (err, result) {
                     console.log(result);
                     if (err) {
+                        console.log(err);
                         res.json({
                             has: false,
                             success: false,
@@ -501,10 +502,13 @@ router.post('/login', (req, res) => {
                     con.query(sql2, function (err, result) {
                         if (err) throw err;
                         else {
-                            console.log(result);
+                            //console.log(result);
                             var pass = result[0].pword;
                             bcrypt.compare(pword, pass, function (err, response) {
-                                if (err) throw err;
+                                console.log(response);
+                                if (err){
+                                    console.log(err);
+                                }
                                 else if (response) {
                                     const user = {
                                         name: name,
@@ -523,6 +527,14 @@ router.post('/login', (req, res) => {
                                         success: true,
                                         token: token,
                                         user: user,
+                                        block: false
+                                    });
+                                }
+                                else if(!response){
+                                    res.json({
+                                        success: false,
+                                        token: null,
+                                        user: null,
                                         block: false
                                     });
                                 }

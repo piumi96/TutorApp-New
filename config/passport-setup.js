@@ -1,7 +1,7 @@
-
     const passport = require('passport');
     const GoogleStrategy = require('passport-google-oauth20');
     const FacebookStrategy = require('passport-facebook');
+    const refresh = require('passport-oauth2-refresh');
     const keys = require('./keys');
     const con = require('../databse/db');
     
@@ -33,7 +33,7 @@
              //options for google strategy
              callbackURL: '/google-login',
              clientID: keys.google.clientID,
-             clientSecret: keys.google.clientSecret
+             clientSecret: keys.google.clientSecret             
          }, (accessToken, refreshToken, email, done) => {
              //passport callback function                
                  done(null, {
@@ -77,23 +77,26 @@ passport.use('googleClass',
     new GoogleStrategy({
         callbackURL: '/courses',
         clientID: keys.googleClassroom.clientID,
-        clientSecret: keys.googleClassroom.clientSecret
-
-    }, (accessToken, refreshToken, email, courses, done) => {
-        //console.log(email);
-        //console.log(" ");
-       // console.log(courses);
+        clientSecret: keys.googleClassroom.clientSecret,
         
-        var access_token = accessToken;
-        var refresh_token = refreshToken;
+    }, (accessToken, refreshToken, courses, email, done) => {
+        //console.log(refresh.requestNewAccessToken('googleClass', 'refreshToken', done));
 
+        var sql = "insert into Tutor(refreshToken) values('"+refreshToken+"')";
+        con.query(sql, (err, result) => {
+            if(err) throw err;
+            console.log(refreshToken);
+        });
+        //console.log(refreshToken);
         done(null, {
-            scope: email,
-            access_token: access_token,
-            refresh_token: refresh_token
+            email: email,
+            access_token: accessToken,
+            refresh_token: refreshToken
         });
     })
 )
+
+
 
 
 

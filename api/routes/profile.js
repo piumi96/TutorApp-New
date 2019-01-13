@@ -8,7 +8,7 @@ router.post('/viewProfile', (req, res) => {
 
     if(role==='tutor'){
         var sql = "select FirstName, LastName, Location, Mobile, Subject, Rate, ImgURL from Tutor where email='"+email+"'";
-        var sql1 = "select date, content, name from Review, Student where tutor='"+email+"' and Student.email=Review.student";
+        var sql1 = "select date, content, name, ImgURL from Review, Student where tutor='"+email+"' and Student.email=Review.student";
         var profile;
         var reviews = [];
     
@@ -44,6 +44,7 @@ router.post('/viewProfile', (req, res) => {
                                tutor: response[i].tutor,
                                student: response[i].name,
                                content: response[i].content, 
+                               image: response[i].ImgURL
                            }
                        } 
                        res.json({
@@ -70,9 +71,10 @@ router.post('/viewProfile', (req, res) => {
             else{
                 console.log(result);
                 var profile = {
-                    Name: result[0].name,
-                    Mobile: result[0].mobile,
-                    Location: result[0].location,
+                    name: result[0].name,
+                    mobile: result[0].mobile,
+                    location: result[0].location,
+                    image: result[0].ImgURL,
                     email: email
                 }
 

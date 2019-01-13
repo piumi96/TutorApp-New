@@ -3,14 +3,81 @@ const router = express.Router();
 const con = require('../../databse/db');
 const passport = require('passport');
 const user = require('../../config/passport-setup');
-const Client = require('google-classroom');
+const Client = require('google-classroom/index');
 const keys = require('../../config/keys');
+
+/* const { google } = require('googleapis');
+const fs = require('fs');
+const path = require('path');
+const http = require('http');
+const url = require('url');
+const opn = require('opn');
+const destroyer = require('server-destroy');
+const classroom = google.classroom({ version: 'v1'});
+
+const oauth2Client = new google.auth.OAuth2(
+    keys.oauthClient.clientID,
+    keys.oauthClient.clientSecret,
+    '/courses'
+);
+
+google.options({ auth: oauth2Client });
+
+async function authenticate(scopes) {
+    return new Promise((resolve, reject) => {
+        // grab the url that will be used for authorization
+        const authorizeUrl = oauth2Client.generateAuthUrl({
+            access_type: 'offline',
+            scope: scopes.join(' '),
+            prompt: 'consent'
+        });
+        const server = http
+            .createServer(async (req, res) => {
+                try {
+                    if (req.url.indexOf('/oauth2callback') > -1) {
+                        const qs = new url.URL(req.url, 'http://localhost:3000')
+                            .searchParams;
+                        res.end('Authentication successful! Please return to the console.');
+                        server.destroy();
+                        const { tokens } = await oauth2Client.getToken(qs.get('code'));
+                        oauth2Client.credentials = tokens;
+                        resolve(oauth2Client);
+                    }
+                } catch (e) {
+                    reject(e);
+                }
+            })
+            .listen(3000, () => {
+                // open the browser to the authorize url to start the workflow
+                opn(authorizeUrl, { wait: false }).then(cp => cp.unref());
+            });
+        destroyer(server);
+    });
+}
+
+async function runSample() {
+    // retrieve user profile
+    const res = await classroom.courses.list;
+    console.log(res.data);
+}
+
+const scopes = [
+    'https://www.googleapis.com/auth/classroom.courses'
+];
+authenticate(scopes)
+    .then(client => runSample(client))
+    .catch(console.error);
+
+  */
+
+
+
 
 /* const fs = require('fs');
 const readline = require('readline');
 const {google} = require('googleapis');
 
-router.get('/courses', (req, res) => {
+router.post('/courses', (req, res) => {
 
     //action = 'viewCourse';
 
@@ -74,6 +141,7 @@ router.get('/courses', (req, res) => {
                 courses.forEach((course) => {
                     console.log(`${course.name} (${course.id})`);
                 });
+                console.log(response);
                 res.json({
                     success: true,
                     courses: courses
@@ -106,6 +174,7 @@ router.get('/courses', (req, res) => {
                 })
             }
             else{
+                console.log(result);
                 listCourses;
             }
         });
@@ -115,7 +184,7 @@ router.get('/courses', (req, res) => {
 }) */
 
 
-router.get('/courses', passport.authenticate('googleClass', {
+/* router.get('/courses', passport.authenticate('googleClass', {
     scope: ['email', 'https://www.googleapis.com/auth/classroom.courses']
 }), (req, res) => {
     req.session.access_token = req.user.access_token;
@@ -125,18 +194,18 @@ router.get('/courses', passport.authenticate('googleClass', {
     req.session.scope = req.user.scope;
     var email = req.session.scope;
 
-    console.log(email.id_token);
+    //console.log(email.id_token);
 
     const client = new Client({
         clientId: keys.googleClassroom.clientID,
         clientSecret: keys.googleClassroom.clientSecret,
-        refreshToken: email.id_token
+        refreshToken: refresh_token
     })
 
     console.log(client.getCourses());
 
     res.send("google classroom works");
-})
+}) */
 
 
 module.exports = router; 

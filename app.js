@@ -14,12 +14,13 @@ const rateRoute = require('./api/routes/rate');
 const resetPassword = require('./api/routes/resetPassword');
 const subjectRoutes = require('./api/routes/subject');
 const requestRoutes = require('./api/routes/request');
-const viewClass = require('./api/routes/viewClassroom');
+//const viewClass = require('./api/routes/viewClassroom');
 const profileRoutes = require('./api/routes/profile');
 const blockRoute = require('./api/routes/block');
 const suggestionRoutes = require('./api/routes/suggestions');
 const adminRoutes = require('./api/routes/admin');
 const districtRoutes = require('./api/routes/district');
+const classroomRoutes = require('./api/routes/classroom');
 const passportSetup = require('./config/passport-setup');
 
 const app = express();
@@ -61,7 +62,8 @@ app.use('/', blockRoute);
 app.use('/', suggestionRoutes);
 app.use('/', adminRoutes);
 app.use('/', districtRoutes);
-app.use('/', viewClass);
+app.use('/', classroomRoutes);
+//app.use('/', viewClass);
 
 app.use((req, res, next)=>{
     const error = {

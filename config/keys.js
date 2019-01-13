@@ -26,4 +26,9 @@ module.exports = {
         clientSecret: "epfbaZNeiGGfSaMnixFmxNIy"
     },
 
+    oauthClient: {
+        clientID: '947360852424-e92nlh6cojdgfk0fka2m2ct5ggpsn1dj.apps.googleusercontent.com',
+        clientSecret: 'Q11YQXDnfYRWLsMRLE0yGNf9'
+    }
+
 };
