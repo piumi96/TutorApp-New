@@ -438,6 +438,13 @@ router.post('/login', (req, res) => {
                                         block: false
                                     });
                                 }
+                                else if(!response){
+                                    res.json({
+                                        success: false,
+                                        token: null,
+                                        block: false
+                                    });
+                                }
                                 else if(result[0].acc_status==0){
                                     res.json({
                                         success: false,
