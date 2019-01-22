@@ -22,6 +22,7 @@ const adminRoutes = require('./api/routes/admin');
 const districtRoutes = require('./api/routes/district');
 const classroomRoutes = require('./api/routes/classroom');
 const tutorDashRoutes = require('./api/routes/tutorDash');
+const achievementRoutes = require('./api/routes/achievements');
 const passportSetup = require('./config/passport-setup');
 
 const app = express();
@@ -65,6 +66,7 @@ app.use('/', adminRoutes);
 app.use('/', districtRoutes);
 app.use('/', classroomRoutes);
 app.use('/', tutorDashRoutes);
+app.use('/', achievementRoutes);
 //app.use('/', viewClass);
 
 app.use((req, res, next)=>{
