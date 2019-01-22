@@ -29,7 +29,7 @@ router.post('/viewProfile', (req, res) => {
                    mobile: result[0].Mobile,
                    subject: result[0].Subject,
                    rate: result[0].Rate,
-                   imgUrl: result[0].ImgURL 
+                   imgUrl: result[0].imgUrl 
                }
     
                con.query(sql1, (err, response) => {
@@ -44,7 +44,7 @@ router.post('/viewProfile', (req, res) => {
                                tutor: response[i].tutor,
                                student: response[i].name,
                                content: response[i].content, 
-                               image: response[i].ImgURL
+                               image: response[i].ImgUrl
                            }
                        } 
                        res.json({
@@ -74,7 +74,7 @@ router.post('/viewProfile', (req, res) => {
                     name: result[0].name,
                     mobile: result[0].mobile,
                     location: result[0].location,
-                    image: result[0].ImgURL,
+                    image: result[0].ImgUrl,
                     email: email
                 }
 
@@ -100,7 +100,7 @@ router.put('/editProfile', (req, res) => {
         var location = req.body.location;
         var imgUrl = req.body.imgUrl;
 
-        var sql = "update Tutor set FirstName='" + fname + "', LastName='" + lname + "', Mobile='" + mobile + "', Subject='" + subject + "', Location='" + location + "', ImgURL='" + imgUrl + "' where email='" + email + "'";
+        var sql = "update Tutor set FirstName='" + fname + "', LastName='" + lname + "', Mobile='" + mobile + "', Subject='" + subject + "', Location='" + location + "', ImgUrl='" + imgUrl + "' where email='" + email + "'";
 
         con.query(sql, function (err, result) {
             if (err) {
