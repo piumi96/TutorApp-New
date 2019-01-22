@@ -1,3 +1,6 @@
+create database tutorApp;
+use tutorApp;
+
 create table District(
 		DistrictID int primary key auto_increment,
 		name varchar(30)

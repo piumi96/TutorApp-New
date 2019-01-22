@@ -8,7 +8,7 @@ const { google } = require('googleapis');
 const classroom = google.classroom({ version: 'v1' });
 
 const fs = require('fs');
-const SCOPES = ['https://www.googleapis.com/auth/classroom.courses'];
+const SCOPES = ['https://www.googleapis.com/auth/classroom.courses', 'https://www.googleapis.com/auth/classroom.rosters'];
 const TOKEN_PATH = 'token.json';
 
 const credentials = {
@@ -61,7 +61,7 @@ function getNewToken(oAuth2Client, callback) {
     });
 }
 
-router.get('/courses', (req, res) => {
+router.get('/listCourses', (req, res) => {
     authorize(credentials, listCourses);
 
     function listCourses(auth) {
@@ -95,16 +95,17 @@ router.get('/courses', (req, res) => {
 
 router.post('/createCourse', (req, res) => {
     authorize(credentials, createCourses);
-
+    
     function createCourses(auth) {
-        const classroom = google.classroom({ version: 'v1', auth });
         var newCourse = {
             'name': req.body.name,
-            'ownerId': 'me' 
+            'ownerId': 'me'
         };
-        classroom.courses.create({
-            newCourse: newCourse
-        }, (err, response) => {
+
+        console.log(newCourse);
+        const classroom = google.classroom({ version: 'v1', auth });
+        
+        classroom.courses.create(newCourse, (err, response) => {
             if(err){
                 console.log(err);
                 res.json({
@@ -122,8 +123,8 @@ router.post('/createCourse', (req, res) => {
 })
 
 router.get('/getCourse', (req, res) => {
-    //var id = req.body.id;
-    var id = '16353445529';
+    var id = req.body.id;
+    //var id = '16353445529';
     authorize(credentials, getCourse);
 
     function getCourse(auth){
@@ -138,7 +139,7 @@ router.get('/getCourse', (req, res) => {
                     course: null
                 });
             }
-            console.log(response.data);
+            //console.log(response.data);
             const course = response.data
             res.json({
                 success: true,
@@ -146,6 +147,25 @@ router.get('/getCourse', (req, res) => {
             })
         });
     }
+});
+
+router.get('/courseStudents', (req, res) => {
+    var courseId = req.body.courseId;
+    authorize(credentials, listStudents);
+
+    function listStudents(auth){
+        const classroom = google.classroom({ version: 'v1', auth });
+        classroom.courses.students.list({
+            courseId: courseId,
+            pageSize: 10
+        }, (err, response) => {
+            
+        })
+    }
 })
+
+
+
+
 
 module.exports = router;
