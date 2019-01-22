@@ -6,7 +6,7 @@ const user = require('../../config/passport-setup');
 const Client = require('google-classroom/index');
 const keys = require('../../config/keys');
 
-/* const { google } = require('googleapis');
+const { google } = require('googleapis');
 const fs = require('fs');
 const path = require('path');
 const http = require('http');
@@ -31,15 +31,14 @@ async function authenticate(scopes) {
             scope: scopes.join(' '),
             prompt: 'consent'
         });
-        const server = http
-            .createServer(async (req, res) => {
+        router.get('/courses',
+            (req, res) => {
                 try {
                     if (req.url.indexOf('/oauth2callback') > -1) {
                         const qs = new url.URL(req.url, 'http://localhost:3000')
                             .searchParams;
                         res.end('Authentication successful! Please return to the console.');
-                        server.destroy();
-                        const { tokens } = await oauth2Client.getToken(qs.get('code'));
+                        const { tokens } = oauth2Client.getToken(qs.get('code'));
                         oauth2Client.credentials = tokens;
                         resolve(oauth2Client);
                     }
@@ -47,11 +46,7 @@ async function authenticate(scopes) {
                     reject(e);
                 }
             })
-            .listen(3000, () => {
-                // open the browser to the authorize url to start the workflow
-                opn(authorizeUrl, { wait: false }).then(cp => cp.unref());
-            });
-        destroyer(server);
+            
     });
 }
 
@@ -68,7 +63,7 @@ authenticate(scopes)
     .then(client => runSample(client))
     .catch(console.error);
 
-  */
+ 
 
 
 
@@ -77,7 +72,7 @@ authenticate(scopes)
 const readline = require('readline');
 const {google} = require('googleapis');
 
-router.post('/courses', (req, res) => {
+router.get('/courses', (req, res) => {
 
     //action = 'viewCourse';
 
@@ -106,6 +101,7 @@ router.post('/courses', (req, res) => {
     function getNewToken(oAuth2Client, callback){
         const authUrl = oAuth2Client.generateAuthUrl({
             access_type: 'offline',
+            prompt: 'consent',
             scope: SCOPES,
         });
         console.log('Authorize this app by visiting this url:', authUrl);
@@ -181,8 +177,8 @@ router.post('/courses', (req, res) => {
         
     
     }
-}) */
-
+})
+ */
 
 /* router.get('/courses', passport.authenticate('googleClass', {
     scope: ['email', 'https://www.googleapis.com/auth/classroom.courses']

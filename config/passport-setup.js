@@ -4,6 +4,8 @@
     const refresh = require('passport-oauth2-refresh');
     const keys = require('./keys');
     const con = require('../databse/db');
+    const { google } = require('googleapis');
+    const classroom = google.classroom({ version: 'v1' });
     
     passport.serializeUser((user, done) => {
         done(null, user);
@@ -73,7 +75,7 @@
        })
     );
 
-passport.use('googleClass',
+/* passport.use('googleClass',
     new GoogleStrategy({
         callbackURL: '/courses',
         clientID: keys.googleClassroom.clientID,
@@ -82,19 +84,19 @@ passport.use('googleClass',
     }, (accessToken, refreshToken, courses, email, done) => {
         //console.log(refresh.requestNewAccessToken('googleClass', 'refreshToken', done));
 
-        var sql = "insert into Tutor(refreshToken) values('"+refreshToken+"')";
+        var sql = "update Tutor set Tutor.refreshToken = '" + refreshToken + "' where email = '" + email.emails[0].value +"'" ;
         con.query(sql, (err, result) => {
             if(err) throw err;
-            console.log(refreshToken);
         });
-        //console.log(refreshToken);
+        //console.log(courses);
         done(null, {
             email: email,
+            course: courses,
             access_token: accessToken,
             refresh_token: refreshToken
         });
     })
-)
+) */
 
 
 

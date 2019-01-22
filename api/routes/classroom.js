@@ -3,32 +3,149 @@ const router = express.Router();
 const con = require('../../databse/db');
 const passport = require('passport');
 const user = require('../../config/passport-setup');
-const refresh = require('passport-oauth2-refresh');
 const keys = require('../../config/keys');
-const Client = require('google-classroom');
+const { google } = require('googleapis');
+const classroom = google.classroom({ version: 'v1' });
 
-router.get('/courses', passport.authenticate('googleClass', {
-    scope: ['https://www.googleapis.com/auth/classroom.courses.readonly', 'email'], 
-    accessType: 'offline', promtp: 'consent'
-}), (req, res) => {
-    req.session.access_token = req.user.access_token;
-    var access_token = req.session.access_token;
-    req.session.refresh_token = req.session.refresh_token;
-    var refresh_token = req.session.resfresh_token;
-    req.session.scope = req.user.email;
-    var email = req.session.email;
+const fs = require('fs');
+const SCOPES = ['https://www.googleapis.com/auth/classroom.courses'];
+const TOKEN_PATH = 'token.json';
 
-    //console.log(refresh_token);
+const credentials = {
+    client_secret: keys.oauthClient.clientSecret,
+    client_id: keys.oauthClient.clientID,
+    redirect_uris: ["urn:ietf:wg:oauth:2.0:oob", "http://localhost:3000/", "https://classroom.googleapis.com/v1/courses"]
+};
 
-    /* const client = new Client({
-        clientId: keys.googleClassroom.clientID,
-        clientSecret: keys.googleClassroom.clientSecret,
-        refreshToken: refresh_token
-    })
+function authorize(credentials, callback) {
+    const client_secret = credentials.client_secret;
+    const client_id = credentials.client_id;
+    const redirect_uris = credentials.redirect_uris;
 
-    console.log(client.getCourses()); */
+    const oAuth2Client = new google.auth.OAuth2(
+        client_id, client_secret, redirect_uris[0]
+    );
 
-    res.send('Callback google classroom reached');
+    fs.readFile(TOKEN_PATH, (err, token) => {
+        if (err) return getNewToken(oAuth2Client, callback);
+        oAuth2Client.setCredentials(JSON.parse(token));
+        callback(oAuth2Client);
+    });
+}
+
+function getNewToken(oAuth2Client, callback) {
+    const authUrl = oAuth2Client.generateAuthUrl({
+        access_type: 'offline',
+        prompt: 'consent',
+        scope: SCOPES,
+    });
+    console.log('Authorize this app by visiting this url:', authUrl);
+    const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout,
+    });
+
+    rl.question('Enter the code from that page here: ', (code) => {
+        rl.close();
+        oAuth2Client.getToken(code, (err, token) => {
+            if (err) return console.error('Error retireving access token', err);
+            oAuth2Client.setCredentials(token);
+            fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
+                if (err) console.error(err);
+                console.log('Token stored to', TOKEN_PATH);
+            });
+            callback(oAuth2Client);
+
+        });
+
+    });
+}
+
+router.get('/courses', (req, res) => {
+    authorize(credentials, listCourses);
+
+    function listCourses(auth) {
+        const classroom = google.classroom({ version: 'v1', auth });
+        classroom.courses.list({
+            pageSize: 10,
+        }, (err, response) => {
+            if (err) return console.error('The API returned an error: ' + err);
+            const courses = response.data.courses;
+            if (courses && courses.length) {
+                console.log('Courses:');
+                courses.forEach((course) => {
+                    console.log(`${course.name} (${course.id})`);
+                });
+                //console.log(response);
+                res.json({
+                    success: true,
+                    courses: courses
+                })
+            }
+            else {
+                console.log('No courses found');
+                res.json({
+                    success: false,
+                    courses: null
+                })
+            }
+        })
+    }
+});
+
+router.post('/createCourse', (req, res) => {
+    authorize(credentials, createCourses);
+
+    function createCourses(auth) {
+        const classroom = google.classroom({ version: 'v1', auth });
+        var newCourse = {
+            'name': req.body.name,
+            'ownerId': 'me' 
+        };
+        classroom.courses.create({
+            newCourse: newCourse
+        }, (err, response) => {
+            if(err){
+                console.log(err);
+                res.json({
+                    success: false,
+                    newCourse: null
+                })
+            }
+            else{
+                console.log(response);
+                res.send("Creating a course");
+            }
+        });
+    }
+
+})
+
+router.get('/getCourse', (req, res) => {
+    //var id = req.body.id;
+    var id = '16353445529';
+    authorize(credentials, getCourse);
+
+    function getCourse(auth){
+        const classroom = google.classroom({ version: 'v1', auth });
+        classroom.courses.get({
+            id: id,
+        }, (err, response) => {
+            if(err){
+                console.log(err);
+                res.json({
+                    success: false,
+                    course: null
+                });
+            }
+            console.log(response.data);
+            const course = response.data
+            res.json({
+                success: true,
+                course: course,
+            })
+        });
+    }
 })
 
 module.exports = router;

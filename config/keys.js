@@ -17,6 +17,13 @@ module.exports = {
         database: 'tutionmaster'
     },
 
+    localdb: {
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'tutorapp'
+    },
+
     session: {
         cookieKey: 'thisistheTutorAppbackendAnditsawesome'
     },
