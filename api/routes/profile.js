@@ -7,8 +7,8 @@ router.post('/viewProfile', (req, res) => {
     var role = req.body.role;
 
     if(role==='tutor'){
-        var sql = "select FirstName, LastName, Location, Mobile, Subject, Rate, ImgURL from Tutor where email='"+email+"'";
-        var sql1 = "select date, content, name, ImgURL from Review, Student where tutor='"+email+"' and Student.email=Review.student";
+        var sql = "select FirstName, LastName, Location, Mobile, Subject, Rate, ImgUrl from Tutor where email='"+email+"'";
+        var sql1 = "select date, content, name, ImgUrl from Review, Student where tutor='"+email+"' and Student.email=Review.student";
         var profile;
         var reviews = [];
     
