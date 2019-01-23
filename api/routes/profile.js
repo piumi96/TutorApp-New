@@ -25,6 +25,7 @@ router.post('/viewProfile', (req, res) => {
                    email: email,
                    firstName: result[0].FirstName,
                    lastName: result[0].LastName,
+                   description: result[0].description,
                    location: result[0].Location,
                    mobile: result[0].Mobile,
                    subject: result[0].Subject,
@@ -95,12 +96,13 @@ router.put('/editProfile', (req, res) => {
     if (role === 'tutor') {
         var fname = req.body.fname;
         var lname = req.body.lname;
+        var description = req.body.description
         var mobile = req.body.mobile;
         var subject = req.body.subject;
         var location = req.body.location;
         var imgUrl = req.body.imgUrl;
 
-        var sql = "update Tutor set FirstName='" + fname + "', LastName='" + lname + "', Mobile='" + mobile + "', Subject='" + subject + "', Location='" + location + "', ImgUrl='" + imgUrl + "' where email='" + email + "'";
+        var sql = "update Tutor set FirstName='" + fname + "', LastName='" + lname + "', description = '"+description+"', Mobile='" + mobile + "', Subject='" + subject + "', Location='" + location + "', ImgUrl='" + imgUrl + "' where email='" + email + "'";
 
         con.query(sql, function (err, result) {
             if (err) {
