@@ -35,7 +35,14 @@ router.post('/register', (req, res) => {
 
         var sql2 = "select * from Tutor, Student where Tutor.email='" + email + "' or Student.email='" + email + "'";
         con.query(sql2, function (err, result) {
-            if (err) throw err;
+            if (err){
+                console.log(err);
+                res.json({
+                    has: false,
+                    success: false,
+                    token: null
+                });
+            }
             else{
             if (result.length > 0) {
                 res.json({

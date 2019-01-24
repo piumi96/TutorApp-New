@@ -97,7 +97,7 @@ router.post('/makeRequest', (req, res) => {
     con.query(sql, (err, result) => {
         if(err) throw err;
         else{
-            //console.log(result);
+            console.log(result);
             res.json({
                 success: true
             });

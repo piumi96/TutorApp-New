@@ -7,7 +7,7 @@ router.post('/viewProfile', (req, res) => {
     var role = req.body.role;
 
     if(role==='tutor'){
-        var sql = "select FirstName, LastName, Location, Mobile, Subject, Rate, ImgUrl from Tutor where email='"+email+"'";
+        var sql = "select FirstName, LastName, Location, Mobile, Subject, Rate, ImgUrl, Price, Available_time from Tutor where email='"+email+"'";
         var sql1 = "select date, content, name, ImgUrl from Review, Student where tutor='"+email+"' and Student.email=Review.student";
         var profile;
         var reviews = [];
@@ -30,7 +30,9 @@ router.post('/viewProfile', (req, res) => {
                    mobile: result[0].Mobile,
                    subject: result[0].Subject,
                    rate: result[0].Rate,
-                   imgUrl: result[0].imgUrl 
+                   imgUrl: result[0].ImgUrl,
+                   price: result[0].Price,
+                   available: result[0].Available_time
                }
     
                con.query(sql1, (err, response) => {
@@ -101,8 +103,10 @@ router.put('/editProfile', (req, res) => {
         var subject = req.body.subject;
         var location = req.body.location;
         var imgUrl = req.body.imgUrl;
+        var price = req.body.price;
+        var available = req.body.available;
 
-        var sql = "update Tutor set FirstName='" + fname + "', LastName='" + lname + "', description = '"+description+"', Mobile='" + mobile + "', Subject='" + subject + "', Location='" + location + "', ImgUrl='" + imgUrl + "' where email='" + email + "'";
+        var sql = "update Tutor set FirstName='" + fname + "', LastName='" + lname + "', description = '"+description+"', Mobile='" + mobile + "', Subject='" + subject + "', Location='" + location + "', ImgUrl='" + imgUrl + "', Price='"+price+"', Available_Time = '"+available+"' where email='" + email + "'";
 
         con.query(sql, function (err, result) {
             if (err) {

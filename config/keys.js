@@ -17,6 +17,13 @@ module.exports = {
         database: 'tutionmaster'
     },
 
+    awsdb: {
+        host: '3.17.98.171',
+        user: 'root',
+        password: '123456',
+        database: 'tutorapp'
+    },
+
     localdb: {
         host: 'localhost',
         user: 'root',
