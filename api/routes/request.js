@@ -36,12 +36,6 @@ router.post('/makeRequest', (req, res) => {
     var time = req.body.time;
     var subject = req.body.subject;  
 
-   /* var student = "rangana@gmail.com";
-    var tutor = "geethya1995@gmail.com";
-    var day = "2018/12/4";
-    var time = "11:07";
-    var subject = "Flutter"; */
-
     var sql = "insert into Requests(tutor, student, sent_date, day, time, subject, status) values('"+tutor+"', '"+student+"', CURDATE()+1, '"+day+"', '"+time+"', '"+subject+"', 'SENT')";
 
     con.query(sql, (err, result) => {

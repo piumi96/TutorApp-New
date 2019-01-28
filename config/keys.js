@@ -11,10 +11,10 @@ module.exports = {
     },
 
     db: {
-        host: 'sql12.freemysqlhosting.net',
-        user: 'sql12268166',
-        password: '7BBdhmeSjL',
-        database: 'sql12268166'
+        host: 'db4free.net',
+        user: 'hackerbuddy',
+        password: '497ae52b',
+        database: 'tutionmaster'
     },
 
     session: {

@@ -10,9 +10,9 @@ router.post('/boostprofile', (req, res) =>{
      var sql = "select * from Tutor where Tutor.email='"+tutor+"' and Tutor.rate>=3";
      var sql2 = "insert into ProfileBoost(email, package, startDate, expiryDate) values('"+tutor+"','"+package+"', CURRENT_TIMESTAMP(), TIMESTAMPADD(DAY,7,CURRENT_TIMESTAMP()))";
      var sql3 = "select * from ProfileBoost where email = '"+tutor+"' AND boostStatus = 1";
-     var sql6 = "update Tutor set Tutor.boostPriority=4 where Tutor.email='"+tutor+"'";
-     var sql7 = "update Tutor set Tutor.boostPriority=3 where Tutor.email='"+tutor+"'";
-     var sql8 = "update Tutor set Tutor.boostPriority=2 where Tutor.email='"+tutor+"'";
+     var sql6 = "update Tutor set boostPriority=4 where Tutor.email='"+tutor+"'";
+     var sql7 = "update Tutor set boostPriority=3 where Tutor.email='"+tutor+"'";
+     var sql8 = "update Tutor set boostPriority=2 where Tutor.email='"+tutor+"'";
 
 
      con.query(sql, (err, result) => {
