@@ -45,7 +45,7 @@ router.post('/addAchievement', (req, res) => {
                     res.json({
                         success: true,
                         achievements: achievements,
-                        id: achievements[response.length-1]
+                        id: achievements[response.length-1].id
                     });
                 }
             })
@@ -142,7 +142,7 @@ router.put('/editAchievement', (req, res) => {
     var name = req.body.name;
     var ImgUrl = req.bodyImgUrl;
 
-    var sql = "update Achievements set title='"+title+"', description='"+description+"', name='"+name+"', ImgUrl='"+ImgUrl+"' where tutor='"+tutor+"' and achievementID='"+id+"'";
+    var sql = "update Achievements set title='"+title+"', description='"+description+"', name='"+name+"' where tutor='"+tutor+"' and achievementID='"+id+"'";
     con.query(sql, (err, result) => {
         if(err){
             console.log(err);
@@ -170,7 +170,8 @@ router.put('/editAchievement', (req, res) => {
                             title: response[i].title,
                             name: response[i].name,
                             ImgUrl: response[i].ImgUrl,
-                            description: response[i].description
+                            description: response[i].description, 
+                            hide: response[i].hideStatus
                         }
                     }
                     res.json({
