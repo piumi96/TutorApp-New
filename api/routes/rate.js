@@ -70,6 +70,34 @@ router.post('/rate', (req, res) => {
         }
     });
 
-})
+});
+
+router.get('/highestRate', (req, res) => {
+    var sql = "select * from Tutor order by Rate desc";
+
+    con.query(sql, (err, result) => {
+        if(err){
+            console.log(err);
+            res.json({
+                success: false,
+                tutorList: null
+            });
+        }
+        else{
+            console.log(result);
+            var tutorList = [];
+            for(var i = 0; i<5; i++){
+                tutorList[i] = {
+                    name: result[i].FirstName + " " + result[i].LastName,
+                    rate: result[i]. Rate
+                };
+            };
+            res.json({
+                success: true,
+                tutorList: tutorList
+            });
+        }
+    })
+});
 
 module.exports = router;

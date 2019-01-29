@@ -97,17 +97,14 @@ router.post('/createCourse', (req, res) => {
     authorize(credentials, createCourses);
     
     function createCourses(auth) {
-/*         var newCourse = {
-            'name': '',
-            'ownerId': ''
+        var newCourse = {
+            'name': req.body.name,
+            'ownerId': req.body.ownerId
         }; 
-        console.log(newCourse); */
+        console.log(newCourse);
         const classroom = google.classroom({ version: 'v1', auth });
         
-        classroom.courses.create({
-            ownerId: req.body.newCourse.ownerId,
-            name: req.body.newCourse.name
-        }, (err, response) => {
+        classroom.courses.create((newCourse), (err, response) => {
             
             if(err){
                 console.log(err);
@@ -162,7 +159,19 @@ router.get('/courseStudents', (req, res) => {
             courseId: courseId,
             pageSize: 10
         }, (err, response) => {
-            
+            if(err){
+                console.log(err);
+                res.json({
+                    success: false,
+                    student: null
+                });
+            }
+            else{
+                console.log(response);
+                res.json({
+                    success: true
+                })
+            }
         })
     }
 })
