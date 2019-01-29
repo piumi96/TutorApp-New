@@ -54,7 +54,7 @@ router.post('/addAchievement', (req, res) => {
     })
 });
 
-router.get('/getAchievements', (req, res) => {
+router.post('/getAchievements', (req, res) => {
     var tutor = req.body.tutor;
 
     var sql = "select * from Achievements where tutor='"+tutor+"'";
