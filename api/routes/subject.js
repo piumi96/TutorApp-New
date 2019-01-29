@@ -22,6 +22,7 @@ router.get('/subject', (req, res) => {
 
 router.get('/subjectCount', (req, res) => {
     var sql = "select email, Tutor.Subject, SubjectID from Tutor, Subject where Tutor.Subject=Subject.Name order by SubjectID";
+    var sql2 = "select student, Requests.subject, SubjectID from Requests, Subject where Requests.subject=Subject.Name order by SubjectID";
     var sql1 = "select * from Subject";
     var subject = 0;
     
@@ -29,10 +30,12 @@ router.get('/subjectCount', (req, res) => {
         if(err) throw err;
         else{
             subject = response.length;
-            var count = [];
+            var Scount = [];
+            var Tcount = [];
 
             for(var i=0; i<=subject; i++){
-                count[i] = 0;
+                Tcount[i] = 0;
+                Scount[i] = 0;
             }
 
             con.query(sql, (err, result) => {
@@ -42,16 +45,32 @@ router.get('/subjectCount', (req, res) => {
                     for(var i=0; i<result.length; i++){
                         for(var j=1; j<=subject; j++){
                             if(result[i].SubjectID==j){
-                                count[j]++;
+                                Tcount[j]++;
                                 break;
                             }
 
                         }
         
                     }
-                    console.log(count);
-                    res.json({
-                        count: count
+                    con.query(sql2, (err, result) => {
+                        if (err) {
+                            Scount = null;
+                        }
+                        else {
+                            for (var i = 0; i < result.length; i++) {
+                                for (var j = 1; j <= 25; j++) {
+                                    if (result[i].DistrictID == j) {
+                                        Scount[j]++;
+                                        break;
+                                    }
+                                }
+
+                            }
+                        }
+                        res.json({
+                            Tcount: Tcount,
+                            Scount: Scount
+                        })
                     })
                 }
                 
