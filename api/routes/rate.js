@@ -89,7 +89,8 @@ router.get('/highestRate', (req, res) => {
             for(var i = 0; i<5; i++){
                 tutorList[i] = {
                     name: result[i].FirstName + " " + result[i].LastName,
-                    rate: result[i]. Rate
+                    rate: result[i]. Rate,
+                    img: result[i].ImgUrl
                 };
             };
             res.json({
