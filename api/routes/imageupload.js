@@ -42,7 +42,7 @@ router.post('/uploadImage', imageUpload.userImageUpload.single('image'), (req, r
 
 });
 
-router.post('/uploadAchievmentImage', imageUpload.userImageUpload.single('image'), (req, res, next) => {
+router.post('/uploadAchievementImage', imageUpload.userImageUpload.single('image'), (req, res, next) => {
     console.log("uploadUserImage");
     const id = req.body.id;
 

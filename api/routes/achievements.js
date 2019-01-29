@@ -8,9 +8,8 @@ router.post('/addAchievement', (req, res) => {
     var title = req.body.title;
     var description = req.body.description;
     var name = req.body.name;
-    var ImgUrl = req.bodyImgUrl;
 
-    var sql = "insert into Achievements(tutor, title, description, name, ImgUrl) values('"+tutor+"', '"+title+"', '"+description+"', '"+name+"', '"+ImgUrl+"')";
+    var sql = "insert into Achievements(tutor, title, description, name) values('"+tutor+"', '"+title+"', '"+description+"', '"+name+"')";
     con.query(sql, (err, result) => {
         if(err){
             console.log(err);
@@ -21,7 +20,7 @@ router.post('/addAchievement', (req, res) => {
         }
         else{
             console.log(result);
-            var sql1 = "select * from Achievements where tutor='"+tutor+"'";
+            var sql1 = "select * from Achievements where tutor='"+tutor+"' order by achievementID";
             con.query(sql1, (err, response) => {
                 if(err){
                     console.log(err);
@@ -39,12 +38,14 @@ router.post('/addAchievement', (req, res) => {
                             title: response[i].title,
                             name: response[i].name,
                             ImgUrl: response[i].ImgUrl,
-                            description: response[i].description
+                            description: response[i].description,
+                            hide: response[i].hideStatus
                         }
                     }
                     res.json({
                         success: true,
-                        achievements: achievements
+                        achievements: achievements,
+                        id: achievements[response.length-1]
                     });
                 }
             })
@@ -73,7 +74,8 @@ router.get('/getAchievements', (req, res) => {
                     title: result[i].title,
                     name: result[i].name,
                     ImgUrl: result[i].ImgUrl,
-                    description: result[i].description
+                    description: result[i].description,
+                    hide: result[i].hideStatus
                 }
             }
             console.log(result);
@@ -118,7 +120,8 @@ router.delete('/deleteAchievement', (req, res) => {
                             title: response[i].title,
                             name: response[i].name,
                             ImgUrl: response[i].ImgUrl,
-                            description: response[i].description
+                            description: response[i].description,
+                            hide: response[i].hideStatus
                         }
                     }
                     res.json({
@@ -180,6 +183,40 @@ router.put('/editAchievement', (req, res) => {
         }
     });
 
-})
+});
+
+router.put('/hideAchievement', (req,res) => {
+    var id = req.body.id;
+    var sql = "update Achievements set hideStatus='1' where achievementID='"+id+"'";
+    con.query(sql, (err, result) => {
+        if(err){
+            console.log(err);
+            res.json({
+                success: false
+            });
+        }
+        console.log(result);
+        res.json({
+            success: true
+        });
+    });
+});
+
+router.put('/unhideAchievement', (req, res) => {
+    var id = req.body.id;
+    var sql = "update Achievements set hideStatus='0' where achievementID='" + id + "'";
+    con.query(sql, (err, result) => {
+        if(err){
+            console.log(err);
+            res.json({
+                success: false
+            });
+        }
+        console.log(result);
+        res.json({
+            success: true
+        });
+    });
+});
 
 module.exports = router;
