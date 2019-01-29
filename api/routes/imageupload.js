@@ -42,4 +42,36 @@ router.post('/uploadImage', imageUpload.userImageUpload.single('image'), (req, r
 
 });
 
+router.post('/uploadAchievmentImage', imageUpload.userImageUpload.single('image'), (req, res, next) => {
+    console.log("uploadUserImage");
+    const id = req.body.id;
+
+    cloudinary.uploader.upload(req.file.path, (result) => {
+        console.log(result);
+        imageSecureURL = result.secure_url;
+        console.log(imageSecureURL);
+        if (imageSecureURL == 'undefined') {
+            res.json({
+                success: false
+            });
+        }
+        else{
+            var sql = "update Achievements set ImgUrl = '"+imageSecureURL+"' where achievementID = '"+id+"'";
+            con.query(sql, (err, response) => {
+                if(err){
+                    console.log(err);
+                    res.json({
+                        success: false
+                    });
+                }
+                else{
+                    res.json({
+                        success: true
+                    });
+                }
+            })
+        }
+    })
+})
+
 module.exports = router;

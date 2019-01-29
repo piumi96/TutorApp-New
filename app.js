@@ -14,7 +14,6 @@ const rateRoute = require('./api/routes/rate');
 const resetPassword = require('./api/routes/resetPassword');
 const subjectRoutes = require('./api/routes/subject');
 const requestRoutes = require('./api/routes/request');
-//const viewClass = require('./api/routes/viewClassroom');
 const profileRoutes = require('./api/routes/profile');
 const blockRoute = require('./api/routes/block');
 const suggestionRoutes = require('./api/routes/suggestions');
@@ -69,7 +68,6 @@ app.use('/', classroomRoutes);
 app.use('/', tutorDashRoutes);
 app.use('/', achievementRoutes);
 app.use('/', imageUploadRoute);
-//app.use('/', viewClass);
 
 app.use((req, res, next)=>{
     const error = {

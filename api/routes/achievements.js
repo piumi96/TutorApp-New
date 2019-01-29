@@ -129,6 +129,57 @@ router.delete('/deleteAchievement', (req, res) => {
             })
         }
     })
+});
+
+router.put('/editAchievement', (req, res) => {
+    var tutor = req.body.tutor;
+    var id = req.body.id;
+    var title = req.body.title;
+    var description = req.body.description;
+    var name = req.body.name;
+    var ImgUrl = req.bodyImgUrl;
+
+    var sql = "update Achievements set title='"+title+"', description='"+description+"', name='"+name+"', ImgUrl='"+ImgUrl+"' where tutor='"+tutor+"' and achievementID='"+id+"'";
+    con.query(sql, (err, result) => {
+        if(err){
+            console.log(err);
+            res.json({
+                success: false,
+                achievements: null
+            });
+        }
+        else{
+            var sql1 = "select * from Achievements where tutor='" + tutor + "'";
+            con.query(sql1, (err, response) => {
+                if (err) {
+                    console.log(err);
+                    res.json({
+                        success: false,
+                        achievements: null
+                    })
+                }
+                else {
+                    console.log(response);
+                    var achievements = [];
+                    for (var i = 0; i < response.length; i++) {
+                        achievements[i] = {
+                            id: response[i].achievementID,
+                            title: response[i].title,
+                            name: response[i].name,
+                            ImgUrl: response[i].ImgUrl,
+                            description: response[i].description
+                        }
+                    }
+                    res.json({
+                        success: true,
+                        achievements: achievements
+                    });
+
+                }
+            })
+        }
+    });
+
 })
 
 module.exports = router;
