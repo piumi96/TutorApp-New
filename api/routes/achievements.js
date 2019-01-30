@@ -186,7 +186,7 @@ router.put('/editAchievement', (req, res) => {
 
 });
 
-router.put('/toggleAchievement', (req,res) => {
+router.post('/toggleAchievement', (req,res) => {
     var id = req.body.id;
     var hide = req.body.hide;
 
