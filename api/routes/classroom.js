@@ -134,9 +134,34 @@ router.post('/createCourse', (req, res) => {
     }
 });
 
-//cannot read property legth error????
-//functions related to invitations cannot be run properly. 
-router.get('/getInvitations', (req, res) => {
+
+router.get('/listInvites', (req, res) => {
+    authorize(credentials, listInvites);
+
+    function listInvites(auth) {
+        const classroom = google.classroom({ version: 'v1', auth });
+        classroom.invitations.list({
+            userId: 'me'
+        }, (err, response) => {
+            if(err){
+                console.log(err);
+                res.json({
+                    success: false,
+                    invites: null
+                });
+            }
+            else{
+                console.log(response);
+                res.json({
+                    success: true,
+                    invites: response.data
+                })
+            }
+        })
+    }
+});
+
+router.post('/acceptInvite', (req, res) => {
     fs.readFile(TOKEN_PATH, (err, token) => {
         if (err) {
             console.log(err);
@@ -149,26 +174,74 @@ router.get('/getInvitations', (req, res) => {
             console.log(refresh);
         }
     });
-    authorize(credentials, getInvitations);
+    authorize(credentials, acceptInvite);
 
-    function getInvitations() {
+    function acceptInvite() {
+        var id = req.body.invitationId;
         const client = new Client({
             clientId: keys.oauthClient.clientID,
             clientSecret: keys.oauthClient.clientSecret,
             refreshToken: refresh
         });
-       
+
         client.on('ready', async classr => {
-            client.getInvites()
+            client.acceptInvitation(id)
                 .then(data => {
                     console.log(data);
                 });
         });
     }
+});
+
+//invalid json payload???
+router.post('/sendInvite', (req, res) => {
+    authorize(credentials, sendInvite);
+
+    function sendInvite(auth){
+        var invite = req.body.invite;
+        const classroom = google.classroom({ version: 'v1', auth });
+        classroom.invitations.create((invite), (err, response) => {
+            if(err){
+                console.log(err);
+                res.json({
+                    success: false
+                });
+            }
+            else{
+                console.log(response);
+                res.json({
+                    success: true
+                })
+            }
+        })
+    }
 })
 
+//teachers of a course////////////////////////////////////////////////////////////////////
+router.get('/listTeachers', (req, res) => {
+    authorize(credentials, listTeachers);
 
-
-
+    function listTeachers(auth){
+        const classroom = google.classroom({ version: 'v1', auth });
+        classroom.courses.teachers.list({
+            courseId: req.body.courseId
+        }, (err, response) => {
+            if(err){
+                console.log(err);
+                res.json({
+                    success: false,
+                    teachers: null
+                })
+            }
+            else{
+                console.log(response.data.teachers[0].profile);
+                res.json({
+                    success: true,
+                    teachers: response.data.teachers
+                })
+            }
+        })
+    }
+})
 
 module.exports = router;

@@ -139,3 +139,36 @@
 
 })
  */
+
+//cannot read property legth error????
+//functions related to invitations cannot be run properly. 
+/* router.get('/getInvitations', (req, res) => {
+    fs.readFile(TOKEN_PATH, (err, token) => {
+        if (err) {
+            console.log(err);
+            res.json({
+                success: false
+            });
+        }
+        else {
+            refresh = JSON.parse(token).refresh_token;
+            console.log(refresh);
+        }
+    });
+    authorize(credentials, getInvitations);
+
+    function getInvitations() {
+        const client = new Client({
+            clientId: keys.oauthClient.clientID,
+            clientSecret: keys.oauthClient.clientSecret,
+            refreshToken: refresh
+        });
+
+        client.on('ready', async classr => {
+            client.getInvites()
+                .then(data => {
+                    console.log(data);
+                });
+        });
+    }
+}); */
