@@ -186,9 +186,16 @@ router.put('/editAchievement', (req, res) => {
 
 });
 
-router.put('/hideAchievement', (req,res) => {
+router.put('/toggleAchievement', (req,res) => {
     var id = req.body.id;
-    var sql = "update Achievements set hideStatus='1' where achievementID='"+id+"'";
+    var hide = req.body.hide;
+
+    if(hide=='0'){
+        var sql = "update Achievements set hideStatus='1' where achievementID='"+id+"'";
+    }
+    else if(hide=='1'){
+        var sql = "update Achievements set hideStatus='0' where achievementID='" + id + "'";
+    }
     con.query(sql, (err, result) => {
         if(err){
             console.log(err);
@@ -203,21 +210,5 @@ router.put('/hideAchievement', (req,res) => {
     });
 });
 
-router.put('/unhideAchievement', (req, res) => {
-    var id = req.body.id;
-    var sql = "update Achievements set hideStatus='0' where achievementID='" + id + "'";
-    con.query(sql, (err, result) => {
-        if(err){
-            console.log(err);
-            res.json({
-                success: false
-            });
-        }
-        console.log(result);
-        res.json({
-            success: true
-        });
-    });
-});
 
 module.exports = router;

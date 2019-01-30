@@ -98,8 +98,9 @@ router.post('/createCourse', (req, res) => {
     
     function createCourses(auth) {
         var newCourse = {
-            'name': req.body.name,
-            'ownerId': req.body.ownerId
+            name: req.body.name,
+            ownerId: req.body.ownerId,
+            description: req.body.description
         }; 
         console.log(newCourse);
         const classroom = google.classroom({ version: 'v1', auth });
@@ -124,6 +125,7 @@ router.post('/createCourse', (req, res) => {
 
 router.get('/getCourse', (req, res) => {
     var id = req.body.id;
+
     //var id = '16353445529';
     authorize(credentials, getCourse);
 
@@ -149,7 +151,7 @@ router.get('/getCourse', (req, res) => {
     }
 });
 
-router.get('/courseStudents', (req, res) => {
+/* router.get('/courseStudents', (req, res) => {
     var courseId = req.body.courseId;
     authorize(credentials, listStudents);
 
@@ -174,8 +176,33 @@ router.get('/courseStudents', (req, res) => {
             }
         })
     }
-})
+}) */
 
+router.delete('/deleteCourse', (req, res) => {
+    var id = req.body.id;
+    authorize(credentials, deleteCourse);
+
+    function deleteCourse(auth){
+        const classroom = google.classroom({ version: 'v1', auth });
+        classroom.courses.delete({
+            id: id
+        }, (err, response) => {
+            if(err){
+                console.log(err);
+                res.json({
+                    success: false
+                });
+            }
+            else{
+                console.log(response);
+                res.json({
+                    success: true
+                });
+            }
+        })
+    }
+
+})
 
 
 
