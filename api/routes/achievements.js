@@ -47,7 +47,7 @@ router.post('/addAchievement', (req, res) => {
                         achievements: achievements,
                         id: achievements[response.length-1].id
                     });
-                }
+                }k
             })
             
         }
@@ -191,10 +191,10 @@ router.post('/toggleAchievement', (req,res) => {
     var hide = req.body.hide;
 
     if(hide == 0){
-        var sql = "update Achievements set hideStatus='1' where achievementID='"+id+"'";
+        var sql = "update Achievements set hideStatus='0' where achievementID='"+id+"'";
     }
     else if(hide == 1){
-        var sql = "update Achievements set hideStatus='0' where achievementID='" + id + "'";
+        var sql = "update Achievements set hideStatus='1' where achievementID='" + id + "'";
     }
     con.query(sql, (err, result) => {
         if(err){
