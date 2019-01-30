@@ -97,17 +97,14 @@ router.post('/createCourse', (req, res) => {
     authorize(credentials, createCourses);
     
     function createCourses(auth) {
-        var name = req.body.name;
-        console.log(name);
-        var ownerId = req.body.ownerId;
-        var description = req.body.description;
+        var newCourse = {
+            name: req.body.name,
+            ownerId: req.body.ownerId,
+            description: req.body.description
+        }
         const classroom = google.classroom({ version: 'v1', auth });
-        
-        classroom.courses.create({
-            name: name,
-            ownerId: ownerId,
-            description: description
-        }, (err, response) => {
+    
+        classroom.courses.create(newCourse, (err, response) => {
             
             if(err){
                 console.log(err);

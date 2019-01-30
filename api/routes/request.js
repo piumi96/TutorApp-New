@@ -152,6 +152,26 @@ router.post('/cancelRequest', (req, res) => {
             });
         }
     })
+});
+
+router.post('/getAcceptedStudents', (req, res) => {
+    var tutor = req.body.tutor;
+    var sql = "select name, email, ImgUrl, mobile, Requests.location, Requests.subject, day, Requests.status, Requests.tutor from Student, Requests where Requests.student = Student.email and Requests.status='ACCEPTED' and Requests.tutor='"+tutor+"'";
+
+    con.query(sql, (err, result) => {
+        if(err){
+            console.log(err);
+            res.json({
+                success: false,
+                students: null
+            });
+        }
+        console.log(result);
+        res.json({
+            success: true,
+            students: result
+        });
+    })
 })
 
 
