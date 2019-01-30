@@ -217,7 +217,7 @@ router.post('/sendInvite', (req, res) => {
     }
 })
 
-//teachers of a course////////////////////////////////////////////////////////////////////
+//teachers of a course
 router.get('/listTeachers', (req, res) => {
     authorize(credentials, listTeachers);
 
@@ -242,6 +242,33 @@ router.get('/listTeachers', (req, res) => {
             }
         })
     }
-})
+});
+
+//students of a course
+router.get('/listStudents', (req, res) => {
+    authorize(credentials, listStudents);
+
+    function listStudents(auth) {
+        const classroom = google.classroom({ version: 'v1', auth });
+        classroom.courses.students.list({
+            courseId: req.body.courseId
+        }, (err, response) => {
+            if (err) {
+                console.log(err);
+                res.json({
+                    success: false,
+                    students: null
+                })
+            }
+            else {
+                console.log(response);
+                res.json({
+                    success: true,
+                    students: response.data.students
+                })
+            }
+        })
+    }
+});
 
 module.exports = router;
