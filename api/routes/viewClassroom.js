@@ -1,149 +1,26 @@
-const express = require('express');
-const router = express.Router();
-const con = require('../../databse/db');
-const passport = require('passport');
-const user = require('../../config/passport-setup');
-const Client = require('google-classroom/index');
-const keys = require('../../config/keys');
+/* router.get('/listCourses', (req, res) => {
+    authorize(credentials, listCourses);
 
-const { google } = require('googleapis');
-const fs = require('fs');
-const path = require('path');
-const http = require('http');
-const url = require('url');
-const opn = require('opn');
-const destroyer = require('server-destroy');
-const classroom = google.classroom({ version: 'v1'});
-
-const oauth2Client = new google.auth.OAuth2(
-    keys.oauthClient.clientID,
-    keys.oauthClient.clientSecret,
-    '/courses'
-);
-
-google.options({ auth: oauth2Client });
-
-async function authenticate(scopes) {
-    return new Promise((resolve, reject) => {
-        // grab the url that will be used for authorization
-        const authorizeUrl = oauth2Client.generateAuthUrl({
-            access_type: 'offline',
-            scope: scopes.join(' '),
-            prompt: 'consent'
-        });
-        router.get('/courses',
-            (req, res) => {
-                try {
-                    if (req.url.indexOf('/oauth2callback') > -1) {
-                        const qs = new url.URL(req.url, 'http://localhost:3000')
-                            .searchParams;
-                        res.end('Authentication successful! Please return to the console.');
-                        const { tokens } = oauth2Client.getToken(qs.get('code'));
-                        oauth2Client.credentials = tokens;
-                        resolve(oauth2Client);
-                    }
-                } catch (e) {
-                    reject(e);
-                }
-            })
-            
-    });
-}
-
-async function runSample() {
-    // retrieve user profile
-    const res = await classroom.courses.list;
-    console.log(res.data);
-}
-
-const scopes = [
-    'https://www.googleapis.com/auth/classroom.courses'
-];
-authenticate(scopes)
-    .then(client => runSample(client))
-    .catch(console.error);
-
- 
-
-
-
-
-/* const fs = require('fs');
-const readline = require('readline');
-const {google} = require('googleapis');
-
-router.get('/courses', (req, res) => {
-
-    //action = 'viewCourse';
-
-    const SCOPES = ['https://www.googleapis.com/auth/classroom.courses'];
-    const TOKEN_PATH = 'token.json';
-
-    
-    fs.readFile('credentials.json', (err, content) => {
-        if(err) return console.log('Error loading client secret file:', err);
-        authorize(JSON.parse(content), createCourses);
-    });
-    
-    function authorize(credentials, callback){
-        const {client_secret, client_id, redirect_uris} = credentials.installed;
-        const oAuth2Client = new google.auth.OAuth2(
-            client_id, client_secret, redirect_uris[0]
-        );
-    
-        fs.readFile(TOKEN_PATH, (err, token) => {
-            if(err) return getNewToken(oAuth2Client, callback);
-            oAuth2Client.setCredentials(JSON.parse(token));
-            callback(oAuth2Client);
-        });
-    }
-    
-    function getNewToken(oAuth2Client, callback){
-        const authUrl = oAuth2Client.generateAuthUrl({
-            access_type: 'offline',
-            prompt: 'consent',
-            scope: SCOPES,
-        });
-        console.log('Authorize this app by visiting this url:', authUrl);
-        const rl = readline.createInterface({
-            input: process.stdin,
-            output: process.stdout,
-        });
-        rl.question('Enter the code from that page here: ', (code) => {
-            rl.close();
-            oAuth2Client.getToken(code, (err, token) => {
-                if(err) return console.error('Error retireving access token', err);
-                oAuth2Client.setCredentials(token);
-                fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
-                    if(err) console.error(err);
-                    console.log('Token stored to', TOKEN_PATH);
-                });
-                callback(oAuth2Client);
-    
-            });
-    
-        });
-    }
-    
-    function listCourses(auth){
-        const classroom = google.classroom({ version: 'v1', auth});
+    function listCourses(auth) {
+        const classroom = google.classroom({ version: 'v1', auth });
         classroom.courses.list({
             pageSize: 10,
         }, (err, response) => {
-            if(err) return console.error('The API returned an error: ' + err);
+            console.log(req);
+            if (err) return console.error('The API returned an error: ' + err);
             const courses = response.data.courses;
-            if(courses && courses.length){
+            if (courses && courses.length) {
                 console.log('Courses:');
                 courses.forEach((course) => {
                     console.log(`${course.name} (${course.id})`);
                 });
-                console.log(response);
+                //console.log(response);
                 res.json({
                     success: true,
                     courses: courses
                 })
             }
-            else{
+            else {
                 console.log('No courses found');
                 res.json({
                     success: false,
@@ -152,56 +29,113 @@ router.get('/courses', (req, res) => {
             }
         })
     }
+}); */
 
-    function createCourses(auth){
+/* router.post('/createCourse', (req, res) => {
+    authorize(credentials, createCourses);
+
+    function createCourses(auth) {
+        var course = req.body.course;
+
         const classroom = google.classroom({ version: 'v1', auth });
-        var newCourse = {
-            Name: 'abc',
-            OwnerId: 'me',
-            CourseState: 'PROVISIONED'
-        }
-    
-        classroom.courses.create(newCourse, (err, result) => {
+        console.log(course);
+
+        classroom.courses.create(course, (err, response) => {
+            //console.log(req);
             if(err){
                 console.log(err);
                 res.json({
                     success: false,
-                    displaycourse: null
+                    newCourse: null
                 })
             }
             else{
-                console.log(result);
-                listCourses;
+                console.log(response);
+                res.send("Creating a course");
             }
         });
-        
-    
     }
-})
- */
 
-/* router.get('/courses', passport.authenticate('googleClass', {
-    scope: ['email', 'https://www.googleapis.com/auth/classroom.courses']
-}), (req, res) => {
-    req.session.access_token = req.user.access_token;
-    var access_token = req.session.access_token;
-    req.session.refresh_token = req.session.refresh_token;
-    var refresh_token = req.session.resfresh_token;
-    req.session.scope = req.user.scope;
-    var email = req.session.scope;
-
-    //console.log(email.id_token);
-
-    const client = new Client({
-        clientId: keys.googleClassroom.clientID,
-        clientSecret: keys.googleClassroom.clientSecret,
-        refreshToken: refresh_token
-    })
-
-    console.log(client.getCourses());
-
-    res.send("google classroom works");
 }) */
 
+/* router.get('/getCourse', (req, res) => {
+    var id = req.body.id;
 
-module.exports = router; 
+    //var id = '16353445529';
+    authorize(credentials, getCourse);
+
+    function getCourse(auth){
+        const classroom = google.classroom({ version: 'v1', auth });
+        classroom.courses.get({
+            id: id,
+        }, (err, response) => {
+            if(err){
+                console.log(err);
+                res.json({
+                    success: false,
+                    course: null
+                });
+            }
+            //console.log(response.data);
+            const course = response.data
+            res.json({
+                success: true,
+                course: course,
+            })
+        });
+    }
+}); */
+
+/* router.get('/courseStudents', (req, res) => {
+    var courseId = req.body.courseId;
+    authorize(credentials, listStudents);
+
+    function listStudents(auth){
+        const classroom = google.classroom({ version: 'v1', auth });
+        classroom.courses.students.list({
+            courseId: courseId,
+            pageSize: 10
+        }, (err, response) => {
+            if(err){
+                console.log(err);
+                res.json({
+                    success: false,
+                    student: null
+                });
+            }
+            else{
+                console.log(response);
+                res.json({
+                    success: true
+                })
+            }
+        })
+    }
+}) */
+
+/* router.delete('/deleteCourse', (req, res) => {
+    var id = req.body.id;
+    authorize(credentials, deleteCourse);
+
+    function deleteCourse(auth){
+        const classroom = google.classroom({ version: 'v1', auth });
+        classroom.courses.delete({
+            id: id
+        }, (err, response) => {
+            if(err){
+                console.log(err);
+                res.json({
+                    success: false
+                });
+            }
+            else{
+                console.log(response);
+                res.json({
+                    success: true
+                });
+            }
+        })
+    }
+
+})
+ */

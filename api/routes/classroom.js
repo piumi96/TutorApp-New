@@ -5,11 +5,13 @@ const passport = require('passport');
 const user = require('../../config/passport-setup');
 const keys = require('../../config/keys');
 const { google } = require('googleapis');
+const Client = require('google-classroom');
 const classroom = google.classroom({ version: 'v1' });
 
 const fs = require('fs');
-const SCOPES = ['https://www.googleapis.com/auth/classroom.courses', 'https://www.googleapis.com/auth/classroom.rosters'];
-const TOKEN_PATH = 'token.json';
+const readline = require('readline');
+const SCOPES = ['https://www.googleapis.com/auth/classroom.courses', 'https://www.googleapis.com/auth/classroom.rosters', 'https://www.googleapis.com/auth/classroom.coursework.me', 'https://www.googleapis.com/auth/classroom.coursework.students'];
+const TOKEN_PATH = 'googleToken.json';
 
 const credentials = {
     client_secret: keys.oauthClient.clientSecret,
@@ -27,6 +29,7 @@ function authorize(credentials, callback) {
     );
 
     fs.readFile(TOKEN_PATH, (err, token) => {
+        //getNewToken(oAuth2Client, callback);
         if (err) return getNewToken(oAuth2Client, callback);
         oAuth2Client.setCredentials(JSON.parse(token));
         callback(oAuth2Client);
@@ -59,149 +62,111 @@ function getNewToken(oAuth2Client, callback) {
         });
 
     });
-}
+};
 
+var refresh = null;
 router.get('/listCourses', (req, res) => {
-    authorize(credentials, listCourses);
+    fs.readFile(TOKEN_PATH, (err, token) => {
+        if (err){
+            console.log(err);
+            res.json({
+                success:false
+            });
+        }
+        else{
+            refresh = JSON.parse(token).refresh_token;
+            console.log(refresh);
+        }
+    });
 
-    function listCourses(auth) {
-        const classroom = google.classroom({ version: 'v1', auth });
-        classroom.courses.list({
-            pageSize: 10,
-        }, (err, response) => {
-            if (err) return console.error('The API returned an error: ' + err);
-            const courses = response.data.courses;
-            if (courses && courses.length) {
-                console.log('Courses:');
-                courses.forEach((course) => {
-                    console.log(`${course.name} (${course.id})`);
-                });
-                //console.log(response);
-                res.json({
-                    success: true,
-                    courses: courses
-                })
-            }
-            else {
-                console.log('No courses found');
-                res.json({
-                    success: false,
-                    courses: null
-                })
-            }
+    authorize(credentials, listCourses);
+    function listCourses(){
+        const client = new Client({
+            clientId: keys.oauthClient.clientID,
+            clientSecret: keys.oauthClient.clientSecret,
+            refreshToken: refresh
         })
+    
+        client.on('ready', async classr => {
+            client.getCourses()
+                .then(data => {
+                    res.json({
+                        courses: data
+                    });
+                });
+        });
     }
+
 });
 
 router.post('/createCourse', (req, res) => {
-    authorize(credentials, createCourses);
-    
-    function createCourses(auth) {
-        var newCourse = {
-            name: req.body.name,
-            ownerId: req.body.ownerId,
-            description: req.body.description
-        }
-        const classroom = google.classroom({ version: 'v1', auth });
-    
-        classroom.courses.create(newCourse, (err, response) => {
-            
-            if(err){
-                console.log(err);
-                res.json({
-                    success: false,
-                    newCourse: null
-                })
-            }
-            else{
-                console.log(response);
-                res.send("Creating a course");
-            }
-        });
-    }
-
-})
-
-router.get('/getCourse', (req, res) => {
-    var id = req.body.id;
-
-    //var id = '16353445529';
-    authorize(credentials, getCourse);
-
-    function getCourse(auth){
-        const classroom = google.classroom({ version: 'v1', auth });
-        classroom.courses.get({
-            id: id,
-        }, (err, response) => {
-            if(err){
-                console.log(err);
-                res.json({
-                    success: false,
-                    course: null
-                });
-            }
-            //console.log(response.data);
-            const course = response.data
+    fs.readFile(TOKEN_PATH, (err, token) => {
+        if (err) {
+            console.log(err);
             res.json({
-                success: true,
-                course: course,
-            })
+                success: false
+            });
+        }
+        else {
+            refresh = JSON.parse(token).refresh_token;
+            console.log(refresh);
+        }
+    });
+    authorize(credentials, createCourses);
+
+    function createCourses() {
+        const client = new Client({
+            clientId: keys.oauthClient.clientID,
+            clientSecret: keys.oauthClient.clientSecret,
+            refreshToken: refresh
+        });
+        var section = req.body.section;
+        var name = req.body.name;
+
+        client.on('ready', async classr => {
+            client.createCourse(name, section)
+                .then(data => {
+                    res.json({
+                        newCourse: data
+                    });
+                });
         });
     }
 });
 
-/* router.get('/courseStudents', (req, res) => {
-    var courseId = req.body.courseId;
-    authorize(credentials, listStudents);
+//cannot read property legth error????
+//functions related to invitations cannot be run properly. 
+router.get('/getInvitations', (req, res) => {
+    fs.readFile(TOKEN_PATH, (err, token) => {
+        if (err) {
+            console.log(err);
+            res.json({
+                success: false
+            });
+        }
+        else {
+            refresh = JSON.parse(token).refresh_token;
+            console.log(refresh);
+        }
+    });
+    authorize(credentials, getInvitations);
 
-    function listStudents(auth){
-        const classroom = google.classroom({ version: 'v1', auth });
-        classroom.courses.students.list({
-            courseId: courseId,
-            pageSize: 10
-        }, (err, response) => {
-            if(err){
-                console.log(err);
-                res.json({
-                    success: false,
-                    student: null
+    function getInvitations() {
+        const client = new Client({
+            clientId: keys.oauthClient.clientID,
+            clientSecret: keys.oauthClient.clientSecret,
+            refreshToken: refresh
+        });
+       
+        client.on('ready', async classr => {
+            client.getInvites()
+                .then(data => {
+                    console.log(data);
                 });
-            }
-            else{
-                console.log(response);
-                res.json({
-                    success: true
-                })
-            }
-        })
+        });
     }
-}) */
-
-router.delete('/deleteCourse', (req, res) => {
-    var id = req.body.id;
-    authorize(credentials, deleteCourse);
-
-    function deleteCourse(auth){
-        const classroom = google.classroom({ version: 'v1', auth });
-        classroom.courses.delete({
-            id: id
-        }, (err, response) => {
-            if(err){
-                console.log(err);
-                res.json({
-                    success: false
-                });
-            }
-            else{
-                console.log(response);
-                res.json({
-                    success: true
-                });
-            }
-        })
-    }
-
 })
+
 
 
 
