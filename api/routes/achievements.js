@@ -190,10 +190,10 @@ router.post('/toggleAchievement', (req,res) => {
     var id = req.body.id;
     var hide = req.body.hide;
 
-    if(hide = true){
+    if(hide == 1){
         var sql = "update Achievements set hideStatus='1' where achievementID='"+id+"'";
     }
-    else if(hide = false){
+    else if(hide == 0){
         var sql = "update Achievements set hideStatus='0' where achievementID='" + id + "'";
     }
     con.query(sql, (err, result) => {
