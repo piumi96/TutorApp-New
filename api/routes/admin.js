@@ -49,6 +49,114 @@ router.get('/adminDash', (req, res) => {
 
 });
 
+router.get('/subjectCount', (req, res) => {
+    var sql = "select email, Tutor.Subject, SubjectID from Tutor, Subject where Tutor.Subject=Subject.Name order by SubjectID";
+    var sql2 = "select student, Requests.subject, SubjectID from Requests, Subject where Requests.subject=Subject.Name order by SubjectID";
+    var sql1 = "select * from Subject";
+    var subject = 0;
+
+    con.query(sql1, (err, response) => {
+        if (err) throw err;
+        else {
+            subject = response.length;
+            var Scount = [];
+            var Tcount = [];
+
+            for (var i = 0; i <= subject; i++) {
+                Tcount[i] = 0;
+                Scount[i] = 0;
+            }
+
+            con.query(sql, (err, result) => {
+                if (err) throw err;
+                else {
+                    console.log(result);
+                    for (var i = 0; i < result.length; i++) {
+                        for (var j = 1; j <= subject; j++) {
+                            if (result[i].SubjectID == j) {
+                                Tcount[j]++;
+                                break;
+                            }
+
+                        }
+
+                    }
+                    con.query(sql2, (err, result) => {
+                        if (err) {
+                            Scount = null;
+                        }
+                        else {
+                            for (var i = 0; i < result.length; i++) {
+                                for (var j = 1; j <= 25; j++) {
+                                    if (result[i].DistrictID == j) {
+                                        Scount[j]++;
+                                        break;
+                                    }
+                                }
+
+                            }
+                        }
+                        res.json({
+                            Tcount: Tcount,
+                            Scount: Scount
+                        })
+                    })
+                }
+
+            })
+        }
+    })
+
+});
+
+router.get('/districtCount', (req, res) => {
+    var sql = "select email, Location, DistrictID from Tutor, District where District.name=Tutor.Location order by Location";
+    var sql2 = "select email, location, DistrictID from Student, District where District.name=Student.Location order by Location";
+
+    var Tcount = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    var Scount = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+    con.query(sql, (err, result) => {
+        if (err) {
+            Tcount = null;
+        }
+        else {
+            //console.log(result);
+            for (var i = 0; i < result.length; i++) {
+                for (var j = 1; j <= 25; j++) {
+                    if (result[i].DistrictID == j) {
+                        Tcount[j]++;
+                        break;
+                    }
+                }
+
+            }
+
+            con.query(sql2, (err, result) => {
+                if (err) {
+                    Scount = null;
+                }
+                else {
+                    for (var i = 0; i < result.length; i++) {
+                        for (var j = 1; j <= 25; j++) {
+                            if (result[i].DistrictID == j) {
+                                Scount[j]++;
+                                break;
+                            }
+                        }
+
+                    }
+                }
+                res.json({
+                    Tcount: Tcount,
+                    Scount: Scount
+                })
+            })
+        }
+    })
+})
+
+
 
 
 
