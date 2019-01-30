@@ -87,7 +87,7 @@ router.post('/getAchievements', (req, res) => {
     })
 });
 
-router.delete('/deleteAchievement', (req, res) => {
+router.post('/deleteAchievement', (req, res) => {
     var id = req.body.id;
     var tutor = req.body.tutor;
 
