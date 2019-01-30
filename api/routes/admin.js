@@ -125,7 +125,7 @@ router.get('/districtCount', (req, res) => {
             for (var i = 0; i < result.length; i++) {
                 for (var j = 1; j <= 25; j++) {
                     if (result[i].DistrictID == j) {
-                        Tcount[j]++;
+                        Tcount[j-1] = Tcount[j-1]+1;
                         break;
                     }
                 }
@@ -140,7 +140,7 @@ router.get('/districtCount', (req, res) => {
                     for (var i = 0; i < result.length; i++) {
                         for (var j = 1; j <= 25; j++) {
                             if (result[i].DistrictID == j) {
-                                Scount[j]++;
+                                Scount[j-1] = Scount[j-1]+1;
                                 break;
                             }
                         }
