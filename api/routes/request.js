@@ -5,7 +5,7 @@ const con = require('../../databse/db');
 router.post('/viewAllRequests', (req, res) => {
     var tutor = req.body.tutor;
 
-    var sql = "select * from Requests where tutor = '"+tutor+"' and status='SENT'";
+    var sql = "select reqID, sent_date, day, Requests.location, subject, name from Requests, Student where tutor = '"+tutor+"' and status='SENT' and Requests.student=Student.email";
     con.query(sql, (err, result) => {
         if(err) throw err;
         else{
@@ -14,7 +14,7 @@ router.post('/viewAllRequests', (req, res) => {
             for(var i=0; i<result.length; i++){
                 request[i] = {
                     id: result[i].reqID,
-                    student: result[i].student,
+                    student: result[i].name,
                     sent_date: result[i].sent_date,
                     day: result[i].day,
                     location: result[i].location,
