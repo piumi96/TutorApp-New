@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const con = require('../../databse/db');
 
-router.get('/viewAllRequests', (req, res) => {
+router.post('/viewAllRequests', (req, res) => {
     var tutor = req.body.tutor;
 
     var sql = "select * from Requests where tutor = '"+tutor+"' and status='SENT'";
