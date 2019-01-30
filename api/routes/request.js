@@ -105,7 +105,7 @@ router.post('/makeRequest', (req, res) => {
     });
 });
 
-router.put('/acceptRequest', (req, res) => {
+router.post('/acceptRequest', (req, res) => {
     var id = req.body.id;
     var sql = "update Requests set status='ACCEPTED' where reqID = '"+id+"'";
 
@@ -120,7 +120,7 @@ router.put('/acceptRequest', (req, res) => {
     });
 });
 
-router.put('/rejectRequest', (req, res) => {
+router.post('/rejectRequest', (req, res) => {
     var id = req.body.id;
     var sql = "update Requests set status='REJECTED' where reqID = '"+id+"'";
 
