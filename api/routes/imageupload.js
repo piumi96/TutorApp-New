@@ -10,7 +10,7 @@ router.post('/uploadImage', imageUpload.userImageUpload.single('image'), (req, r
     const email = req.body.email;
     const role = req.body.role;
 
-    cloudinary.uploader.upload(req.file.path, (result) => {
+    cloudinary.uploader.upload(req.body.image.path, (result) => {
         console.log(result);
         imageSecureURL = result.secure_url;
         console.log(imageSecureURL);

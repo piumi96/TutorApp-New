@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const nodemailer = require('nodemailer');
+const randomstring = require('randomstring');
 const con = require('../../databse/db');
 const user = require('../../config/passport-setup');
 const transporter = require('../../config/email-config');
@@ -13,6 +14,10 @@ var saltRounds = 10;
 //email verification
 function emailVerification(email){
     console.log(email);
+    var code = randomstring.generate(20);
+    console.log(code);
+    var sql3 = "insert into Tutor(token) values('"+code+"')";
+
     var mailOptions = {
         from: 'teaminsomniac16@gmail.com',
         to: email,
