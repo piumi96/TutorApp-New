@@ -3,7 +3,7 @@ const router = express.Router();
 
 const con = require('../../databse/db');
 
-router.put('/block', (req, res) => {
+router.post('/block', (req, res) => {
     var role = req.body.role;
     var email = req.body.email;
 
@@ -39,7 +39,7 @@ router.put('/block', (req, res) => {
     }
 })
 
-router.put('/unblock', (req, res) => {
+router.post('/unblock', (req, res) => {
     var role = req.body.role;
     var email = req.body.email;
 
@@ -116,6 +116,60 @@ router.get('/blockList', (req, res) => {
     })
 
 
-})
+});
+
+router.post('/tempDisable', (req, res) => {
+    var role = req.body.role;
+    var email = req.body.email;
+    
+    if(role=='tutor'){
+        var sql = "update Tutor set acc_status = '2' where email='"+email+"'";
+    }
+    else{
+        var sql = "update Student set acc_status = '2'where email='" + email + "'";
+    }
+
+    con.query(sql, (err, result) => {
+        if(err){
+            console.log(err);
+            res.json({
+                success: false
+            });
+        }
+        else{
+            console.log(result);
+            res.json({
+                success: true
+            });
+        }
+    })
+});
+
+router.post('/activate', (req, res) => {
+    var role = req.body.role;
+    var email = req.body.email;
+
+    if (role == 'tutor') {
+        var sql = "update Tutor set acc_status = '1' where email='" + email + "'";
+    }
+    else {
+        var sql = "update Student set acc_status = '1'where email='" + email + "'";
+    }
+
+    con.query(sql, (err, result) => {
+        if (err) {
+            console.log(err);
+            res.json({
+                success: false
+            });
+        }
+        else {
+            console.log(result);
+            res.json({
+                success: true
+            });
+        }
+    })
+});
 
 module.exports = router;

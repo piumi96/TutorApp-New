@@ -92,7 +92,7 @@ router.post('/makeRequest', (req, res) => {
     var location = req.body.location;
     var subject = req.body.subject;
 
-    var sql = "insert into Requests(tutor, student, sent_date, day, subject, location, status) values('"+tutor+"', '"+student+"', CURDATE()+1, '"+day+"', '"+subject+"', '"+location+"' , 'SENT')";
+    var sql = "insert into Requests(tutor, student, sent_date, day, subject, location, status) values('"+tutor+"', '"+student+"', CURDATE(), '"+day+"', '"+subject+"', '"+location+"' , 'SENT')";
 
     con.query(sql, (err, result) => {
         if(err) throw err;

@@ -7,7 +7,68 @@ router.post('/rate', (req, res) => {
     var tutor = req.body.tutor;
     var student = req.body.student;
 
-    var rating;
+    var sql1 = "select * from Requests where tutor='" + tutor + "' and student='" + student + "' and status='ACCEPTED'";
+    var sql2 = "select * from Rate where tutor='" + tutor + "' and student='" + student + "'";
+    var sql3 = "update Tutor set Tutor.rate = (select avg(Rate.rating) from Rate where Rate.tutor='" + tutor + "') where Tutor.email='" + tutor + "'";
+    var sql4 = "insert into Rate(tutor, student, rating) values('" + tutor + "', '" + student + "', '" + rate + "')";
+    var sql5 = "update Rate set rating = '" + rate + "' where tutor='" + tutor + "' and student='" + student + "'";
+
+    var success = false;
+    var allowed = false;
+
+    con.query(sql1, (err, result1) => {
+        if(err){
+            console.log(err);
+        }
+        if(result1.length!=0){
+            con.query(sql2, (err, result2) => {
+                if(err){
+                    console.log(err);
+                }
+                if(result2.length !=0){
+                   con.query(sql5, (err, result3) => {
+                       if(err){
+                           console.log(err);
+                       }
+                       console.log(result3);
+                   }) 
+                }
+                else{
+                    con.query(sql4, (err, result3) => {
+                        if(err){
+                            console.log(err);
+                        }
+                        console.log(result3);
+                    })
+                }
+            })
+            
+        }
+        else{
+            res.json({
+                success: success,
+                allowed: allowed
+            });
+        }
+
+        
+        con.query(sql3, (err, result) => {
+            if (err) {
+                console.log(err);
+            }
+            console.log(result);
+            allowed = true;
+            success = true;
+
+            res.json({
+                success: success,
+                allowed: allowed
+            })
+        });
+    });
+
+
+/*     var rating;
     var sql2 = "select rate from Tutor where Tutor.email='"+tutor+"'";
     con.query(sql2, (err, result) => {
         if(err) throw err;
@@ -68,7 +129,7 @@ router.post('/rate', (req, res) => {
                 allowed: false
             })
         }
-    });
+    }); */
 
 });
 
