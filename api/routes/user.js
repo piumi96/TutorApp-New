@@ -2,18 +2,39 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
+const nodemailer = require('nodemailer');
 const con = require('../../databse/db');
 const user = require('../../config/passport-setup');
-
+const transporter = require('../../config/email-config');
 
 const router = express.Router();
 var saltRounds = 10;
+
+//email verification
+function emailVerification(email){
+    console.log(email);
+    var mailOptions = {
+        from: 'teaminsomniac16@gmail.com',
+        to: email,
+        subject: 'TutorApp verification',
+        text: 'Confirm your email account using this verification code'
+    };
+
+    transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
+}
 
 router.get('/', (req, res) => {
     res.json({
         response: 'It works!'
     });
 });
+
 //Register routes-----------------------------------------------------------------
 router.post('/register', (req, res) => {
 
@@ -88,6 +109,7 @@ router.post('/register', (req, res) => {
                                         role: role
                                     }
                                 }
+                                emailVerification(email);
                                 //console.log(user);
                                 const token = jwt.sign({ user }, 'secret_key');
 

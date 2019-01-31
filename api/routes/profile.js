@@ -90,7 +90,7 @@ router.post('/viewProfile', (req, res) => {
     
 });
 
-router.put('/editProfile', (req, res) => {
+router.post('/editProfile', (req, res) => {
     var role = req.body.role;
     var email = req.body.email;
     console.log(req);
@@ -102,11 +102,10 @@ router.put('/editProfile', (req, res) => {
         var mobile = req.body.mobile;
         var subject = req.body.subject;
         var location = req.body.location;
-        var imgUrl = req.body.imgUrl;
         var price = req.body.price;
         var available = req.body.available;
 
-        var sql = "update Tutor set FirstName='" + fname + "', LastName='" + lname + "', description = '"+description+"', Mobile='" + mobile + "', Subject='" + subject + "', Location='" + location + "', ImgUrl='" + imgUrl + "', Price='"+price+"', Available_Time = '"+available+"' where email='" + email + "'";
+        var sql = "update Tutor set FirstName='" + fname + "', LastName='" + lname + "', description = '"+description+"', Mobile='" + mobile + "', Subject='" + subject + "', Location='" + location + "', Price='"+price+"', Available_Time = '"+available+"' where email='" + email + "'";
 
         con.query(sql, function (err, result) {
             if (err) {
