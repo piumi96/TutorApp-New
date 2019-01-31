@@ -9,11 +9,7 @@ router.post('/boostprofile', (req, res) =>{
 
      var sql = "select * from Tutor where Tutor.email='"+tutor+"' and Tutor.rate>=3";
      var sql2 = "insert into ProfileBoost(email, package, startDate, expiryDate) values('"+tutor+"','"+package+"', CURRENT_TIMESTAMP(), TIMESTAMPADD(DAY,7,CURRENT_TIMESTAMP()))";
-     var sql3 = "select * from ProfileBoost where email = '"+tutor+"' AND boostStatus = 1";
-     var sql6 = "update Tutor set boostPriority=4 where Tutor.email='"+tutor+"'";
-     var sql7 = "update Tutor set boostPriority=3 where Tutor.email='"+tutor+"'";
-     var sql8 = "update Tutor set boostPriority=2 where Tutor.email='"+tutor+"'";
-
+     var sql3 = "select * from ProfileBoost where email = '"+tutor+"'";
 
      con.query(sql, (err, result) => {
         if(err){
@@ -42,45 +38,11 @@ router.post('/boostprofile', (req, res) =>{
                                 response: 'DB entry error!'
                             });
                         }else{ 
-                            if(package=='platinum'){
-                                con.query(sql6, (err,result) => {
-                                    if(err) throw err;
-                                    else{
-                                        res.json({
-                                            success: true,
-                                            allowed: true,
-                                            response: 'boosted!'
-                                        });
-                                 
-                                    }
-                                });
-                            }
-                            if(package=='gold'){
-                                con.query(sql7, (err,result) => {
-                                    if(err) throw err;
-                                    else{
-                                        res.json({
-                                            success: true,
-                                            allowed: true,
-                                            response: 'boosted!'
-                                        });
-                                 
-                                    }
-                                });
-                            }
-                            if(package=='silver'){
-                                con.query(sql8, (err,result) => {
-                                    if(err) throw err;
-                                    else{
-                                        res.json({
-                                            success: true,
-                                            allowed: true,
-                                            response: 'boosted!'
-                                        });
-                                 
-                                    }
-                                });
-                            }   
+                            res.json({
+                                success: true,
+                                allowed: true,
+                                response: 'boosted!'
+                            });    
                         }
                     });
                 }else{
@@ -110,7 +72,7 @@ function DailyCheckup(){
         else{
             for(var i=0; i<result.length; i++){
                 var sql5 = "delete from ProfileBoost where ProfileBoost.email = '"+result[i].email+"'";
-                var sql9 = "update Tutor set Tutor.boostPriority=1 where Tutor.email='"+result[i].email+"'";
+                // var sql6 = "update Tutor set Tutor.boostStatus=0 where Tutor.email='"+result[i].email+"'";
 
                 con.query(sql5, (err, result) => {
                     if(err) throw err;
@@ -119,25 +81,25 @@ function DailyCheckup(){
                     }
                 });
 
-                con.query(sql9, (err, result) => {
-                    if(err) throw err;
-                    else{
-                        console.log('priority changed');
-                    }
-                });
+                // con.query(sql6, (err, result) => {
+                //     if(err) throw err;
+                //     else{
+                //         console.log('boost status changed');
+                //     }
+                // });
             } 
         }     
     });
 }
 
-/* 
-schedule.scheduleJob('0 0 * * *', DailyCheckup);
 
-//checking for delays if any
-var Delay = schedule.scheduleJob('0 0 * * *', function(fireDate){
-    console.log('This job was supposed to run at ' + fireDate + ', but actually ran at ' + new Date());
-});
-*/
+// schedule.scheduleJob('0 0 * * *', DailyCheckup);
+
+// //checking for delays if any
+// var Delay = schedule.scheduleJob('0 0 * * *', function(fireDate){
+//     console.log('This job was supposed to run at ' + fireDate + ', but actually ran at ' + new Date());
+// });
+// */
  
 module.exports = router;
 

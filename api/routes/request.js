@@ -17,7 +17,6 @@ router.get('/viewRequests', (req, res) => {
                     student: result[i].student,
                     sent_date: result[i].sent_date,
                     day: result[i].day,
-                    time: result[i].time,
                     subject: result[i].subject
                 }
             }
@@ -33,10 +32,9 @@ router.post('/makeRequest', (req, res) => {
     var student = req.body.student;
     var tutor = req.body.tutor;
     var day = req.body.day;
-    var time = req.body.time;
     var subject = req.body.subject;  
 
-    var sql = "insert into Requests(tutor, student, sent_date, day, time, subject, status) values('"+tutor+"', '"+student+"', CURDATE()+1, '"+day+"', '"+time+"', '"+subject+"', 'SENT')";
+    var sql = "insert into Requests(tutor, student, sent_date, day, subject, status) values('"+tutor+"', '"+student+"', CURDATE()+1, '"+day+"', '"+subject+"', 'SENT')";
 
     con.query(sql, (err, result) => {
         if(err) throw err;
