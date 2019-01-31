@@ -37,7 +37,7 @@ router.post('/search', (req, res) => {
                 var sql2 = "update ProfileBoost set boostPriority = boostPriority-1 where email='" + result[i].email + "'";
                 // console.log(result[i].package);
 
-                if (result[i].package == 'platinum' && platinumCount < 4) {
+                if (result[i].package == 'platinum' && platinumCount < 2) {
 
                     // platinum profiles
                     user[j] = {
