@@ -12,7 +12,7 @@ const router = express.Router();
 var saltRounds = 10;
 
 //email verification
-function emailVerification(email){
+function emailVerification(email, code){
     var mailOptions = {
         from: 'teaminsomniac16@gmail.com',
         to: email,
@@ -43,30 +43,23 @@ router.post('/register', (req, res) => {
     var lname = req.body.lname;
     var email = req.body.email;
     var pword = req.body.password;
-    var code = randomstring.generate(20);
-    console.log(code);
-    con.query(sql, (err, result) => {
-        if (err) {
-            console.log(err);
-        }
-        else {
-            console.log(result);
-        }
-    });
     
     bcrypt.hash(pword, saltRounds, function (err, hash) {
+        var code = randomstring.generate(20);
+        console.log(code);
+
         if (role === 'tutor') {
-            var sql = "insert into Tutor(FirstName, LastName, email, password) values('" + fname + "', '" + lname + "', '" + email + "', '" + hash + "')";
+            var sql = "insert into Tutor(FirstName, LastName, email, password, token) values('" + fname + "', '" + lname + "', '" + email + "', '" + hash + "', '"+code+"')";
+            var sql2 = "select email from Tutor where Tutor.email='" + email + "'";
             var sql3 = "select email, FirstName, LastName, Location, Mobile, Subject, Rate, ImgUrl from Tutor where email='"+email+"'";
-            var sql4 = "insert into Tutor(token) values('" + code + "') where email='" + email + "'";
         }
         else if (role === 'student') {
-            var sql = "insert into Student(name, email, pword) values('" + fname + " " + lname + "', '" + email + "', '" + hash + "')";
+            var sql = "insert into Student(name, email, pword, token) values('" + fname + " " + lname + "', '" + email + "', '" + hash + "', '"+code+"')";
+            var sql2 = "select email from Student where email='" + email + "'";
             var sql3 = "select email, name, location, mobile from Student where email='"+email+"'";
-            var sql4 = "insert into Student(token) values('" + code + "') where email='" + email + "'";
         }
 
-        var sql2 = "select * from Tutor, Student where Tutor.email='" + email + "' or Student.email='" + email + "'";
+      
         con.query(sql2, function (err, result) {
             if (err){
                 console.log(err);
@@ -77,11 +70,13 @@ router.post('/register', (req, res) => {
                 });
             }
             else{
-            if (result.length > 0) {
+            if (result.length!= 0) {
+                console.log(result);
                 res.json({
                     has: true,
                     success: false,
-                    token: null
+                    token: null,
+                    confirmed: false
                 });
             }
             else {
@@ -121,7 +116,7 @@ router.post('/register', (req, res) => {
                                         role: role
                                     }
                                 }
-                                emailVerification(email);
+                                emailVerification(email, code);
                                 //console.log(user);
                                 const token = jwt.sign({ user }, 'secret_key');
 
