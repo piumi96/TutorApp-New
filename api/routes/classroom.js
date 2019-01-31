@@ -1,12 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const con = require('../../databse/db');
-const passport = require('passport');
-const user = require('../../config/passport-setup');
 const keys = require('../../config/keys');
 const { google } = require('googleapis');
 const Client = require('google-classroom');
-const classroom = google.classroom({ version: 'v1' });
 
 const fs = require('fs');
 const readline = require('readline');
@@ -270,5 +267,34 @@ router.get('/listStudents', (req, res) => {
         })
     }
 });
+
+//courseWork
+router.get('/listCourseWork', (req, res) => {
+    authorize(credentials, listCourseWork);
+
+    function listCourseWork(auth){
+        const classroom = google.classroom({ version: 'v1', auth });
+        classroom.courses.courseWork.list({
+            courseId: req.body.courseId,          
+        }, (err, response) => {
+            if(err){
+                console.log(err);
+                res.json({
+                    success: false,
+                    courseWork: null
+                })
+            }
+            else{
+                console.log(response.data);
+                res.json({
+                    success: true,
+                    courseWork: response.data
+                });
+            }
+        })
+    }
+});
+
+
 
 module.exports = router;
