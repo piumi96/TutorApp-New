@@ -49,6 +49,13 @@ module.exports = {
         cloud_name: 'tutorapp',
         api_key: '358911337359442',
         api_secret: 'goGEmvy_FLpWgJxBC6hMvdDln9A' 
+    },
+
+    pusher: {
+        appId: '704314',
+        key: '459f66fdccbb4fdebbb2',
+        secret: '0e410517f7c505d200ed',
+        cluster: 'ap2',
     }
 
 };
