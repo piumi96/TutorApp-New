@@ -96,14 +96,14 @@ router.post('/editProfile', (req, res) => {
     console.log(req);
 
     if (role === 'tutor') {
-        var fname = req.body.fname;
-        var lname = req.body.lname;
-        var description = req.body.description
-        var mobile = req.body.mobile;
-        var subject = req.body.subject;
-        var location = req.body.location;
-        var price = req.body.price;
-        var available = req.body.available;
+        var fname = req.body.user.fname;
+        var lname = req.body.user.lname;
+        var description = req.body.user.description
+        var mobile = req.body.user.mobile;
+        var subject = req.body.user.subject;
+        var location = req.body.user.location;
+        var price = req.body.user.price;
+        var available = req.body.user.available;
 
         var sql = "update Tutor set FirstName='" + fname + "', LastName='" + lname + "', description = '"+description+"', Mobile='" + mobile + "', Subject='" + subject + "', Location='" + location + "', Price='"+price+"', Available_Time = '"+available+"' where email='" + email + "'";
 
