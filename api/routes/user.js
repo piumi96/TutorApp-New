@@ -6,13 +6,20 @@ const nodemailer = require('nodemailer');
 const randomstring = require('randomstring');
 const con = require('../../databse/db');
 const user = require('../../config/passport-setup');
-const transporter = require('../../config/email-config');
 
 const router = express.Router();
 var saltRounds = 10;
 
 //email verification
 function emailVerification(email, code){
+    var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'teaminsomniac16@gmail.com',
+            pass: 'tutorapp123'
+        }
+    });
+
     var mailOptions = {
         from: 'teaminsomniac16@gmail.com',
         to: email,
@@ -116,7 +123,7 @@ router.post('/register', (req, res) => {
                                         role: role
                                     }
                                 }
-                                emailVerification(email, code);
+                                //emailVerification(email, code);
                                 //console.log(user);
                                 const token = jwt.sign({ user }, 'secret_key');
 
@@ -410,7 +417,7 @@ router.post('/login', (req, res) => {
                     });
                 }
                 else if(result[0].acc_status != 0) {
-                    if (result[0].confirmed) {
+                    //if (result[0].confirmed) {
                         var fname = result[0].FirstName;
                         var lname = result[0].LastName;
                         var status = result[0].acc_status;
@@ -491,15 +498,15 @@ router.post('/login', (req, res) => {
     
                                 });
 
-                    }
-                    else{
+                    //}
+                    /* else{
                         res.json({
                             success: false,
                             token: null,
                             block: false,
                             confirmed: false
                         });
-                    }
+                    } */
                 }
             }
         });
@@ -524,7 +531,7 @@ router.post('/login', (req, res) => {
                 }
                 else if(result[0].acc_status != 0){
                     console.log(result);
-                    if(result[0].confirmed){
+                    //if(result[0].confirmed){
                         var name = result[0].name;
                         var status =result[0].acc_status;
                         var location, mobile;
@@ -584,7 +591,7 @@ router.post('/login', (req, res) => {
                                     
                                 });
                         
-                    }
+                    //}
                     
                 }
                 else if(result[0].acc_status == 0){
