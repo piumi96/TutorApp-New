@@ -7,107 +7,274 @@ router.post('/search', (req, res) => {
     var subject = req.body.subject;
 
     if(district === "all" && subject=="all"){
-
-        var sql = "select * from Tutor";
-        con.query(sql, function(err, result){
-            if (err) throw err;
-            else{
-                var user = [];
-                for(var i=0; i<result.length; i++){
-                    user[i] = {
-                        fname: result[i].FirstName,
-                        lname: result[i].LastName,
-                        location: result[i].Location,
-                        mobile: result[i].Mobile,
-                        subject: result[i].Subject,
-                        rate: result[i].Rate,
-                        imgURL: result[i].ImgURL,
-                        email: result[i].email
-                    }
-                }
-                res.send({
-                    user: user
-                });
-                //console.log(result);
-            }
-        });
+        var sql = "select Tutor.*, ProfileBoost.package, ProfileBoost.boostPriority from Tutor LEFT JOIN ProfileBoost on Tutor.email=ProfileBoost.email where acc_status='1' order by boostPriority desc"; 
+    }
+    else if (subject == "all" && district != "all") {
+       var sql = "select Tutor.*, ProfileBoost.package, ProfileBoost.boostPriority from Tutor LEFT JOIN ProfileBoost on Tutor.email=ProfileBoost.email where Location like '%" + district + "%' AND acc_status='1' order by boostPriority desc"; 
+    }
+    else if (district == "all" && subject != "all") {
+        var sql = "select Tutor.*, ProfileBoost.package, ProfileBoost.boostPriority from Tutor LEFT JOIN ProfileBoost on Tutor.email=ProfileBoost.email where Subject like '%" + subject + "%' AND acc_status='1' order by boostPriority desc"; 
+    }
+    else if (subject != "all" && district != "all") {
+        var sql = "select Tutor.*, ProfileBoost.package, ProfileBoost.boostPriority from Tutor LEFT JOIN ProfileBoost on Tutor.email=ProfileBoost.email where Location like '%" + district + "%' AND Subject like '%" + subject + "%' AND acc_status='1' order by boostPriority desc"; 
     }
 
-    else if(subject=="all" && district != "all"){
+    con.query(sql, function(err, result){
+        if (err) throw err;
+        else{
+            
+            var user = [];
+            var platinumCount, goldCount, silverCount;
+            platinumCount = goldCount = silverCount = 1;
+            var j=0;
 
-        var sql = "select * from Tutor where Location like '%"+district+"%'";
-        con.query(sql, function(err, result){
-            if(err) throw err;
-            else{
-                var user = [];
-                for(var i=0; i<result.length; i++){
-                    user[i] = {
+            for(var i=0; i<result.length; i++){
+                var sql2 = "update ProfileBoost set boostPriority = boostPriority-1 where email='"+result[i].email+"'";
+                console.log(result[i].package);
+               
+                if(result[i].package == 'platinum' && platinumCount<2){
+
+                    // platinum profiles
+                    user[j] = {
                         fname: result[i].FirstName,
                         lname: result[i].LastName,
-                        location: result[i].Location,
-                        mobile: result[i].Mobile,
-                        subject: result[i].Subject,
                         email: result[i].email,
-                        imgURL: result[i].ImgURL,
-                        rate: result[i].Rate
+                        package: 'platinum',
+                        location: '',
+                        subject: '',
+                        mobile: '',
+                        rate: '',
+                        imgUrl: '',
+                        price: '',
+                        available: ''
+                
                     }
-                }
-                res.send({
-                    user: user
-                });
-            }
-        })
-    }
+                    if (result[i].Location) {
+                        user[j].location = result[i].Location;
+                    }
+                    if (result[i].Mobile) {
+                        user[j].mobile = result[i].Mobile;
+                    }
+                    if (result[i].Subject) {
+                        user[j].subject = result[i].Subject;
+                    }
+                    if (result[i].Rate) {
+                        user[j].rate = result[i].Rate;
+                    }
+                    if (result[i].ImgUrl) {
+                        user[j].imgUrl = result[i].ImgUrl;
+                    }
+                    if (result[i].Price) {
+                        user[j].price = result[i].Price;
+                    }
+                    if (result[i].Available_time) {
+                        user[j].available = result[i].Available_time;
+                    }
+                    platinumCount++;
+                    j++;
 
-    else if(district=="all" && subject != "all"){
-        var sql = "select * from Tutor where Subject like '%"+subject+"%'";
-        con.query(sql, function(err, result){
-            if(err) throw err;
-            else{
-                var user = [];
-                for(var i=0; i<result.length; i++){
-                    user[i] = {
+                    con.query(sql2, function(err){
+                        if(err) throw err;
+                    });
+
+                }else if(result[i].package == 'gold' && goldCount<2){
+
+                    //Gold profiles
+                    user[j] = {
                         fname: result[i].FirstName,
                         lname: result[i].LastName,
-                        location: result[i].Location,
-                        mobile: result[i].Mobile,
-                        subject: result[i].Subject,
                         email: result[i].email,
-                        imgURL: result[i].ImgURL,
-                        rate: result[i].Rate
+                        package: 'gold',
+                        location: '',
+                        subject: '',
+                        mobile: '',
+                        rate: '',
+                        imgUrl: '',
+                        price: '',
+                        available: ''
+                
                     }
-                }
-                res.send({
-                    user: user
-                });
-            }
-        })
-    }
+                    if (result[i].Location) {
+                        user[j].location = result[i].Location;
+                    }
+                    if (result[i].Mobile) {
+                        user[j].mobile = result[i].Mobile;
+                    }
+                    if (result[i].Subject) {
+                        user[j].subject = result[i].Subject;
+                    }
+                    if (result[i].Rate) {
+                        user[j].rate = result[i].Rate;
+                    }
+                    if (result[i].ImgUrl) {
+                        user[j].imgUrl = result[i].ImgUrl;
+                    }
+                    if (result[i].Price) {
+                        user[j].price = result[i].Price;
+                    }
+                    if (result[i].Available_time) {
+                        user[j].available = result[i].Available_time;
+                    }
 
-    else if(subject != "all" && district != "all"){
-        var sql = "select * from Tutor where (Location like '%"+district+"%' and Subject like '%"+subject+"%')";
-        con.query(sql, function(err, result){
-            if(err) throw err;
-            else{
-                var user = [];
-                for(var i=0; i<result.length; i++){
-                    user[i] = {
+                    goldCount++;
+                    j++;
+
+                    con.query(sql2, function(err,result){
+                        if(err) throw err;
+                    });
+
+                }else if(result[i].package =='silver' && silverCount<2){
+
+                    //silver profiles
+                    user[j] = {
                         fname: result[i].FirstName,
                         lname: result[i].LastName,
-                        location: result[i].Location,
-                        mobile: result[i].Mobile,
-                        subject: result[i].Subject,
                         email: result[i].email,
-                        imgURL: result[i].ImgURL,
-                        rate: result[i].Rate
+                        package: 'silver',
+                        location: '',
+                        subject: '',
+                        mobile: '',
+                        rate: '',
+                        imgUrl: '',
+                        price: '',
+                        available: ''
+                
                     }
+                    if (result[i].Location) {
+                        user[j].location = result[i].Location;
+                    }
+                    if (result[i].Mobile) {
+                        user[j].mobile = result[i].Mobile;
+                    }
+                    if (result[i].Subject) {
+                        user[j].subject = result[i].Subject;
+                    }
+                    if (result[i].Rate) {
+                        user[j].rate = result[i].Rate;
+                    }
+                    if (result[i].ImgUrl) {
+                        user[j].imgUrl = result[i].ImgUrl;
+                    }
+                    if (result[i].Price) {
+                        user[j].price = result[i].Price;
+                    }
+                    if (result[i].Available_time) {
+                        user[j].available = result[i].Available_time;
+                    }
+
+                    silverCount++;
+                    j++;
+
+                    con.query(sql2, function(err,result){
+                        if(err) throw err;
+                    });
+
+                    }else if(result[i].package != 'platinum' && result[i].package != 'gold' && result[i].package != 'silver'){
+
+                    user[j] = {
+                        fname: result[i].FirstName,
+                        lname: result[i].LastName,
+                        email: result[i].email,
+                        package: 'null',
+                        location: '',
+                        subject: '',
+                        mobile: '',
+                        rate: '',
+                        imgUrl: '',
+                        price: '',
+                        available: ''
+                
+                    }
+                    if (result[i].Location) {
+                        user[j].location = result[i].Location;
+                    }
+                    if (result[i].Mobile) {
+                        user[j].mobile = result[i].Mobile;
+                    }
+                    if (result[i].Subject) {
+                        user[j].subject = result[i].Subject;
+                    }
+                    if (result[i].Rate) {
+                        user[j].rate = result[i].Rate;
+                    }
+                    if (result[i].ImgUrl) {
+                        user[j].imgUrl = result[i].ImgUrl;
+                    }
+                    if (result[i].Price) {
+                        user[j].price = result[i].Price;
+                    }
+                    if (result[i].Available_time) {
+                        user[j].available = result[i].Available_time;
+                    }
+                    j++;
                 }
-                res.send({
-                    user: user
-                });
             }
-        })
-    }
+            res.json({
+                user: user
+            });
+        }
+    });
 });
 
-module.exports = router;
+router.post('/searchByName', (req, res) => {
+    var name = req.body.name;
+    var fname = (name.trim().split(/\s+/))[0];
+    var lname = (name.trim().split(/\s+/))[1];
+    var sql = "select * from Tutor where (FirstName like '%"+fname+"%' OR LastName like '%"+lname+"%') AND acc_status='1'";
+    con.query(sql, (err, result) => {
+        if(err){
+            console.log(err);
+            res.json({
+                success: false,
+                user: null
+            });
+        }
+        //console.log(result);
+        var user = [];
+        for (var i = 0; i < result.length; i++) {
+            user[i] = {
+                fname: result[i].FirstName,
+                lname: result[i].LastName,
+                email: result[i].email,
+                location: '',
+                subject: '',
+                mobile: '',
+                rate: '',
+                imgUrl: '',
+                price: '',
+                available: ''
+
+            }
+            if (result[i].Location) {
+                user[i].location = result[i].Location;
+            }
+            if (result[i].Mobile) {
+                user[i].mobile = result[i].Mobile;
+            }
+            if (result[i].Subject) {
+                user[i].subject = result[i].Subject;
+            }
+            if (result[i].Rate) {
+                user[i].rate = result[i].Rate;
+            }
+            if (result[i].ImgUrl) {
+                user[i].imgUrl = result[i].ImgUrl;
+            }
+            if (result[i].Price) {
+                user[i].price = result[i].Price;
+            }
+            if (result[i].Available_time) {
+                user[i].available = result[i].Available_time;
+            }
+
+        }
+        res.json({
+            success: true,
+            user: user
+        });
+    });
+})
+
+
+
+module.exports = router
