@@ -17,7 +17,7 @@ function emailVerification(email){
         from: 'teaminsomniac16@gmail.com',
         to: email,
         subject: 'TutorApp verification',
-        text: 'Confirm your email account by following this link and pasting the verification code provided.\nVerification Code: '+code+'\nLink: '
+        text: 'Confirm your email account by following this link and pasting the verification code provided.\nVerification Code: ' + code +'\nLink: https://guarded-beyond-19031.herokuapp.com/verify'
     };
 
     transporter.sendMail(mailOptions, function (error, info) {
@@ -402,7 +402,7 @@ router.post('/login', (req, res) => {
     //role tutor-------
 
     if (role === 'tutor') {
-        var sql = "select email, password, confirmed from Tutor where email='" + email + "'";
+        var sql = "select * from Tutor where email='" + email + "'";
 
         con.query(sql, function (err, result) {
             if (err) throw err;
@@ -514,13 +514,13 @@ router.post('/login', (req, res) => {
     //role student------
 
     if (role === 'student') {
-        var sql = "select email, pword, confirmed from Student where email='" + email + "'";
+        var sql = "select * from Student where email='" + email + "'";
 
         con.query(sql, function (err, result) {
             if (err) throw err;
             else {
                 if (result.length == 0) {
-                    res.send({
+                    res.json({
                         success: false,
                         token: null,
                         block: false,
@@ -601,7 +601,7 @@ router.post('/login', (req, res) => {
                             confirmed: false
                         })
                     }
-                else{
+                else if(result[0].confirmed == 0){
                     res.send({
                         success: false,
                         token: null,
