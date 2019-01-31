@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const Pusher = require('pusher');
 const keys = require('../../config/keys');
 
 const pusher = new Pusher({
