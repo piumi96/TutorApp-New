@@ -8,7 +8,7 @@ router.post('/viewProfile', (req, res) => {
 
     if(role==='tutor'){
         var sql = "select FirstName, LastName, Location, Mobile, Subject, Rate, ImgUrl, Price, Available_time from Tutor where email='"+email+"'";
-        var sql1 = "select date, content, name, ImgUrl from Review, Student where tutor='"+email+"' and Student.email=Review.student";
+        var sql1 = "select date, content, name, ImgUrl from Review, Student where tutor='"+email+"' and Student.email=Review.student order by date desc";
         var profile;
         var reviews = [];
     
@@ -41,8 +41,8 @@ router.post('/viewProfile', (req, res) => {
                    }
                    else{
                        console.log(response);
-                       for(var i=response.length-1; i>=0; i--){
-                            reviews[i - (response.length - 1)] = {
+                       for(var i=0; i<response.length; i++){
+                            reviews[i] = {
                                date: response[i].date,
                                tutor: response[i].tutor,
                                student: response[i].name,

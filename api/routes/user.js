@@ -13,16 +13,11 @@ var saltRounds = 10;
 
 //email verification
 function emailVerification(email){
-    console.log(email);
-    var code = randomstring.generate(20);
-    console.log(code);
-    var sql3 = "insert into Tutor(token) values('"+code+"')";
-
     var mailOptions = {
         from: 'teaminsomniac16@gmail.com',
         to: email,
         subject: 'TutorApp verification',
-        text: 'Confirm your email account using this verification code'
+        text: 'Confirm your email account by following this link and pasting the verification code provided.\nVerification Code: '+code+'\nLink: '
     };
 
     transporter.sendMail(mailOptions, function (error, info) {
@@ -48,15 +43,27 @@ router.post('/register', (req, res) => {
     var lname = req.body.lname;
     var email = req.body.email;
     var pword = req.body.password;
+    var code = randomstring.generate(20);
+    console.log(code);
+    con.query(sql, (err, result) => {
+        if (err) {
+            console.log(err);
+        }
+        else {
+            console.log(result);
+        }
+    });
     
     bcrypt.hash(pword, saltRounds, function (err, hash) {
         if (role === 'tutor') {
             var sql = "insert into Tutor(FirstName, LastName, email, password) values('" + fname + "', '" + lname + "', '" + email + "', '" + hash + "')";
             var sql3 = "select email, FirstName, LastName, Location, Mobile, Subject, Rate, ImgUrl from Tutor where email='"+email+"'";
+            var sql4 = "insert into Tutor(token) values('" + code + "') where email='" + email + "'";
         }
         else if (role === 'student') {
             var sql = "insert into Student(name, email, pword) values('" + fname + " " + lname + "', '" + email + "', '" + hash + "')";
             var sql3 = "select email, name, location, mobile from Student where email='"+email+"'";
+            var sql4 = "insert into Student(token) values('" + code + "') where email='" + email + "'";
         }
 
         var sql2 = "select * from Tutor, Student where Tutor.email='" + email + "' or Student.email='" + email + "'";
@@ -131,8 +138,6 @@ router.post('/register', (req, res) => {
         });
     });
 });
-
-
 
 router.post('/google-reg', passport.authenticate('google', {
     scope: ['email']
@@ -259,8 +264,6 @@ router.post('/google-reg', passport.authenticate('google', {
     }
    
 });
-
-
 
 router.post('/facebook-reg', passport.authenticate('facebook', { 
     scope: ['email']
@@ -390,9 +393,6 @@ router.post('/facebook-reg', passport.authenticate('facebook', {
 });
 
 
-
-
-
 //Login routes------------------------------------------------------------------
 router.post('/login', (req, res) => {
     var email = req.body.username;
@@ -402,8 +402,7 @@ router.post('/login', (req, res) => {
     //role tutor-------
 
     if (role === 'tutor') {
-        var sql = "select * from Tutor where email='" + email + "'";
-        var sql2 = "select password from Tutor where email = '" + email + "'";
+        var sql = "select email, password, confirmed from Tutor where email='" + email + "'";
 
         con.query(sql, function (err, result) {
             if (err) throw err;
@@ -416,88 +415,96 @@ router.post('/login', (req, res) => {
                     });
                 }
                 else if(result[0].acc_status != 0) {
-                    var fname = result[0].FirstName;
-                    var lname = result[0].LastName;
-                    var status = result[0].acc_status;
-                    var location, mobile, subject;
-
-                    if (result[0].Location) {
-                        location = result[0].Location;
-                    }
-                    else {
-                        location = '';
-                    }
-
-                    if (result[0].Mobile) {
-                        mobile = result[0].Mobile;
-                    }
-                    else {
-                        mobile = '';
-                    }
-
-                    if (result[0].Subject) {
-                        subject = result[0].Subject;
-                    }
-                    else {
-                        subject = '';
-                    }
-
-                    con.query(sql2, function (err, result) {
-                        if (err) throw err;
-                        else {
-                            console.log(result);
-                            var pass = result[0].password;
-                            bcrypt.compare(pword, pass, function (err, response) {
-                                if (err) throw err;
-                                else if (response) {
-                                    const user = {
-                                        fname: fname,
-                                        lname: lname,
-                                        mobile: mobile,
-                                        subject: subject,
-                                        location: location,
-                                        role:role,
-                                        email:email,
-                                        status: status
-                                    };
-
-                                    const token = jwt.sign({ user }, 'secret_key');
-                                    console.log(user);
-                                    console.log(token);
-
-                                    res.json({
-                                        success: true,
-                                        token: token,
-                                        user: user,
-                                        block: false
-                                    });
-                                }
-                                else if(!response){
-                                    res.json({
-                                        success: false,
-                                        token: null,
-                                        block: false
-                                    });
-                                }
-                                else if(result[0].acc_status==0){
-                                    res.json({
-                                        success: false,
-                                        token: null,
-                                        block: true
-                                    })
-                                }
-                                else{
-                                    res.json({
-                                        success: false,
-                                        token: null,
-                                        block: false
-                                    })
-                                }
-
-                            });
+                    if (result[0].confirmed) {
+                        var fname = result[0].FirstName;
+                        var lname = result[0].LastName;
+                        var status = result[0].acc_status;
+                        var location, mobile, subject;
+    
+                        if (result[0].Location) {
+                            location = result[0].Location;
                         }
-                    });
+                        else {
+                            location = '';
+                        }
+    
+                        if (result[0].Mobile) {
+                            mobile = result[0].Mobile;
+                        }
+                        else {
+                            mobile = '';
+                        }
+    
+                        if (result[0].Subject) {
+                            subject = result[0].Subject;
+                        }
+                        else {
+                            subject = '';
+                        }
+                                console.log(result);
+                                var pass = result[0].password;
+                                bcrypt.compare(pword, pass, function (err, response) {
+                                    if (err) throw err;
+                                    else if (response) {
+                                        const user = {
+                                            fname: fname,
+                                            lname: lname,
+                                            mobile: mobile,
+                                            subject: subject,
+                                            location: location,
+                                            role:role,
+                                            email:email,
+                                            status: status
+                                        };
+    
+                                        const token = jwt.sign({ user }, 'secret_key');
+                                        console.log(user);
+                                        console.log(token);
+    
+                                        res.json({
+                                            success: true,
+                                            token: token,
+                                            user: user,
+                                            block: false,
+                                            confirmed: true
+                                        });
+                                    }
+                                    else if(!response){
+                                        res.json({
+                                            success: false,
+                                            token: null,
+                                            block: false,
+                                            confirmed: true
+                                        });
+                                    }
+                                    else if(result[0].acc_status==0){
+                                        res.json({
+                                            success: false,
+                                            token: null,
+                                            block: true,
+                                            confirmed: true
+                                        })
+                                    }
+                                    else{
+                                        res.json({
+                                            success: false,
+                                            token: null,
+                                            block: false,
+                                            confirmed: true
+                                        })
+                                    }
+    
+                                });
 
+                    }
+                    else{
+                        res.json({
+                            success: false,
+                            token: null,
+                            block: false,
+                            confirmed: false
+                        });
+                    }
                 }
             }
         });
@@ -507,8 +514,7 @@ router.post('/login', (req, res) => {
     //role student------
 
     if (role === 'student') {
-        var sql = "select * from Student where email='" + email + "'";
-        var sql2 = "select pword from Student where email = '" + email + "'";
+        var sql = "select email, pword, confirmed from Student where email='" + email + "'";
 
         con.query(sql, function (err, result) {
             if (err) throw err;
@@ -517,72 +523,73 @@ router.post('/login', (req, res) => {
                     res.send({
                         success: false,
                         token: null,
-                        block: false
+                        block: false,
+                        confirmed: false
                     });
                 }
                 else if(result[0].acc_status != 0){
                     console.log(result);
-                    var name = result[0].name;
-                    var status =result[0].acc_status;
-                    var location, mobile;
-
-                    if (result[0].location) {
-                        location = result[0].location;
-                    }
-                    else {
-                        location = '';
-                    }
-
-                    if (result[0].mobile) {
-                        mobile = result[0].mobile;
-                    }
-                    else {
-                        mobile = '';
-                    }
-
-                    con.query(sql2, function (err, result) {
-                        if (err) throw err;
-                        else {
-                            //console.log(result);
-                            var pass = result[0].pword;
-                            bcrypt.compare(pword, pass, function (err, response) {
-                                console.log(response);
-                                if (err){
-                                    console.log(err);
-                                }
-                                else if (response) {
-                                    const user = {
-                                        name: name,
-                                        mobile: mobile,
-                                        location: location,
-                                        email:email,
-                                        role:role,
-                                        status: status
-                                    };
-
-                                    const token = jwt.sign({ user }, 'secret_key');
-                                    console.log(user);
-                                    console.log(token);
-
-                                    res.json({
-                                        success: true,
-                                        token: token,
-                                        user: user,
-                                        block: false
-                                    });
-                                }
-                                else if(!response){
-                                    res.json({
-                                        success: false,
-                                        token: null,
-                                        user: null,
-                                        block: false
-                                    });
-                                }
-                                
-                            });
+                    if(result[0].confirmed){
+                        var name = result[0].name;
+                        var status =result[0].acc_status;
+                        var location, mobile;
+    
+                        if (result[0].location) {
+                            location = result[0].location;
                         }
-                    });
+                        else {
+                            location = '';
+                        }
+    
+                        if (result[0].mobile) {
+                            mobile = result[0].mobile;
+                        }
+                        else {
+                            mobile = '';
+                        }
+    
+                                //console.log(result);
+                                var pass = result[0].pword;
+                                bcrypt.compare(pword, pass, function (err, response) {
+                                    console.log(response);
+                                    if (err){
+                                        console.log(err);
+                                    }
+                                    else if (response) {
+                                        const user = {
+                                            name: name,
+                                            mobile: mobile,
+                                            location: location,
+                                            email:email,
+                                            role:role,
+                                            status: status
+                                        };
+    
+                                        const token = jwt.sign({ user }, 'secret_key');
+                                        console.log(user);
+                                        console.log(token);
+    
+                                        res.json({
+                                            success: true,
+                                            token: token,
+                                            user: user,
+                                            block: false,
+                                            confirmed: true
+                                        });
+                                    }
+                                    else if(!response){
+                                        res.json({
+                                            success: false,
+                                            token: null,
+                                            user: null,
+                                            block: false,
+                                            confirmed: true
+                                        });
+                                    }
+                                    
+                                });
+                        
+                    }
                     
                 }
                 else if(result[0].acc_status == 0){
@@ -590,14 +597,16 @@ router.post('/login', (req, res) => {
                         res.send({
                             success: false,
                             token: null,
-                            block: true
+                            block: true,
+                            confirmed: false
                         })
                     }
                 else{
                     res.send({
                         success: false,
                         token: null,
-                        block: false
+                        block: false,
+                        confirmed: false
                     })
                 }
             }
