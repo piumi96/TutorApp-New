@@ -218,19 +218,22 @@ router.post('/renewboost', (req, res) => {
         if (err) {
             console.log(err);
             res.json({
-                success: false
+                success: false,
+                newDate: null
             });
         } else {
             con.query(sql2, (err) => {
                 if (err) {
                     console.log(err);
                     res.json({
-                        success: false
+                        success: false,
+                        newDate: null
                     });
                 } else {
                     //successfully re-boosted
                     res.json({
-                        success: true
+                        success: true,
+                        newDate: oldExpiry
                     });
                 }
             });
