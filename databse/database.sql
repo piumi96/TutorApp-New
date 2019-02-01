@@ -30,8 +30,8 @@ create table ProfileBoost(
 	boostId int primary key auto_increment,
 	email varchar(100),
 	package varchar(20),
-	startDate timestamp,
-	expiryDate timestamp,
+	startDate date,
+	expiryDate date,
 	boostPriority int
 );
 

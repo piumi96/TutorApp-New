@@ -26,6 +26,7 @@ const imageUploadRoute = require('./api/routes/imageupload');
 const emailVerifyRoute = require('./api/routes/emailVerify');
 const chatRoute = require('./api/routes/chat');
 const boostOfferRoutes = require('./api/routes/boostOffer');
+const boostRoutes = require('./api/routes/boostProfile');
 const passportSetup = require('./config/passport-setup');
 
 const app = express();
@@ -74,6 +75,7 @@ app.use('/', imageUploadRoute);
 app.use('/', emailVerifyRoute);
 app.use('/', chatRoute);
 app.use('/', boostOfferRoutes);
+app.use('/', boostRoutes);
 
 app.use((req, res, next)=>{
     const error = {
