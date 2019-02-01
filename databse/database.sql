@@ -1,36 +1,39 @@
-create database tutorApp;
-use tutorApp;
+create database tutionmaster;
+use tutionmaster;
+
+create table Achievements(
+	achievementID int primary key auto_increment,
+	tutor varchar(30),
+	name varchar(50),
+	title varchar(100),
+	description longtext,
+	ImgUrl longtext,
+	hideStatus boolean
+);
+
+create table BoostOffers(
+	packageID int primary key auto_increment,
+	package varchar(20),
+	price float,
+	discount float,
+	startDate date,
+	expiryDate date,
+	duration int
+);
 
 create table District(
-		DistrictID int primary key auto_increment,
-		name varchar(30)
+	DistrictID int primary key auto_increment,
+	name varchar(30)
 );
 
-create table Tutor(
-		TutorID int primary key auto_increment,
-		email varchar(50),
-		password varchar(100),
-		FirstName varchar(50),
-		LastName varchar(50),
-		Location varchar(30),
-		Mobile varchar(10),
-		Subject varchar(30),
-		Rate float,
-		ImgUrl varchar(200),
-		Price float,
-		Available_time date,
-		acc_status boolean default '1'
+create table ProfileBoost(
+	boostId int primary key auto_increment,
+	email varchar(100),
+	package varchar(20),
+	startDate timestamp,
+	expiryDate timestamp,
+	boostPriority int
 );
-
-create table Student(
-		StudentID int primary key auto_increment,
-		email varchar(50),
-		pword varchar(100),
-		name varchar(50),
-		mobile varchar(10),
-		location varchar(30),
-		acc_status boolean default '1'
-)
 
 create table Rate(
 		RateID int primary key auto_increment,
@@ -58,6 +61,19 @@ create table Review(
 		content varchar(500)
 );
 
+create table Student(
+		StudentID int primary key auto_increment,
+		email varchar(50),
+		confirmed tinyint,
+		token varchar(20),
+		pword varchar(100),
+		name varchar(50),
+		mobile varchar(10),
+		location varchar(30),
+		ImgUrl longtext,
+		acc_status boolean default '1'
+)
+
 create table Subject(
 		SubjectID int primary key auto_increment,
 		Name varchar(50)
@@ -70,11 +86,27 @@ create table Suggestions(
 		Content varchar(500)
 );
 
-create table ProfileBoost(
-	boostId int auto_increment,
-    email varchar(100) primary key not null,
-	package varchar(20),
-	startDate timestamp,
-	expiryDate timestamp,
-	boostPriority int default 5000
+create table Tutor(
+		TutorID int primary key auto_increment,
+		email varchar(50),
+		confirmed tinyint,
+		token varchar(20),
+		password varchar(100),
+		FirstName varchar(50),
+		LastName varchar(50),
+		description longtext,
+		Location varchar(30),
+		Mobile varchar(10),
+		Subject varchar(30),
+		Rate float,
+		ImgUrl varchar(200),
+		Price float,
+		Available_time date,
+		acc_status boolean default '1',
+		priority int default '0'
 );
+
+create table ViewCount(
+	tutor varchar(30) primary key,
+	viewCount int
+)

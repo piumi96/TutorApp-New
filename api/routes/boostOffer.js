@@ -8,7 +8,7 @@ router.post('/addBoostOffer', (req, res) => {
     var discount = req.body.discount;
     var duration = req.body.duration;
 
-    var sql = "update BoostOffers set discount = '" + discount + "', duration='" + duration +"', startdate=CURRENT_TIMESTAMP(), expirydate=TIMESTAMPADD(DAY,"+duration+",CURRENT_TIMESTAMP()) where package = '"+ package+"'";
+    var sql = "update BoostOffers set discount = '" + discount + "', duration='" + duration +"', startDate=CURRENT_TIMESTAMP(), expiryDate=TIMESTAMPADD(DAY,"+duration+",CURRENT_TIMESTAMP()) where package = '"+ package+"'";
     var sql1 = "select price from BoostOffers where package='"+package+"'";
 
     con.query(sql, (err, result) => {
