@@ -44,6 +44,32 @@ router.post('/rate', (req, res) => {
                     })
                 }
             })
+
+            con.query(sql3, (err, response) => {
+                if (err) {
+                    console.log(err);
+                }
+                console.log(response);
+                allowed = true;
+                success = true;
+            });
+            con.query(sql6, (err, result) => {
+                if (err) {
+                    console.log(err);
+                    res.json({
+                        success: success,
+                        allowed: allowed,
+                        rate: rate
+                    });
+                }
+                console.log(result);
+                rate = result[0].rate;
+                res.json({
+                    success: success,
+                    allowed: allowed,
+                    rate: rate
+                });
+            })
             
         }
         else{
@@ -55,31 +81,7 @@ router.post('/rate', (req, res) => {
         }
 
         
-        con.query(sql3, (err, response) => {
-            if (err) {
-                console.log(err);
-            }
-            console.log(response);
-            allowed = true;
-            success = true;
-        });
-        con.query(sql6, (err, result) => {
-            if(err){
-                console.log(err);
-                res.json({
-                    success: success,
-                    allowed: allowed,
-                    rate: rate
-                });
-            }
-            console.log(result);
-            rate = result[0].rate;
-            res.json({
-                success: success,
-                allowed: allowed,
-                rate: rate
-            });
-        })
+
     });
 
 
