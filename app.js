@@ -25,6 +25,7 @@ const achievementRoutes = require('./api/routes/achievements');
 const imageUploadRoute = require('./api/routes/imageupload');
 const emailVerifyRoute = require('./api/routes/emailVerify');
 const chatRoute = require('./api/routes/chat');
+const boostOfferRoutes = require('./api/routes/boostOffer');
 const passportSetup = require('./config/passport-setup');
 
 const app = express();
@@ -72,6 +73,7 @@ app.use('/', achievementRoutes);
 app.use('/', imageUploadRoute);
 app.use('/', emailVerifyRoute);
 app.use('/', chatRoute);
+app.use('/', boostOfferRoutes);
 
 app.use((req, res, next)=>{
     const error = {

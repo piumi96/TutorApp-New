@@ -123,7 +123,7 @@ router.post('/register', (req, res) => {
                                         role: role
                                     }
                                 }
-                                //emailVerification(email, code);
+                                emailVerification(email, code);
                                 //console.log(user);
                                 const token = jwt.sign({ user }, 'secret_key');
 
