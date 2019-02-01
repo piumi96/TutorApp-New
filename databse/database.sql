@@ -69,3 +69,12 @@ create table Suggestions(
 		Date date,
 		Content varchar(500)
 );
+
+create table ProfileBoost(
+	boostId int auto_increment,
+    email varchar(100) primary key not null,
+	package varchar(20),
+	startDate timestamp,
+	expiryDate timestamp,
+	boostPriority int default 5000
+);

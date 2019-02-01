@@ -12,9 +12,11 @@ router.post('/rate', (req, res) => {
     var sql3 = "update Tutor set Tutor.rate = (select avg(Rate.rating) from Rate where Rate.tutor='" + tutor + "') where Tutor.email='" + tutor + "'";
     var sql4 = "insert into Rate(tutor, student, rating) values('" + tutor + "', '" + student + "', '" + rate + "')";
     var sql5 = "update Rate set rating = '" + rate + "' where tutor='" + tutor + "' and student='" + student + "'";
+    var sql6 = "select rate from Tutor where email='"+tutor+"'";
 
     var success = false;
     var allowed = false;
+    var rate = null;
 
     con.query(sql1, (err, result1) => {
         if(err){
@@ -47,25 +49,39 @@ router.post('/rate', (req, res) => {
         else{
             res.json({
                 success: success,
-                allowed: allowed
+                allowed: allowed,
+                rate: rate
             });
         }
 
         
-        con.query(sql3, (err, result) => {
+        con.query(sql3, (err, response) => {
             if (err) {
                 console.log(err);
             }
-            console.log(result);
+            console.log(response);
             allowed = true;
             success = true;
-
+        });
+        con.query(sql6, (err, result) => {
+            if(err){
+                console.log(err);
+                res.json({
+                    success: success,
+                    allowed: allowed,
+                    rate: rate
+                });
+            }
+            console.log(result);
+            rate = result[0].rate;
             res.json({
                 success: success,
-                allowed: allowed
-            })
-        });
+                allowed: allowed,
+                rate: rate
+            });
+        })
     });
+
 
 
 /*     var rating;

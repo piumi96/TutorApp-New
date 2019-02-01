@@ -58,7 +58,7 @@ router.post('/writeReview', (req, res) => {
     
 });
 
-router.get('/viewMyReviews', (req, res) => {
+router.post('/viewReviews', (req, res) => {
     var tutor = req.body.tutor;
     var sql = "select * from Review where tutor='"+tutor+"'";
 
