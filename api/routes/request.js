@@ -156,7 +156,7 @@ router.post('/cancelRequest', (req, res) => {
 
 router.post('/getAcceptedStudents', (req, res) => {
     var tutor = req.body.tutor;
-    var sql = "select name, email, ImgUrl, mobile, Requests.location, Requests.subject, day, Requests.status, Requests.tutor from Student, Requests where Requests.student = Student.email and Requests.status='ACCEPTED' and Requests.tutor='"+tutor+"'";
+    var sql = "select reqID, name, email, ImgUrl, mobile, Requests.location, Requests.subject, day, Requests.status, Requests.tutor from Student, Requests where Requests.student = Student.email and Requests.status='ACCEPTED' and Requests.tutor='"+tutor+"' and Requests.show='1'";
 
     con.query(sql, (err, result) => {
         if(err){
@@ -166,13 +166,79 @@ router.post('/getAcceptedStudents', (req, res) => {
                 students: null
             });
         }
-        console.log(result);
-        res.json({
-            success: true,
-            students: result
-        });
+        else{
+            console.log(result);
+            res.json({
+                success: true,
+                students: result
+            });
+        }
+        
     })
-})
+});
+
+router.post('/unshowRequest', (req, res) => {
+    var id = req. body.id;
+    var sql = "update Requests set Requests.show = '0' where reqID = '"+id+"'";
+
+    con.query(sql, (err, result) => {
+        if(err){
+            console.log(err);
+            res.json({
+                success: false
+            });
+        }else{
+            console.log(result);
+            res.json({
+                success: true
+            });
+        }
+    });
+});
+
+router.post('/showRequest', (req, res) => {
+    var id = req.body.id;
+    var sql = "update Requests set Requests.show = '1' where reqID = '" + id + "'";
+
+    con.query(sql, (err, result) => {
+        if (err) {
+            console.log(err);
+            res.json({
+                success: false
+            });
+        }
+        else{
+            console.log(result);
+            res.json({
+                success: true
+            });
+
+        }
+    });
+});
+
+router.post('/getRemovedRequests', (req, res) => {
+    var tutor = req.body.tutor;
+    var sql = "select reqID, name, email, ImgUrl, mobile, Requests.location, Requests.subject, day, Requests.status, Requests.tutor from Student, Requests where Requests.student = Student.email and Requests.status='ACCEPTED' and Requests.tutor='" + tutor + "' and Requests.show = '0'";
+
+    con.query(sql, (err, result) => {
+        if (err) {
+            console.log(err);
+            res.json({
+                success: false,
+                requests: null
+            });
+        }
+        else{
+            console.log(result);
+            res.json({
+                success: true,
+                requests: result
+            });
+
+        }
+    });
+});
 
 
 module.exports = router;
