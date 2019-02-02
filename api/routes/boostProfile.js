@@ -18,13 +18,13 @@ router.post('/boostprofile', (req, res) => {
             res.json({
                 success: false,
                 allowed: null,
-                //    response: 'error!' 
+                msg : 'Error!' 
             });
         } else if (result1.length == 0) {
             res.json({
                 success: false,
                 allowed: false,
-                //    response: 'Insufficient Rating!' 
+                msg: 'Insufficient Rating! Profile Boosting is not allowed' 
             });
         } else {
             con.query(sql3, (err, result2) => {
@@ -32,7 +32,7 @@ router.post('/boostprofile', (req, res) => {
                     res.json({
                         success: false,
                         allowed: null,
-                        //    response: 'error!' 
+                        msg: 'Error!' 
                     });
                 }
                 else if (result2.length == 0) {
@@ -41,7 +41,7 @@ router.post('/boostprofile', (req, res) => {
                             res.json({
                                 success: false,
                                 allowed: null,
-                                // response: 'DB entry error!'
+                                msg: 'Error!' 
                             });
                         } else {
                             var today = new Date();
@@ -59,8 +59,8 @@ router.post('/boostprofile', (req, res) => {
                             res.json({
                                 success: true,
                                 allowed: true,
-                                user: user
-                                // response: 'boosted!'
+                                user: user,
+                                msg: 'Your account is successfully boosted!'
                             });
                             con.query(sql7, (err) => {
                                 if (err) {
@@ -84,8 +84,8 @@ router.post('/boostprofile', (req, res) => {
                     res.json({
                         success: true,
                         allowed: false,
+                        msg: 'Your profile is already boosted! Choose re-new package to extend your boost period',
                         user: user
-                        // response: 'Profile is already boosted!'
                     });
                 }
             });
@@ -106,7 +106,7 @@ function DailyCheckup() {
             res.json({
                 success: false,
                 allowed: null,
-                //    response: 'error!' 
+                msg: 'Error!' 
             });
         }
         else {
@@ -120,7 +120,7 @@ function DailyCheckup() {
                         res.json({
                             success: false,
                             allowed: null,
-                            //    response: 'error!' 
+                            msg: 'Error!'  
                         });
                     } else {
                         con.query(sql6, (err) => {
