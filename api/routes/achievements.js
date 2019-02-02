@@ -47,7 +47,7 @@ router.post('/addAchievement', (req, res) => {
                         achievements: achievements,
                         id: achievements[response.length-1].id
                     });
-                }k
+                }
             })
             
         }
