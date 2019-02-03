@@ -32,7 +32,7 @@ function authorize(credentials) {
     return authUrl;
 }
 
-router.post('/auth', (req, res) => {
+router.get('/auth', (req, res) => {
     var authUrl = authorize(credentials);
     console.log(authUrl);
     res.json({
