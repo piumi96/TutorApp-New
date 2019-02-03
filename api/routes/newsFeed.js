@@ -5,8 +5,9 @@ const schedule = require('node-schedule');
 
 router.post('/insertNews', (req, res) => {
     var content = req.body.content;
+    var title = req.body.title;
 
-    var sql = "insert into NewsFeed(content, startDate, expiryDate) values('" + content + "', CURRENT_TIMESTAMP(), TIMESTAMPADD(MONTH, 6, CURRENT_TIMESTAMP()))";
+    var sql = "insert into NewsFeed(title, content, startDate, expiryDate) values('"+title+"', '" + content + "', CURRENT_TIMESTAMP(), TIMESTAMPADD(MONTH, 6, CURRENT_TIMESTAMP()))";
     con.query(sql, (err, result) => {
         if(err){
             console.log(err);
@@ -38,6 +39,7 @@ router.get('/getNews', (req, res) => {
             for(var i=0; i<result.length; i++){
                 news[i] = {
                     id: result[i].newsID,
+                    title: result[i].title,
                     content: result[i].content,
                     startDate: result[i].startDate,
                     expiryDate: result[i].expiryDate
