@@ -7,7 +7,7 @@ router.post('/viewProfile', (req, res) => {
     var role = req.body.role;
 
     if(role==='tutor'){
-        var sql = "select FirstName, LastName, Location, Mobile, Subject, Rate, ImgUrl, Price, Available_time from Tutor where email='"+email+"'";
+        var sql = "select FirstName, LastName, Location, Mobile, Subject, Rate, ImgUrl, Price, description, Available_time from Tutor where email='"+email+"'";
         var sql1 = "select date, content, name, ImgUrl from Review, Student where tutor='"+email+"' and Student.email=Review.student order by date desc";
         var sql2 = "update ViewCount set viewCount = viewCount+100000 where tutor='"+email+"'";
         var sql3 = "insert into ViewCount(tutor, viewCount) values ('"+email+"', '100000')";
