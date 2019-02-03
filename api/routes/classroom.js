@@ -32,6 +32,15 @@ function authorize(credentials) {
     return authUrl;
 }
 
+router.post('/loginToClass', (req, res) => {
+    var authUrl = authorize(credentials);
+    console.log(authUrl);
+    res.json({
+        url: authUrl
+    });
+    
+})
+
 router.post('/listCourses', (req, res) => {
     var code = req.body.token;
     if(code != "null"){
@@ -65,6 +74,7 @@ router.post('/listCourses', (req, res) => {
                     client.getCourses()
                         .then(data => {
                             res.json({
+                                success: true,
                                 courses: data
                             });
                         });
@@ -73,11 +83,10 @@ router.post('/listCourses', (req, res) => {
         })
     }
     else{
-        var authUrl = authorize(credentials);
-        console.log(authUrl);
         res.json({
-            url: authUrl
-        });
+            success: false,
+            courses: null
+        })
     }
 });
 
@@ -117,6 +126,7 @@ router.post('/createCourse', (req, res) => {
                     client.createCourse(name, section)
                         .then(data => {
                             res.json({
+                                success: true,
                                 newCourse: data
                             });
                         });
@@ -126,11 +136,10 @@ router.post('/createCourse', (req, res) => {
         })
     }
     else {
-        var authUrl = authorize(credentials);
-        console.log(authUrl);
         res.json({
-            url: authUrl
-        });
+            success: false,
+            newCourse: null
+        })
     }
 });
 
