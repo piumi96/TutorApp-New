@@ -50,7 +50,8 @@ create table Requests(
 		day varchar(30),
 		location varchar(50),
 		subject varchar(50),
-		status varchar(50)
+		status varchar(50),
+		show boolean default '1'
 );
 
 create table Review(
