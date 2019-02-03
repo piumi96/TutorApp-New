@@ -16,7 +16,8 @@ const credentials = {
     redirect_uris: ["urn:ietf:wg:oauth:2.0:oob", "http://localhost:3000/", "https://classroom.googleapis.com/v1/courses"]
 };
 
-function authorize(credentials, callback) {
+
+function authorize(credentials) {
     const client_secret = credentials.client_secret;
     const client_id = credentials.client_id;
     const redirect_uris = credentials.redirect_uris;
@@ -24,15 +25,22 @@ function authorize(credentials, callback) {
     const oAuth2Client = new google.auth.OAuth2(
         client_id, client_secret, redirect_uris[0]
     );
+    
+    const authUrl = oAuth2Client.generateAuthUrl({
+        access_type: 'offline',
+        prompt: 'consent',
+        scope: SCOPES,
+    });
 
-    fs.readFile(TOKEN_PATH, (err, token) => {
+    return authUrl;
+    /* fs.readFile(TOKEN_PATH, (err, token) => {
         if (err) return getNewToken(oAuth2Client, callback);
         oAuth2Client.setCredentials(JSON.parse(token));
         callback(oAuth2Client);
-    });
+    }); */
 }
 
-function getNewToken(oAuth2Client, callback) {
+/* function getNewToken(oAuth2Client, callback) {
     const authUrl = oAuth2Client.generateAuthUrl({
         access_type: 'offline',
         prompt: 'consent',
@@ -58,11 +66,11 @@ function getNewToken(oAuth2Client, callback) {
         });
 
     });
-};
+}; */
 
 var refresh = null;
-router.get('/listCourses', (req, res) => {
-    fs.readFile(TOKEN_PATH, (err, token) => {
+router.post('/listCourses', (req, res) => {
+    /* fs.readFile(TOKEN_PATH, (err, token) => {
         if (err){
             console.log(err);
             res.json({
@@ -74,8 +82,54 @@ router.get('/listCourses', (req, res) => {
             console.log(refresh);
         }
     });
+ */
+    var code = req.body.token;
+    if(code != "null"){
+        const client_secret = credentials.client_secret;
+        const client_id = credentials.client_id;
+        const redirect_uris = credentials.redirect_uris;
 
-    authorize(credentials, listCourses);
+        const oAuth2Client = new google.auth.OAuth2(
+            client_id, client_secret, redirect_uris[0]
+        );
+
+        oAuth2Client.getToken(code, (err, token) => {
+            if(err){
+                console.log(err);
+                res.json({
+                    success: false,
+                    msg: "error fetching access token"
+                });
+            }
+            else{
+                console.log(token);
+                refresh = token.refresh_token;
+                
+                const client = new Client({
+                    clientId: keys.oauthClient.clientID,
+                    clientSecret: keys.oauthClient.clientSecret,
+                    refreshToken: refresh
+                })
+
+                client.on('ready', async classr => {
+                    client.getCourses()
+                        .then(data => {
+                            res.json({
+                                courses: data
+                            });
+                        });
+                });
+            }
+        })
+    }
+    else{
+        var authUrl = authorize(credentials);
+        console.log(authUrl);
+        res.json({
+            url: authUrl
+        });
+    }
+    /* authorize(credentials, listCourses);
     function listCourses(){
         const client = new Client({
             clientId: keys.oauthClient.clientID,
@@ -91,7 +145,7 @@ router.get('/listCourses', (req, res) => {
                     });
                 });
         });
-    }
+    } */
 
 });
 
