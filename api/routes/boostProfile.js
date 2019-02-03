@@ -208,11 +208,11 @@ router.post('/boost', (req, res) => {
 
 router.post('/renewboost', (req, res) => {
     var tutor = req.body.tutor;
-    //    console.log(tutor);
     var oldExpiry = req.body.end;
 
     var sql = "update ProfileBoost set expiryDate = TIMESTAMPADD(DAY,7,'" + oldExpiry + "') where ProfileBoost.email = '" + tutor + "'";
     var sql2 = "update ProfileBoost,Tutor set ProfileBoost.boostPriority = 5000, Tutor.priority = 5000 where ProfileBoost.email = '" + tutor + "' AND Tutor.email = '" + tutor + "'";
+    var sql3 = "select expiryDate from ProfileBoost where email='"+tutor+"'";
 
     con.query(sql, (err) => {
         if (err) {
@@ -231,10 +231,24 @@ router.post('/renewboost', (req, res) => {
                     });
                 } else {
                     //successfully re-boosted
-                    res.json({
-                        success: true,
-                        newDate: oldExpiry
-                    });
+                    con.query(sql3, (err, response) => {
+                        if(err){
+                            console.log(err);
+                            res.json({
+                                success: false,
+                                newDate: null
+                            });
+                        }
+                        else{
+                            console.log(response);
+
+                            res.json({
+                                success: true,
+                                oldExpiry: oldExpiry,
+                                newDate: response[0].expiryDate
+                            });
+                        }
+                    })
                 }
             });
         }
