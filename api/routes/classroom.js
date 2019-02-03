@@ -43,6 +43,7 @@ router.get('/auth', (req, res) => {
 
 router.post('/listCourses', (req, res) => {
     var code = req.body.token;
+    console.log(req.body);
     if(code != "null"){
         const client_secret = credentials.client_secret;
         const client_id = credentials.client_id;
@@ -165,9 +166,25 @@ router.post('/listInvites', (req, res) => {
             else {
                 console.log(token);
                 refresh = token.refresh_token;
-                var access = token.access_token;
+                
+                const client = new Client({
+                    clientId: keys.oauthClient.clientID,
+                    clientSecret: keys.oauthClient.clientSecret,
+                    refreshToken: refresh
+                });
 
-                const classroom = google.classroom({ version: 'v1', oAuth2Client});
+                client.on('ready', async classr => {
+                    client.getInvites()
+                        .then(data => {
+                            res.json({
+                                success: true,
+                                invites: data
+                            });
+                        });
+                });
+
+
+                /* const classroom = google.classroom({ version: 'v1', auth});
                 classroom.invitations.list({
                     userId: 'me'
                 }, (err, response) => {
@@ -185,7 +202,7 @@ router.post('/listInvites', (req, res) => {
                             invites: response.data
                         })
                     }
-                })
+                }) */
 
             }
         })
