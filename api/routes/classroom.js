@@ -32,7 +32,7 @@ function authorize(credentials) {
     return authUrl;
 }
 
-router.post('/loginToClass', (req, res) => {
+router.post('/auth', (req, res) => {
     var authUrl = authorize(credentials);
     console.log(authUrl);
     res.json({
@@ -343,7 +343,7 @@ router.post('/listCourseWork', (req, res) => {
 
                 const classroom = google.classroom({ version: 'v1', oAuth2Client });
                 classroom.courses.courseWork.list({
-                    courseId: req.body.courseId,
+                    courseId: courseId,
                 }, (err, response) => {
                     if (err) {
                         console.log(err);
