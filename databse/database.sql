@@ -26,6 +26,14 @@ create table District(
 	name varchar(30)
 );
 
+create table NewsFeed(
+	newsID int primary key auto_increment,
+	title text,
+	content text,
+	startDate date,
+	expiryDate date
+);
+
 create table ProfileBoost(
 	boostId int primary key auto_increment,
 	email varchar(100),
