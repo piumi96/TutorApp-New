@@ -27,6 +27,7 @@ const emailVerifyRoute = require('./api/routes/emailVerify');
 const chatRoute = require('./api/routes/chat');
 const boostOfferRoutes = require('./api/routes/boostOffer');
 const boostRoutes = require('./api/routes/boostProfile');
+const newsFeedRoute = require('./api/routes/newsFeed');
 const passportSetup = require('./config/passport-setup');
 
 const app = express();
@@ -76,6 +77,7 @@ app.use('/', emailVerifyRoute);
 app.use('/', chatRoute);
 app.use('/', boostOfferRoutes);
 app.use('/', boostRoutes);
+app.use('/', newsFeedRoute);
 
 app.use((req, res, next)=>{
     const error = {
