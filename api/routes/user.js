@@ -515,7 +515,7 @@ router.post('/login', (req, res) => {
                     }
                     else if(result[0].confirmed==0){
                         res.json({
-                            success: true,
+                            success: false,
                             token: null,
                             block: false,
                             confirmed: false
@@ -619,7 +619,7 @@ router.post('/login', (req, res) => {
                     }
                 else if(result[0].confirmed == 0){
                     res.send({
-                        success: true,
+                        success: false,
                         token: null,
                         block: false,
                         confirmed: false
