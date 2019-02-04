@@ -514,6 +514,7 @@ router.post('/login', (req, res) => {
 
                     }
                     else if(result[0].confirmed==0){
+                        console.log("tutor not cofirmed");
                         res.json({
                             success: false,
                             token: null,
@@ -533,7 +534,12 @@ router.post('/login', (req, res) => {
         var sql = "select * from Student where email='" + email + "'";
 
         con.query(sql, function (err, result) {
-            if (err) throw err;
+            if (err){
+                console.log(err);
+                res.json({
+                    success: false
+                })
+            }
             else {
                 if (result.length == 0) {
                     res.json({
@@ -544,7 +550,7 @@ router.post('/login', (req, res) => {
                     });
                 }
                 else if(result[0].acc_status != 0){
-                    console.log(result);
+                    //console.log(result);
                     if(result[0].confirmed==1){
                         var name = result[0].name;
                         var status =result[0].acc_status;
@@ -564,7 +570,7 @@ router.post('/login', (req, res) => {
                             mobile = '';
                         }
     
-                                //console.log(result);
+                                console.log(result);
                                 var pass = result[0].pword;
                                 bcrypt.compare(pword, pass, function (err, response) {
                                     console.log(response);
@@ -606,6 +612,15 @@ router.post('/login', (req, res) => {
                                 });
                         
                     }
+                    else if (result[0].confirmed == 0) {
+                        console.log("not confirmed");
+                        res.send({
+                            success: false,
+                            token: null,
+                            block: false,
+                            confirmed: false
+                        })
+                    }
                     
                 }
                 else if(result[0].acc_status == 0){
@@ -617,14 +632,7 @@ router.post('/login', (req, res) => {
                             confirmed: false
                         })
                     }
-                else if(result[0].confirmed == 0){
-                    res.send({
-                        success: false,
-                        token: null,
-                        block: false,
-                        confirmed: false
-                    })
-                }
+                
             }
         });
     }
