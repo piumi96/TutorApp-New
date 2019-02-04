@@ -126,9 +126,9 @@ router.post('/search', (req, res) => {
                     goldCount++;
                     j++;
 
-                    con.query(sql2, function (err, result) {
+                    /* con.query(sql2, function (err, result) {
                         if (err) throw err;
-                    });
+                    }); */
 
                 } else if (result[i].package == 'silver' && silverCount < 2) {
 
