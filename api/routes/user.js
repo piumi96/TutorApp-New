@@ -114,6 +114,16 @@ router.post('/register', (req, res) => {
                                         startDate: result[0].startDate,
                                         role: role
                                     }
+
+                                    var sql4 = "insert into ViewCount(tutor) values('"+email+"')";
+                                    con.query(sql4, (err, result) => {
+                                        if(err){
+                                            console.log(err);
+                                        }
+                                        else{
+                                            console.log(result);
+                                        }
+                                    })
                                 }
                                 else if(role==='student'){
                                     var user = {

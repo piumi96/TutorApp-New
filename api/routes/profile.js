@@ -10,34 +10,14 @@ router.post('/viewProfile', (req, res) => {
         var sql = "select FirstName, LastName, Location, Mobile, Subject, Rate, ImgUrl, Price, description, Available_time from Tutor where email='"+email+"'";
         var sql1 = "select date, content, name, ImgUrl from Review, Student where tutor='"+email+"' and Student.email=Review.student order by date desc";
         var sql2 = "update ViewCount set viewCount = viewCount+100000 where tutor='"+email+"'";
-        var sql3 = "insert into ViewCount(tutor, viewCount) values ('"+email+"', '100000')";
-        var sql4 = "select * from ViewCount where tutor='"+email+"'";
         var profile;
         var reviews = [];
 
-        con.query(sql4, (err, result) => {
+        con.query(sql2, (err, result) => {
             if(err){
                 console.log(err);
             }
             console.log(result);
-            if(result.length!=0){
-                console.log("tutor has views");
-                con.query(sql2, (err, result) => {
-                    if (err) {
-                        console.log(err);
-                    }
-                    console.log("now there is 100000 more view");
-                })
-            }
-            else{
-                console.log("tutor has 0 views")
-                con.query(sql3, (err, result) => {
-                    if (err) {
-                        console.log(err);
-                    }
-                    console.log("tutor has 100000 views");
-                })
-            }
             con.query(sql, (err, result) => {
                 if(err) {
                     res.json({
@@ -86,9 +66,6 @@ router.post('/viewProfile', (req, res) => {
                 }
             })   
         });
-        
-    
-
     }
     else if(role==='student'){
         var sql = "select * from Student where email='"+email+"'";
