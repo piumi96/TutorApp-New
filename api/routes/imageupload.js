@@ -10,7 +10,7 @@ router.post('/uploadImage', (req, res, next) => {
     const image = req.body.image;
     const email = req.body.email;
     const role = req.body.role;
-    //console.log(image);
+    console.log(image);
 
     cloudinary.uploader.upload(image, (result) => {
             //console.log(result);
@@ -45,12 +45,13 @@ router.post('/uploadImage', (req, res, next) => {
 
 });
 
-router.post('/uploadAchievementImage', imageUpload.userImageUpload.single('image'), (req, res, next) => {
+router.post('/uploadAchievementImage', (req, res, next) => {
     console.log("uploadUserImage");
     const id = req.body.id;
+    var image = req.body.image;
 
-    cloudinary.uploader.upload(req.file.path, (result) => {
-        console.log(req.file.path);
+
+    cloudinary.uploader.upload(image, (result) => {
         console.log(result);
         imageSecureURL = result.secure_url;
         console.log(imageSecureURL);
@@ -77,45 +78,5 @@ router.post('/uploadAchievementImage', imageUpload.userImageUpload.single('image
         }
     })
 });
-
-/* router.post('/uploadImage', imageUpload.userImageUpload.single('image'), (req, res, next) => {
-    console.log("uploadUserImage");
-    const email = req.body.email;
-    const role = req.body.role;
-
-    cloudinary.uploader.upload(req.file.path, (result) => {
-        console.log(result);
-        imageSecureURL = result.secure_url;
-        console.log(imageSecureURL);
-        if (imageSecureURL == 'undefined') {
-            res.json({
-                success: false
-            });
-        }
-        if (role == 'tutor') {
-            var sql = "update Tutor set ImgUrl = '" + imageSecureURL + "' where email='" + email + "'";
-        }
-        else if (role == 'student') {
-            var sql = "update Student set ImgUrl = '" + imageSecureURL + "' where email='" + email + "'";
-        }
-        con.query(sql, (err, response) => {
-            if (err) {
-                console.log(err);
-                res.json({
-                    success: false,
-                    url: null
-                });
-            }
-            //console.log(response);
-            res.json({
-                success: true,
-                url: imageSecureURL
-            });
-        })
-
-    });
-
-}); */
-
 
 module.exports = router;

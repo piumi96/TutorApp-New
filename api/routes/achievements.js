@@ -73,7 +73,7 @@ router.post('/getAchievements', (req, res) => {
                     id: result[i].achievementID,
                     title: result[i].title,
                     name: result[i].name,
-                    ImgUrl: result[i].ImgUrl,
+                    imgUrl: result[i].ImgUrl,
                     description: result[i].description,
                     hide: result[i].hideStatus
                 }
@@ -119,7 +119,7 @@ router.post('/deleteAchievement', (req, res) => {
                             id: response[i].achievementID,
                             title: response[i].title,
                             name: response[i].name,
-                            ImgUrl: response[i].ImgUrl,
+                            imgUrl: response[i].ImgUrl,
                             description: response[i].description,
                             hide: response[i].hideStatus
                         }
@@ -140,7 +140,7 @@ router.put('/editAchievement', (req, res) => {
     var title = req.body.title;
     var description = req.body.description;
     var name = req.body.name;
-    var ImgUrl = req.bodyImgUrl;
+    var ImgUrl = req.bodyimgUrl;
 
     var sql = "update Achievements set title='"+title+"', description='"+description+"', name='"+name+"' where tutor='"+tutor+"' and achievementID='"+id+"'";
     con.query(sql, (err, result) => {
@@ -169,7 +169,7 @@ router.put('/editAchievement', (req, res) => {
                             id: response[i].achievementID,
                             title: response[i].title,
                             name: response[i].name,
-                            ImgUrl: response[i].ImgUrl,
+                            imgUrl: response[i].ImgUrl,
                             description: response[i].description, 
                             hide: response[i].hideStatus
                         }
