@@ -43,51 +43,78 @@ router.get('/auth', (req, res) => {
 
 router.post('/listCourses', (req, res) => {
     var code = req.body.token;
+    var refresh_token = req.body.refresh;
+
     console.log(req.body);
-    if(code != "null"){
-        const client_secret = credentials.client_secret;
-        const client_id = credentials.client_id;
-        const redirect_uris = credentials.redirect_uris;
+    if(refresh_token){
+        refresh = token.refresh_token;
 
-        const oAuth2Client = new google.auth.OAuth2(
-            client_id, client_secret, redirect_uris[0]
-        );
-
-        oAuth2Client.getToken(code, (err, token) => {
-            if(err){
-                console.log(err);
-                res.json({
-                    success: false,
-                    msg: "error fetching access token"
-                });
-            }
-            else{
-                console.log(token);
-                refresh = token.refresh_token;
-                
-                const client = new Client({
-                    clientId: keys.oauthClient.clientID,
-                    clientSecret: keys.oauthClient.clientSecret,
-                    refreshToken: refresh
-                })
-
-                client.on('ready', async classr => {
-                    client.getCourses()
-                        .then(data => {
-                            res.json({
-                                success: true,
-                                courses: data
-                            });
-                        });
-                });
-            }
+        const client = new Client({
+            clientId: keys.oauthClient.clientID,
+            clientSecret: keys.oauthClient.clientSecret,
+            refreshToken: refresh
         })
+
+        client.on('ready', async classr => {
+            client.getCourses()
+                .then(data => {
+                    res.json({
+                        success: true,
+                        courses: data,
+                        refresh: refresh
+                    });
+                });
+        });
+
     }
     else{
-        res.json({
-            success: false,
-            courses: null
-        })
+
+        if(code!="null"){
+            const client_secret = credentials.client_secret;
+            const client_id = credentials.client_id;
+            const redirect_uris = credentials.redirect_uris;
+    
+            const oAuth2Client = new google.auth.OAuth2(
+                client_id, client_secret, redirect_uris[0]
+            );
+    
+            oAuth2Client.getToken(code, (err, token) => {
+                if(err){
+                    console.log(err);
+                    res.json({
+                        success: false,
+                        msg: "error fetching access token"
+                    });
+                }
+                else{
+                    console.log(token);
+                    refresh = token.refresh_token;
+                    
+                    const client = new Client({
+                        clientId: keys.oauthClient.clientID,
+                        clientSecret: keys.oauthClient.clientSecret,
+                        refreshToken: refresh
+                    })
+    
+                    client.on('ready', async classr => {
+                        client.getCourses()
+                            .then(data => {
+                                res.json({
+                                    success: true,
+                                    courses: data,
+                                    refresh: refresh
+                                });
+                            });
+                    });
+                }
+            })
+        }
+        else{
+            res.json({
+                success: false,
+                courses: null
+            })
+        }
     }
 });
 
@@ -141,78 +168,6 @@ router.post('/createCourse', (req, res) => {
             success: false,
             newCourse: null
         })
-    }
-});
-
-router.post('/listInvites', (req, res) => {
-    var code = req.body.token;
-    if (code != "null") {
-        const client_secret = credentials.client_secret;
-        const client_id = credentials.client_id;
-        const redirect_uris = credentials.redirect_uris;
-
-        const oAuth2Client = new google.auth.OAuth2(
-            client_id, client_secret, redirect_uris[0]
-        );
-
-        oAuth2Client.getToken(code, (err, token) => {
-            if (err) {
-                console.log(err);
-                res.json({
-                    success: false,
-                    msg: "error fetching access token"
-                });
-            }
-            else {
-                console.log(token);
-                refresh = token.refresh_token;
-                
-                const client = new Client({
-                    clientId: keys.oauthClient.clientID,
-                    clientSecret: keys.oauthClient.clientSecret,
-                    refreshToken: refresh
-                });
-
-                client.on('ready', async classr => {
-                    client.getInvites()
-                        .then(data => {
-                            res.json({
-                                success: true,
-                                invites: data
-                            });
-                        });
-                });
-
-
-                /* const classroom = google.classroom({ version: 'v1', auth});
-                classroom.invitations.list({
-                    userId: 'me'
-                }, (err, response) => {
-                    if (err) {
-                        console.log(err);
-                        res.json({
-                            success: false,
-                            invites: null
-                        });
-                    }
-                    else {
-                        console.log(response);
-                        res.json({
-                            success: true,
-                            invites: response.data
-                        })
-                    }
-                }) */
-
-            }
-        })
-    }
-    else{
-        var authUrl = authorize(credentials);
-        console.log(authUrl);
-        res.json({
-            url: authUrl
-        });
     }
 });
 
@@ -389,6 +344,61 @@ router.post('/listCourseWork', (req, res) => {
         });
     }
 });
+
+/* router.post('/listInvites', (req, res) => {
+    var code = req.body.token;
+    if (code != "null") {
+        const client_secret = credentials.client_secret;
+        const client_id = credentials.client_id;
+        const redirect_uris = credentials.redirect_uris;
+
+        const oAuth2Client = new google.auth.OAuth2(
+            client_id, client_secret, redirect_uris[0]
+        );
+
+        oAuth2Client.getToken(code, (err, token) => {
+            if (err) {
+                console.log(err);
+                res.json({
+                    success: false,
+                    msg: "error fetching access token"
+                });
+            }
+            else {
+                console.log(token);
+                refresh = token.refresh_token;
+
+                const classroom = google.classroom({ version: 'v1', auth});
+                classroom.invitations.list({
+                    userId: 'me'
+                }, (err, response) => {
+                    if (err) {
+                        console.log(err);
+                        res.json({
+                            success: false,
+                            invites: null
+                        });
+                    }
+                    else {
+                        console.log(response);
+                        res.json({
+                            success: true,
+                            invites: response.data
+                        })
+                    }
+                })
+
+            }
+        })
+    }
+    else{
+        var authUrl = authorize(credentials);
+        console.log(authUrl);
+        res.json({
+            url: authUrl
+        });
+    }
+}); */
 
 /* router.post('/acceptInvite', (req, res) => {
     fs.readFile(TOKEN_PATH, (err, token) => {

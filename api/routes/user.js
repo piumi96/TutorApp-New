@@ -56,9 +56,9 @@ router.post('/register', (req, res) => {
         console.log(code);
 
         if (role === 'tutor') {
-            var sql = "insert into Tutor(FirstName, LastName, email, password, token) values('" + fname + "', '" + lname + "', '" + email + "', '" + hash + "', '"+code+"')";
+            var sql = "insert into Tutor(FirstName, LastName, email, password, token, startDate) values('" + fname + "', '" + lname + "', '" + email + "', '" + hash + "', '"+code+"', CURRENT_TIMESTAMP())";
             var sql2 = "select email from Tutor where Tutor.email='" + email + "'";
-            var sql3 = "select email, FirstName, LastName, Location, Mobile, Subject, Rate, ImgUrl from Tutor where email='"+email+"'";
+            var sql3 = "select email, FirstName, LastName, Location, Mobile, Subject, Rate, ImgUrl, startDate from Tutor where email='"+email+"'";
         }
         else if (role === 'student') {
             var sql = "insert into Student(name, email, pword, token) values('" + fname + " " + lname + "', '" + email + "', '" + hash + "', '"+code+"')";
@@ -111,6 +111,7 @@ router.post('/register', (req, res) => {
                                         Subject: result[0].Subject,
                                         Rate: result[0].Rate,
                                         ImgUrl: result[0].ImgUrl,
+                                        startDate: result[0].startDate,
                                         role: role
                                     }
                                 }
