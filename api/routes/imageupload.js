@@ -10,18 +10,11 @@ router.post('/uploadImage', (req, res, next) => {
     const image = req.body.image;
     const email = req.body.email;
     const role = req.body.role;
-    console.log(image);
+    //console.log(image);
 
-    cloudinary.uploader.upload(image, (err, result) => {
-        if(err){
-            console.log(err);
-            res.json({
-                success: false
-            })
-        }
-        else{
-            console.log(result);
-            imageSecureURL = result.secure_url;
+    cloudinary.uploader.upload(image, (result) => {
+            //console.log(result);
+            var imageSecureURL = result.secure_url;
             console.log(imageSecureURL);
             if (imageSecureURL == 'undefined') {
                 res.json({
@@ -42,15 +35,12 @@ router.post('/uploadImage', (req, res, next) => {
                         url: null
                     });
                 }
-                //console.log(response);
+                console.log(response);
                 res.json({
                     success: true,
                     url: imageSecureURL
                 });
             })
-
-        }
-
     });
 
 });
