@@ -80,9 +80,9 @@ router.post('/search', (req, res) => {
                     platinumCount++;
                     j++;
 
-                    con.query(sql2, function (err) {
+                    /* con.query(sql2, function (err) {
                         if (err) throw err;
-                    });
+                    }); */
 
                 } else if (result[i].package == 'gold' && goldCount < 3) {
 
@@ -172,9 +172,9 @@ router.post('/search', (req, res) => {
                     silverCount++;
                     j++;
 
-                    con.query(sql2, function (err, result) {
+                    /* con.query(sql2, function (err, result) {
                         if (err) throw err;
-                    });
+                    }); */
 
                 } else if (result[i].package != 'platinum' && result[i].package != 'gold' && result[i].package != 'silver') {
 
