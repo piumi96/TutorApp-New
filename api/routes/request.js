@@ -5,7 +5,7 @@ const schedule = require('node-schedule');
 
 router.post('/viewAllRequests', (req, res) => {
     var tutor = req.body.tutor;
-
+    Checkup;
     var sql = "select reqID, sent_date, day, Requests.location, subject, name from Requests, Student where tutor = '"+tutor+"' and status='SENT' and Requests.student=Student.email";
     con.query(sql, (err, result) => {
         if(err) throw err;

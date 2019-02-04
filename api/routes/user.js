@@ -519,7 +519,8 @@ router.post('/login', (req, res) => {
                             success: false,
                             token: null,
                             block: false,
-                            confirmed: false
+                            confirmed: false,
+                            email: email
                         });
                     }
                 }
@@ -618,7 +619,8 @@ router.post('/login', (req, res) => {
                             success: false,
                             token: null,
                             block: false,
-                            confirmed: false
+                            confirmed: false,
+                            email: email
                         })
                     }
                     

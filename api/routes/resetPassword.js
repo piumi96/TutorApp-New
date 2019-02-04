@@ -29,7 +29,7 @@ router.post('/reset', (req, res) => {
                                 var sql1 = "update Tutor set Tutor.password='"+hash+"' where Tutor.email='"+email+"'";
                                 con.query(sql1, (err, response) => {
                                     if(err) {
-                                        throw err;
+                                        console.log(err);
                                         res.json({
                                             sucess: false
                                         });
