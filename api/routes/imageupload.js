@@ -14,19 +14,19 @@ router.post('/uploadImage', imageUpload.userImageUpload.single('image'), (req, r
         console.log(result);
         imageSecureURL = result.secure_url;
         console.log(imageSecureURL);
-        if(imageSecureURL=='undefined'){
+        if (imageSecureURL == 'undefined') {
             res.json({
                 success: false
             });
         }
-        if(role == 'tutor'){
-            var sql = "update Tutor set ImgUrl = '"+imageSecureURL+"' where email='"+email+"'";
+        if (role == 'tutor') {
+            var sql = "update Tutor set ImgUrl = '" + imageSecureURL + "' where email='" + email + "'";
         }
-        else if(role == 'student'){
-            var sql = "update Student set ImgUrl = '" + imageSecureURL + "' where email='"+email+"'";
+        else if (role == 'student') {
+            var sql = "update Student set ImgUrl = '" + imageSecureURL + "' where email='" + email + "'";
         }
         con.query(sql, (err, response) => {
-            if(err){
+            if (err) {
                 console.log(err);
                 res.json({
                     success: false,
@@ -41,7 +41,7 @@ router.post('/uploadImage', imageUpload.userImageUpload.single('image'), (req, r
         })
 
     });
-    
+
 });
 
 router.post('/uploadAchievementImage', imageUpload.userImageUpload.single('image'), (req, res, next) => {
@@ -57,16 +57,16 @@ router.post('/uploadAchievementImage', imageUpload.userImageUpload.single('image
                 success: false
             });
         }
-        else{
-            var sql = "update Achievements set ImgUrl = '"+imageSecureURL+"' where achievementID = '"+id+"'";
+        else {
+            var sql = "update Achievements set ImgUrl = '" + imageSecureURL + "' where achievementID = '" + id + "'";
             con.query(sql, (err, response) => {
-                if(err){
+                if (err) {
                     console.log(err);
                     res.json({
                         success: false
                     });
                 }
-                else{
+                else {
                     res.json({
                         success: true
                     });

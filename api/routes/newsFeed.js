@@ -24,7 +24,7 @@ router.post('/insertNews', (req, res) => {
 });
 
 router.get('/getNews', (req, res) => {
-    var sql = "select * from NewsFeed";
+    var sql = "select * from NewsFeed order by startDate desc";
     con.query(sql, (err, result) => {
         if(err){
             console.log(err);
