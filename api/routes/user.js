@@ -418,7 +418,9 @@ router.post('/login', (req, res) => {
         var sql = "select * from Tutor where email='" + email + "'";
 
         con.query(sql, function (err, result) {
-            if (err) throw err;
+            if (err){
+                console.log(err);
+            }
             else {
                 if (result.length == 0) {
                     res.send({
@@ -428,7 +430,8 @@ router.post('/login', (req, res) => {
                     });
                 }
                 else if(result[0].acc_status != 0) {
-                    if (result[0].confirmed) {
+                    console.log(result[0].confirmed);
+                    if (result[0].confirmed==1) {
                         var fname = result[0].FirstName;
                         var lname = result[0].LastName;
                         var status = result[0].acc_status;
@@ -510,9 +513,9 @@ router.post('/login', (req, res) => {
                                 });
 
                     }
-                    else{
+                    else if(result[0].confirmed==0){
                         res.json({
-                            success: false,
+                            success: true,
                             token: null,
                             block: false,
                             confirmed: false
@@ -542,7 +545,7 @@ router.post('/login', (req, res) => {
                 }
                 else if(result[0].acc_status != 0){
                     console.log(result);
-                    if(result[0].confirmed){
+                    if(result[0].confirmed==1){
                         var name = result[0].name;
                         var status =result[0].acc_status;
                         var location, mobile;
@@ -616,7 +619,7 @@ router.post('/login', (req, res) => {
                     }
                 else if(result[0].confirmed == 0){
                     res.send({
-                        success: false,
+                        success: true,
                         token: null,
                         block: false,
                         confirmed: false
