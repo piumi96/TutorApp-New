@@ -123,6 +123,7 @@ router.post('/createCourse', (req, res) => {
     var refresh_token = req.body.refresh;
     var section = req.body.section;
     var name = req.body.name;
+    console.log(req.body);
 
 
 if(refresh_token != null){
@@ -144,6 +145,7 @@ if(refresh_token != null){
     });
 
 }
+else{
     if (code != "null") {
         const client_secret = credentials.client_secret;
         const client_id = credentials.client_id;
@@ -191,6 +193,8 @@ if(refresh_token != null){
             newCourse: null
         })
     }
+
+}
 });
 
 //teachers of a course
