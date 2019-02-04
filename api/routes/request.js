@@ -32,7 +32,7 @@ router.post('/viewAllRequests', (req, res) => {
 router.post('/viewMyRequests', (req, res) => {
     var student = req.body.student;
 
-    var sql = "select reqID, sent_date, day, Requests.location, Requests.subject, tutor, status, FirstName, LastName from Requests, Tutor where Requests.student='"+student+"' and Requests.tutor = Tutor.email";
+    var sql = "select reqID, sent_date, day, Requests.location, Requests.subject, tutor, status, FirstName, LastName from Requests, Tutor where Requests.student='"+student+"' and Requests.tutor = Tutor.email order by sent_date desc";
     con.query(sql, (err, result) => {
         if(err) throw err;
         else{
