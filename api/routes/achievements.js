@@ -57,7 +57,7 @@ router.post('/addAchievement', (req, res) => {
 router.post('/getAchievements', (req, res) => {
     var tutor = req.body.tutor;
 
-    var sql = "select * from Achievements where tutor='"+tutor+"'";
+    var sql = "select * from Achievements where tutor='"+tutor+"' where hideStatus='1'";
     con.query(sql, (err, result) => {
         if(err){
             console.log(err);
