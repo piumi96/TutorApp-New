@@ -101,6 +101,7 @@ create table Tutor(
 		confirmed tinyint,
 		token varchar(20),
 		password varchar(100),
+		startDate date,
 		FirstName varchar(50),
 		LastName varchar(50),
 		description longtext,
@@ -117,5 +118,6 @@ create table Tutor(
 
 create table ViewCount(
 	tutor varchar(30) primary key,
-	viewCount int
-)
+	viewCount int default '0',
+	dailyReachCount int default '0'
+);
