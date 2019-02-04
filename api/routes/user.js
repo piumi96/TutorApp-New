@@ -24,7 +24,7 @@ function emailVerification(email, code){
         from: 'teaminsomniac16@gmail.com',
         to: email,
         subject: 'TutorApp verification',
-        text: 'Confirm your email account by following this link and pasting the verification code provided.\nVerification Code: ' + code +'\nLink: https://guarded-beyond-19031.herokuapp.com/verify'
+        text: 'Confirm your email account by following this link and pasting the verification code provided.\nVerification Code: ' + code +'\nLink: localhost:4200/verify'
     };
 
     transporter.sendMail(mailOptions, function (error, info) {
