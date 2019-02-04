@@ -44,15 +44,15 @@ router.get('/auth', (req, res) => {
 router.post('/listCourses', (req, res) => {
     var code = req.body.token;
     var refresh_token = req.body.refresh;
+    console.log(refresh_token);
 
     console.log(req.body);
-    if(refresh_token){
-        refresh = token.refresh_token;
+    if(refresh_token != "null"){
 
         const client = new Client({
             clientId: keys.oauthClient.clientID,
             clientSecret: keys.oauthClient.clientSecret,
-            refreshToken: refresh
+            refreshToken: refresh_token
         })
 
         client.on('ready', async classr => {
