@@ -33,7 +33,7 @@ router.post('/viewAllRequests', (req, res) => {
 router.post('/viewMyRequests', (req, res) => {
     var student = req.body.student;
 
-    var sql = "select reqID, sent_date, day, Requests.location, Requests.subject, tutor, status, FirstName, LastName from Requests, Tutor where Requests.student='"+student+"' and Requests.tutor = Tutor.email order by sent_date desc";
+    var sql = "select reqID, sent_date, day, Requests.location, Requests.subject, tutor, status, FirstName, LastName from Requests, Tutor where Requests.student='"+student+"' and Requests.tutor = Tutor.email and studentShow='1' order by sent_date desc";
     con.query(sql, (err, result) => {
         if(err) throw err;
         else{
@@ -241,10 +241,11 @@ router.post('/getRemovedRequests', (req, res) => {
     });
 });
 
-schedule.scheduleJob('0 0 1 6 *', Checkup);
+schedule.scheduleJob('0 0 1 1 *', Checkup);
+schedule.scheduleJob('0 0 1 7 *', Checkup);
 
 function Checkup() {
-    var sql = "delete from Requests where expiryDate < CURRENT_TIMESTAMP";
+    var sql = "update Requests set studentShow='0' where (TIMESTAMPADD(MONTH, 6, Requests.sent_date)) > CURRENT_TIMESTAMP";
     con.query(sql, (err, result) => {
         if (err) {
             console.log(err);
