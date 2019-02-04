@@ -120,9 +120,30 @@ router.post('/listCourses', (req, res) => {
 
 router.post('/createCourse', (req, res) => {
     var code = req.body.token;
+    var refresh_token = req.body.refresh;
     var section = req.body.section;
     var name = req.body.name;
 
+
+if(refresh_token != null){
+    const client = new Client({
+        clientId: keys.oauthClient.clientID,
+        clientSecret: keys.oauthClient.clientSecret,
+        refreshToken: refresh_token
+    });
+
+    client.on('ready', async classr => {
+        client.createCourse(name, section)
+            .then(data => {
+                res.json({
+                    success: true,
+                    newCourse: data,
+                    refresh: refresh_token
+                });
+            });
+    });
+
+}
     if (code != "null") {
         const client_secret = credentials.client_secret;
         const client_id = credentials.client_id;
@@ -155,7 +176,8 @@ router.post('/createCourse', (req, res) => {
                         .then(data => {
                             res.json({
                                 success: true,
-                                newCourse: data
+                                newCourse: data,
+                                refresh: refresh
                             });
                         });
                 });
