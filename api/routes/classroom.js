@@ -46,8 +46,8 @@ router.post('/listCourses', (req, res) => {
     var refresh_token = req.body.refresh;
     console.log(refresh_token);
 
-    console.log(req.body);
-    if(refresh_token != "null"){
+    //console.log(req.body);
+    if(refresh_token != null){
 
         const client = new Client({
             clientId: keys.oauthClient.clientID,
