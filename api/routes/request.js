@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const con = require('../../databse/db');
+const schedule = require('node-schedule');
 
 router.post('/viewAllRequests', (req, res) => {
     var tutor = req.body.tutor;
@@ -239,6 +240,21 @@ router.post('/getRemovedRequests', (req, res) => {
         }
     });
 });
+
+schedule.scheduleJob('0 0 1 6 *', Checkup);
+
+function Checkup() {
+    var sql = "delete from Requests where expiryDate < CURRENT_TIMESTAMP";
+    con.query(sql, (err, result) => {
+        if (err) {
+            console.log(err);
+        }
+        else {
+            console.log(result);
+        }
+    })
+}
+
 
 
 module.exports = router;
