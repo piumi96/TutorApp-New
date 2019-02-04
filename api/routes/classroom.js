@@ -61,7 +61,7 @@ router.post('/listCourses', (req, res) => {
                     res.json({
                         success: true,
                         courses: data,
-                        refresh: refresh
+                        refresh: refresh_token 
                     });
                 });
         });
