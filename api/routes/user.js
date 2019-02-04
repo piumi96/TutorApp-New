@@ -428,7 +428,7 @@ router.post('/login', (req, res) => {
                     });
                 }
                 else if(result[0].acc_status != 0) {
-                    //if (result[0].confirmed) {
+                    if (result[0].confirmed) {
                         var fname = result[0].FirstName;
                         var lname = result[0].LastName;
                         var status = result[0].acc_status;
@@ -509,15 +509,15 @@ router.post('/login', (req, res) => {
     
                                 });
 
-                    //}
-                    /* else{
+                    }
+                    else{
                         res.json({
                             success: false,
                             token: null,
                             block: false,
                             confirmed: false
                         });
-                    } */
+                    }
                 }
             }
         });
@@ -542,7 +542,7 @@ router.post('/login', (req, res) => {
                 }
                 else if(result[0].acc_status != 0){
                     console.log(result);
-                    //if(result[0].confirmed){
+                    if(result[0].confirmed){
                         var name = result[0].name;
                         var status =result[0].acc_status;
                         var location, mobile;
@@ -602,7 +602,7 @@ router.post('/login', (req, res) => {
                                     
                                 });
                         
-                    //}
+                    }
                     
                 }
                 else if(result[0].acc_status == 0){
