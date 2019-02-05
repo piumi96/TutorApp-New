@@ -33,9 +33,11 @@ router.post('/newsearch', (req, res) => {
     var bronzeUser = [];
     var nonBoostedUser = [];
     var nonBoost = [];
+    var n = 0;
 
     ////getting non-boosted profiles////
     con.query(sql3, (err, result2) => {
+       // console.log(result2);
         if (err) {
             res.json({
                 success: false,
@@ -55,9 +57,9 @@ router.post('/newsearch', (req, res) => {
             }
 
             for (var i = start; i < end; i++) {
-                // console.log(result2[i].email);
+               //console.log(result2[i].email);
 
-                nonBoostedUser[i] = {
+                nonBoostedUser[n] = {
                     fname: result2[i].FirstName,
                     lname: result2[i].LastName,
                     email: result2[i].email,
@@ -71,25 +73,25 @@ router.post('/newsearch', (req, res) => {
 
                 }
                 if (result2[i].Location) {
-                    nonBoostedUser[i].location = result2[i].Location;
+                    nonBoostedUser[n].location = result2[i].Location;
                 }
                 if (result2[i].Mobile) {
-                    nonBoostedUser[i].mobile = result2[i].Mobile;
+                    nonBoostedUser[n].mobile = result2[i].Mobile;
                 }
                 if (result2[i].Subject) {
-                    nonBoostedUser[i].subject = result2[i].Subject;
+                    nonBoostedUser[n].subject = result2[i].Subject;
                 }
                 if (result2[i].Rate) {
-                    nonBoostedUser[i].rate = result2[i].Rate;
+                    nonBoostedUser[n].rate = result2[i].Rate;
                 }
                 if (result2[i].ImgUrl) {
-                    nonBoostedUser[i].imgUrl = result2[i].ImgUrl;
+                    nonBoostedUser[n].imgUrl = result2[i].ImgUrl;
                 }
                 if (result2[i].Price) {
-                    nonBoostedUser[i].price = result2[i].Price;
+                    nonBoostedUser[n].price = result2[i].Price;
                 }
                 if (result2[i].Available_time) {
-                    nonBoostedUser[i].available = result2[i].Available_time;
+                    nonBoostedUser[n].available = result2[i].Available_time;
                 }
 
                 var sql2 = "update ViewCount set hourlyReachCount = hourlyReachCount + 1 where tutor = '" + result2[i].email + "'";
@@ -104,7 +106,7 @@ router.post('/newsearch', (req, res) => {
                         });
                     }
                 });
-
+                n++;
             }
 
             nonBoost = nonBoostedUser;
