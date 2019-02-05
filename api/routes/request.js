@@ -241,21 +241,4 @@ router.post('/getRemovedRequests', (req, res) => {
     });
 });
 
-schedule.scheduleJob('0 0 1 1 *', Checkup);
-schedule.scheduleJob('0 0 1 7 *', Checkup);
-
-function Checkup() {
-    var sql = "update Requests set studentShow='0' where (TIMESTAMPADD(MONTH, 6, Requests.sent_date)) > CURRENT_TIMESTAMP";
-    con.query(sql, (err, result) => {
-        if (err) {
-            console.log(err);
-        }
-        else {
-            console.log(result);
-        }
-    })
-}
-
-
-
 module.exports = router;

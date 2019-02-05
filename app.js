@@ -87,6 +87,8 @@ schedule.scheduleJob('0 * * * *', HourlyPriorityReduction);
 schedule.scheduleJob('0 0 * * *', BoostOfferDailyCheckup);
 schedule.scheduleJob('0 0 * * *', NewsFeedCheckup);
 schedule.scheduleJob('0 0 * * *', RateDailyCheckup);
+schedule.scheduleJob('0 0 1 1 *', RequestCheckup);
+schedule.scheduleJob('0 0 1 7 *', RequestCheckup);
 
 app.use((req, res, next)=>{
     const error = {
@@ -232,6 +234,19 @@ function RateDailyCheckup() {
 //remove 6 month old news feed
 function NewsFeedCheckup() {
     var sql = "delete from NewsFeed where expiryDate < CURRENT_TIMESTAMP";
+    con.query(sql, (err, result) => {
+        if (err) {
+            console.log(err);
+        }
+        else {
+            console.log(result);
+        }
+    })
+}
+
+//request update
+function RequestCheckup() {
+    var sql = "update Requests set studentShow='0' where (TIMESTAMPADD(MONTH, 6, Requests.sent_date)) > CURRENT_TIMESTAMP";
     con.query(sql, (err, result) => {
         if (err) {
             console.log(err);
