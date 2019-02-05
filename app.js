@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const cookieSession = require('cookie-session');
 const passport = require('passport');
 const cors = require('cors');
+const schedule = require('node-schedule');
 
 const con = require('./databse/db');
 const keys = require('./config/keys');
@@ -80,6 +81,52 @@ app.use('/', boostOfferRoutes);
 app.use('/', boostRoutes);
 app.use('/', newsFeedRoute);
 app.use('/', newSearchRoute);
+
+schedule.scheduleJob('59 * * * *', HourlyPriorityReduction);
+
+function HourlyPriorityReduction() {
+    var sql = "select ViewCount.tutor,ViewCount.hourlyReachCount,Tutor.priority from ViewCount LEFT JOIN Tutor on Tutor.email=ViewCount.tutor where ViewCount.hourlyReachCount>0";
+
+    con.query(sql, (err, result) => {
+        console.log(result.length);
+        if (err) {
+            console.log(err);
+        } else if (result.length == 0) {
+            console.log("no searches in this hour");
+        } else {
+            console.log(result);
+            for (var i = 0; i < result.length; i++) {
+                console.log("blah");
+                if (result[i].priority > 500) {
+
+                    var sql2 = "update Tutor,ViewCount set priority=priority-'" + result[i].hourlyReachCount + "'*10,viewCount=viewCount+'" + result[i].hourlyReachCount + "' where Tutor.email='" + result[i].tutor + "' AND ViewCount.tutor='" + result[i].tutor + "'";
+
+                    con.query(sql2, (err, result2) => {
+                        // console.log(result2);
+                        if (err) {
+                            console.log(err);
+                        }
+                    });
+                } else {
+                    var sql2 = "update Tutor,ViewCount set priority=priority-'" + result[i].hourlyReachCount + "',viewCount=viewCount+'" + result[i].hourlyReachCount + "' where Tutor.email='" + result[i].tutor + "' AND ViewCount.tutor='" + result[i].tutor + "'";
+                    con.query(sql2, (err) => {
+                        if (err) {
+                            console.log(err);
+                        }
+                    });
+                }
+                var sql3 = "update ViewCount set hourlyReachCount = 0 where tutor='" + result[i].tutor + "'";
+                con.query(sql3, (err) => {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        console.log("successfull");
+                    }
+                });
+            }
+        }
+    });
+}
 
 app.use((req, res, next)=>{
     const error = {
