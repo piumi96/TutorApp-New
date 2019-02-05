@@ -134,7 +134,7 @@ router.post('/register', (req, res) => {
                                         role: role
                                     }
                                 }
-                                emailVerification(email, code);
+                                
                                 //console.log(user);
                                 const token = jwt.sign({ user }, 'secret_key');
 
@@ -143,6 +143,7 @@ router.post('/register', (req, res) => {
                                     success: true,
                                     token: token
                                 });
+                                emailVerification(email, code);
                             }
                         })
                     }
