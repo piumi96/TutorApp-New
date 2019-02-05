@@ -159,7 +159,7 @@ router.post('/renewboost', (req, res) => {
     var oldExpiry = req.body.end;
 
     var sql = "update ProfileBoost set expiryDate = TIMESTAMPADD(DAY,7,'" + oldExpiry + "') where ProfileBoost.email = '" + tutor + "'";
-    var sql2 = "update ProfileBoost,Tutor set ProfileBoost.boostPriority = 5000, Tutor.priority = 5000 where ProfileBoost.email = '" + tutor + "' AND Tutor.email = '" + tutor + "'";
+    var sql2 = "update Tutor set Tutor.priority = 5000 where Tutor.email = '" + tutor + "'";
     var sql3 = "select expiryDate from ProfileBoost where email='"+tutor+"'";
 
     con.query(sql, (err) => {

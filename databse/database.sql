@@ -121,3 +121,14 @@ create table ViewCount(
 	viewCount int default '0',
 	dailyReachCount int default '0'
 );
+
+delete * from Achievements;
+delete * from NewsFeed;
+delete * from ProfileBoost;
+delete * from Rate;
+delete * from Requests;
+delete * from Review;
+delete * from Student;
+delete * from Suggestions;
+delete * from Tutor;
+delete * from ViewCount;
