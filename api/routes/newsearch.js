@@ -41,13 +41,13 @@ router.post('/newsearch', (req, res) => {
         if (err) {
             res.json({
                 success: false,
-                gold: null,
-                silver: null,
-                bronze: null,
-                nonBoosted: null
+                gold: [],
+                silver: [],
+                bronze: [],
+                nonBoosted: []
             });
         } else if (result2.length == 0) {
-            nonBoost = null;
+            nonBoost = [];
         } else {
 
             if (end <= result2.length) {
