@@ -7,16 +7,16 @@ router.post('/search', (req, res) => {
     var subject = req.body.subject;
 
     if (district === "all" && subject == "all") {
-        var sql = "select Tutor.*, ProfileBoost.package, ProfileBoost.boostPriority from Tutor LEFT JOIN ProfileBoost on Tutor.email=ProfileBoost.email where acc_status='1'";
+        var sql = "select Tutor.*, ProfileBoost.package from Tutor LEFT JOIN ProfileBoost on Tutor.email=ProfileBoost.email where acc_status='1' order by Tutor.priority desc";
     }
     else if (subject == "all" && district != "all") {
-        var sql = "select Tutor.*, ProfileBoost.package, ProfileBoost.boostPriority from Tutor LEFT JOIN ProfileBoost on Tutor.email=ProfileBoost.email where Location like '%" + district + "%' AND acc_status='1'";
+        var sql = "select Tutor.*, ProfileBoost.package from Tutor LEFT JOIN ProfileBoost on Tutor.email=ProfileBoost.email where Location like '%" + district + "%' AND acc_status='1' order by Tutor.priority desc";
     }
     else if (district == "all" && subject != "all") {
-        var sql = "select Tutor.*, ProfileBoost.package, ProfileBoost.boostPriority from Tutor LEFT JOIN ProfileBoost on Tutor.email=ProfileBoost.email where Subject like '%" + subject + "%' AND acc_status='1'";
+        var sql = "select Tutor.*, ProfileBoost.package from Tutor LEFT JOIN ProfileBoost on Tutor.email=ProfileBoost.email where Subject like '%" + subject + "%' AND acc_status='1' order by Tutor.priority desc";
     }
     else if (subject != "all" && district != "all") {
-        var sql = "select Tutor.*, ProfileBoost.package, ProfileBoost.boostPriority from Tutor LEFT JOIN ProfileBoost on Tutor.email=ProfileBoost.email where Location like '%" + district + "%' AND Subject like '%" + subject + "%' AND acc_status='1'";
+        var sql = "select Tutor.*, ProfileBoost.package from Tutor LEFT JOIN ProfileBoost on Tutor.email=ProfileBoost.email where Location like '%" + district + "%' AND Subject like '%" + subject + "%' AND acc_status='1' order by Tutor.priority desc";
     }
 
     con.query(sql, function (err, result) {
