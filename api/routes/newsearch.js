@@ -165,7 +165,7 @@ router.post('/newsearch', (req, res) => {
                             goldUser[j].mobile = result[i].Mobile;
                         }
                         if (result[i].description) {
-                            goldUser[n].description = result[i].description;
+                            goldUser[j].description = result[i].description;
                         }
                         if (result[i].Subject) {
                             goldUser[j].subject = result[i].Subject;
@@ -227,7 +227,7 @@ router.post('/newsearch', (req, res) => {
                             silverUser[k].subject = result[i].Subject;
                         }
                         if (result[i].description) {
-                            nonBoostedUser[n].description = result[i].description;
+                            silverUser[k].description = result[i].description;
                         }
                         if (result[i].Rate) {
                             silverUser[k].rate = result[i].Rate;
@@ -287,7 +287,7 @@ router.post('/newsearch', (req, res) => {
                             bronzeUser[l].subject = result[i].Subject;
                         }
                         if (result[i].description) {
-                            bronzeUser[n].description = result[i].description;
+                            bronzeUser[l].description = result[i].description;
                         }
                         if (result[i].Rate) {
                             bronzeUser[l].rate = result[i].Rate;
