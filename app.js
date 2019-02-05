@@ -89,6 +89,7 @@ schedule.scheduleJob('0 0 * * *', NewsFeedCheckup);
 schedule.scheduleJob('0 0 * * *', RateDailyCheckup);
 schedule.scheduleJob('0 0 1 1 *', RequestCheckup);
 schedule.scheduleJob('0 0 1 7 *', RequestCheckup);
+schedule.scheduleJob('0 0 * * *', DefaultPriorityReduction);
 
 app.use((req, res, next)=>{
     const error = {
@@ -254,6 +255,23 @@ function RequestCheckup() {
         else {
             console.log(result);
         }
+    })
+};
+
+function DefaultPriorityReduction(){
+    var sql = "update Tutor set priority = priority-500 where priority>700";
+    var sql1 = "update Tutor set priority = priority-10 where priority<=500 and priority>10";
+    con.query(sql, (err, result) => {
+        if(err){
+            console.log(err);
+        }
+        console.log(result);
+    })
+    con.query(sql1, (err, result) => {
+        if(err){
+            console.log(err);
+        }
+        console.log(result);
     })
 }
 
