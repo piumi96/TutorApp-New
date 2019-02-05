@@ -60,7 +60,7 @@ router.post('/newsearch', (req, res) => {
             for (var i = start; i < end; i++) {
             //    console.log(result2[i].email);
 
-               console.log(result2[i]);
+               console.log(result2[i].FirstName);
 
                 nonBoostedUser[n] = {
                     fname: result2[i].FirstName,
