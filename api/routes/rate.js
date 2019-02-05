@@ -8,6 +8,8 @@ router.post('/rate', (req, res) => {
     var tutor = req.body.tutor;
     var student = req.body.student;
    // var priority = req.body.priority;
+   //this is a wedakata nathi magulak
+   paanbatta = 0
 
     var sql1 = "select * from Requests where tutor='" + tutor + "' and student='" + student + "' and status='ACCEPTED'";
     var sql2 = "select * from Rate where tutor='" + tutor + "' and student='" + student + "'";
