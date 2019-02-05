@@ -57,6 +57,8 @@ router.post('/newsearch', (req, res) => {
             }
             var n = 0;
 
+            console.log(start + ' ' + end);
+
             for (var i = start; i < end; i++) {
             //    console.log(result2[i].email);
 
