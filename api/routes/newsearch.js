@@ -129,6 +129,8 @@ router.post('/newsearch', (req, res) => {
                 goldCount = silverCount = bronzeCount = 1;
                 var j, k, l;
                 j = k = l = 0;
+                //meka wedak nethi comment ekak.. yata peliya wedak nehe
+                pannbatta = 0
 
                 for (var i = 0; i < result.length; i++) {
 
