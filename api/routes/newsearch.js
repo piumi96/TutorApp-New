@@ -57,7 +57,7 @@ router.post('/newsearch', (req, res) => {
             }
             var n = 0;
 
-            console.log(start + ' ' + end);
+           // console.log(start + ' ' + end);
 
             for (var i = start; i < end; i++) {
             //    console.log(result2[i].email);
@@ -104,10 +104,10 @@ router.post('/newsearch', (req, res) => {
                     if (err) {
                         res.json({
                             success: false,
-                            gold: null,
-                            silver: null,
-                            bronze: null,
-                            nonBoosted: null
+                            gold: [],
+                            silver: [],
+                            bronze: [],
+                            nonBoosted: []
                         });
                     }
                 });
@@ -122,9 +122,9 @@ router.post('/newsearch', (req, res) => {
             if (err) {
                 res.json({
                     success: false,
-                    gold: null,
-                    silver: null,
-                    bronze: null,
+                    gold: [],
+                    silver: [],
+                    bronze: [],
                     nonBoosted: nonBoost
                 });
             } else if (result != 0) {
@@ -133,8 +133,6 @@ router.post('/newsearch', (req, res) => {
                 goldCount = silverCount = bronzeCount = 1;
                 var j, k, l;
                 j = k = l = 0;
-                //meka wedak nethi comment ekak.. yata peliya wedak nehe
-                pannbatta = 0
 
                 for (var i = 0; i < result.length; i++) {
 
@@ -317,9 +315,9 @@ router.post('/newsearch', (req, res) => {
             } else {
                 res.json({
                     success: true,
-                    gold: null,
-                    silver: null,
-                    bronze: null,
+                    gold: [],
+                    silver: [],
+                    bronze: [],
                     nonBoosted: nonBoost
                 });
             }
