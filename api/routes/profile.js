@@ -115,12 +115,13 @@ router.post('/editProfile', (req, res) => {
 
         con.query(sql, function (err, result) {
             if (err) {
+                console.log(err);
                 res.status(404).send({
                     success: false
                 });
             }
             else {
-                //console.log(result);
+                console.log(result);
                 res.send({
                     success: true
                 });
