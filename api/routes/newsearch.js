@@ -68,6 +68,7 @@ router.post('/newsearch', (req, res) => {
                     fname: result2[i].FirstName,
                     lname: result2[i].LastName,
                     email: result2[i].email,
+                    description: '',
                     location: '',
                     subject: '',
                     mobile: '',
@@ -82,6 +83,9 @@ router.post('/newsearch', (req, res) => {
                 }
                 if (result2[i].Mobile) {
                     nonBoostedUser[n].mobile = result2[i].Mobile;
+                }
+                if (result2[i].description) {
+                    nonBoostedUser[n].description = result2[i].description;
                 }
                 if (result2[i].Subject) {
                     nonBoostedUser[n].subject = result2[i].Subject;
@@ -144,6 +148,7 @@ router.post('/newsearch', (req, res) => {
                             lname: result[i].LastName,
                             email: result[i].email,
                             package: result[i].package,
+                            description: '',
                             location: '',
                             subject: '',
                             mobile: '',
@@ -158,6 +163,9 @@ router.post('/newsearch', (req, res) => {
                         }
                         if (result[i].Mobile) {
                             goldUser[j].mobile = result[i].Mobile;
+                        }
+                        if (result2[i].description) {
+                            nonBoostedUser[n].description = result2[i].description;
                         }
                         if (result[i].Subject) {
                             goldUser[j].subject = result[i].Subject;
@@ -199,6 +207,7 @@ router.post('/newsearch', (req, res) => {
                             lname: result[i].LastName,
                             email: result[i].email,
                             package: result[i].package,
+                            description: '',
                             location: '',
                             subject: '',
                             mobile: '',
@@ -216,6 +225,9 @@ router.post('/newsearch', (req, res) => {
                         }
                         if (result[i].Subject) {
                             silverUser[k].subject = result[i].Subject;
+                        }
+                        if (result2[i].description) {
+                            nonBoostedUser[n].description = result2[i].description;
                         }
                         if (result[i].Rate) {
                             silverUser[k].rate = result[i].Rate;
@@ -255,6 +267,7 @@ router.post('/newsearch', (req, res) => {
                             lname: result[i].LastName,
                             email: result[i].email,
                             package: result[i].package,
+                            description: '',
                             location: '',
                             subject: '',
                             mobile: '',
@@ -272,6 +285,9 @@ router.post('/newsearch', (req, res) => {
                         }
                         if (result[i].Subject) {
                             bronzeUser[l].subject = result[i].Subject;
+                        }
+                        if (result2[i].description) {
+                            nonBoostedUser[n].description = result2[i].description;
                         }
                         if (result[i].Rate) {
                             bronzeUser[l].rate = result[i].Rate;

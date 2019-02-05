@@ -237,11 +237,9 @@ router.post('/search', (req, res) => {
 
 router.post('/searchByName', (req, res) => {
     var name = req.body.name;
-    var fname = (name.trim().split(/\s+/))[0];
-    var lname = (name.trim().split(/\s+/))[1];
-    console.log(fname);
-    console.log(lname);
-    var sql = "select * from Tutor where (FirstName like '%" + name + "%') AND acc_status='1'";
+   /*  var fname = (name.trim().split(/\s+/))[0];
+    var lname = (name.trim().split(/\s+/))[1]; */
+    var sql = "select * from Tutor where FirstName like '%" + name + "%' AND acc_status='1'";
     con.query(sql, (err, result) => {
         if (err) {
             console.log(err);
