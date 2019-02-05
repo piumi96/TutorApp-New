@@ -33,7 +33,7 @@ router.post('/newsearch', (req, res) => {
     var bronzeUser = [];
     var nonBoostedUser = [];
     var nonBoost = [];
-    var n = 0;
+    
 
     ////getting non-boosted profiles////
     con.query(sql3, (err, result2) => {
@@ -55,6 +55,7 @@ router.post('/newsearch', (req, res) => {
             } else {
                 end = result2.length;
             }
+            var n = 0;
 
             for (var i = start; i < end; i++) {
                //console.log(result2[i].email);
