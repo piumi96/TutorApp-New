@@ -7,15 +7,13 @@ router.post('/rate', (req, res) => {
     var rate = req.body.rate;
     var tutor = req.body.tutor;
     var student = req.body.student;
-   // var priority = req.body.priority;
-   //this is a wedakata nathi magulak
-   paanbatta = 0
-
+    //var priority = req.body.priority;
+   
     var sql1 = "select * from Requests where tutor='" + tutor + "' and student='" + student + "' and status='ACCEPTED'";
     var sql2 = "select * from Rate where tutor='" + tutor + "' and student='" + student + "'";
     var sql4 = "insert into Rate(tutor, student, rating) values('" + tutor + "', '" + student + "', '" + rate + "')";
     var sql5 = "update Rate set rating = '" + rate + "' where tutor='" + tutor + "' and student='" + student + "'";
-   // var sql7 = "update Tutor set priority = priority + '"+priority+"' where email = '"+tutor+"' AND priority>500 AND (priority+'"+priority+"'<=500)";
+   //var sql7 = "update Tutor set priority = priority + '"+priority+"' where email = '"+tutor+"' AND priority>500 AND (priority+'"+priority+"'<=500)";
 
 
     var success = false;

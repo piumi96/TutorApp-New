@@ -292,6 +292,65 @@ router.post('/searchByName', (req, res) => {
             user: user
         });
     });
+});
+
+router.post('/searchByName', (req, res) => {
+    var name = req.body.name;
+    var fname = (name.trim().split(/\s+/))[0];
+    var lname = (name.trim().split(/\s+/))[1];
+    var sql = "select * from Tutor where (FirstName like '%" + fname + "%' OR LastName like '%" + lname + "%') AND acc_status='1'";
+    con.query(sql, (err, result) => {
+        if (err) {
+            console.log(err);
+            res.json({
+                success: false,
+                user: []
+            });
+        }
+        //console.log(result);
+        var user = [];
+        for (var i = 0; i < result.length; i++) {
+            user[i] = {
+                fname: result[i].FirstName,
+                lname: result[i].LastName,
+                email: result[i].email,
+                location: '',
+                subject: '',
+                mobile: '',
+                rate: '',
+                imgUrl: '',
+                price: '',
+                available: ''
+
+            }
+            if (result[i].Location) {
+                user[i].location = result[i].Location;
+            }
+            if (result[i].Mobile) {
+                user[i].mobile = result[i].Mobile;
+            }
+            if (result[i].Subject) {
+                user[i].subject = result[i].Subject;
+            }
+            if (result[i].Rate) {
+                user[i].rate = result[i].Rate;
+            }
+            if (result[i].ImgUrl) {
+                user[i].imgUrl = result[i].ImgUrl;
+            }
+            if (result[i].Price) {
+                user[i].price = result[i].Price;
+            }
+            if (result[i].Available_time) {
+                user[i].available = result[i].Available_time;
+            }
+
+        }
+        res.json({
+            success: true,
+            user: user
+        });
+    });
 })
 
 
@@ -520,64 +579,6 @@ module.exports = router;
     });
 });
 
-router.post('/searchByName', (req, res) => {
-    var name = req.body.name;
-    var fname = (name.trim().split(/\s+/))[0];
-    var lname = (name.trim().split(/\s+/))[1];
-    var sql = "select * from Tutor where (FirstName like '%" + fname + "%' OR LastName like '%" + lname + "%') AND acc_status='1'";
-    con.query(sql, (err, result) => {
-        if (err) {
-            console.log(err);
-            res.json({
-                success: false,
-                user: null
-            });
-        }
-        //console.log(result);
-        var user = [];
-        for (var i = 0; i < result.length; i++) {
-            user[i] = {
-                fname: result[i].FirstName,
-                lname: result[i].LastName,
-                email: result[i].email,
-                location: '',
-                subject: '',
-                mobile: '',
-                rate: '',
-                imgUrl: '',
-                price: '',
-                available: ''
-
-            }
-            if (result[i].Location) {
-                user[i].location = result[i].Location;
-            }
-            if (result[i].Mobile) {
-                user[i].mobile = result[i].Mobile;
-            }
-            if (result[i].Subject) {
-                user[i].subject = result[i].Subject;
-            }
-            if (result[i].Rate) {
-                user[i].rate = result[i].Rate;
-            }
-            if (result[i].ImgUrl) {
-                user[i].imgUrl = result[i].ImgUrl;
-            }
-            if (result[i].Price) {
-                user[i].price = result[i].Price;
-            }
-            if (result[i].Available_time) {
-                user[i].available = result[i].Available_time;
-            }
-
-        }
-        res.json({
-            success: true,
-            user: user
-        });
-    });
-})
  */
 
 
