@@ -90,32 +90,4 @@ router.get('/highestRate', (req, res) => {
     })
 });
 
-schedule.scheduleJob('0 0 * * *', DailyCheckup);
-
-function DailyCheckup() {
-    var sql = "select email, avg(rating) as newRate from Tutor right join Rate on Tutor.email=Rate.tutor group by Tutor.email";
-
-    con.query(sql, (err, result) => {
-        if(err){
-            console.log(err);
-        }
-        else{
-            console.log(result);
-            for(var i=0; i<result.length; i++){
-                var sql1 = "update Tutor set rate = '"+result[i].newRate+"' where email='"+result[i].email+"'";
-                con.query(sql1, (err, response) => {
-                    if(err){
-                        console.log(err);
-                    }
-                    else{
-                        console.log(response);
-                    }
-                })
-            }
-        }
-    })
-}
-
-
-
 module.exports = router;

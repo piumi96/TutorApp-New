@@ -24,16 +24,29 @@ router.post('/verify', (req, res) => {
                 success: false
             });
         }
-        console.log(result[0].token);
-        if(result[0].token==token){
-            res.json({
-                success: true
-            });
-        }
         else{
-            res.json({
-                success: false
-            })
+            console.log(result[0].token);
+            if(result[0].token==token){
+                con.query(sql2, (err, response) => {
+                    if(err){
+                        console.log(err);
+                        res.json({
+                            success: false
+                        });
+                    }
+                    else{
+                        res.json({
+                            success: true
+                        });
+                    }
+                }) 
+            }
+            else{
+                res.json({
+                    success: false
+                })
+            }
+
         }
     })
     

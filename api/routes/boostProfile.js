@@ -93,59 +93,7 @@ router.post('/boostprofile', (req, res) => {
     });
 });
 
-/*
-resetting boost status after a week
-var ExpiryCheckupUpdate = setInterval(dailyCheck, 1000*60*60*24); 
-*/
 
-function DailyCheckup() {
-    var sql4 = "select * from ProfileBoost where ProfileBoost.expiryDate < CURRENT_TIMESTAMP";
-
-    con.query(sql4, (err, result) => {
-        if (err) {
-            res.json({
-                success: false,
-                allowed: null,
-                msg: 'Error!' 
-            });
-        }
-        else {
-            for (var i = 0; i < result.length; i++) {
-                var sql5 = "delete from ProfileBoost where ProfileBoost.email = '" + result[i].email + "'";
-                var sql6 = "update Tutor set Tutor.priority=200 where Tutor.email = '" + result[i].email + "'";
-                // var sql6 = "update Tutor set Tutor.boostStatus=0 where Tutor.email='"+result[i].email+"'";
-
-                con.query(sql5, (err) => {
-                    if (err) {
-                        res.json({
-                            success: false,
-                            allowed: null,
-                            msg: 'Error!'  
-                        });
-                    } else {
-                        con.query(sql6, (err) => {
-                            if (err) {
-                                res.json({
-                                    success: false,
-                                    allowed: null,
-                                });
-                            }
-                        });
-                    }
-                });
-            }
-        }
-    });
-}
-
-
-// schedule.scheduleJob('0 0 * * *', DailyCheckup);
-
-// //checking for delays if any
-// var Delay = schedule.scheduleJob('0 0 * * *', function(fireDate){
-//     console.log('This job was supposed to run at ' + fireDate + ', but actually ran at ' + new Date());
-// });
-// */
 
 router.post('/boost', (req, res) => {
     var tutor = req.body.tutor;

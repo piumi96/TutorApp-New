@@ -91,28 +91,4 @@ router.post('/endBoostOffer', (req, res) => {
     })
 })
 
-function DailyCheckup(){
-    var sql = "select * from BoostOffers where CURRENT_TIMESTAMP() > expirydate";
-    con.query(sql, (err, result) => {
-        if(err){
-            console.log(err);
-        }
-        else{
-            for(var i=0; i< result.length; i++){
-                var discount = result[i].discount;
-                var oldPrice = result[i].price;
-                var newPrice = (oldPrice * 100) / (100 - discount);
-
-                var sql1 = "update BoostOffers set discount='0', price='"+newPrice+"' where package='"+result[i].package+"'";
-                con.query(sql1, (err, response) => {
-                    if(err) throw err;
-                    console.log(response);
-                })
-            }
-        }
-    })
-}
-
-//schedule.scheduleJob('0 0 * * *', DailyCheckup);
-
 module.exports = router;

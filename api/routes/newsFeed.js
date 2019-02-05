@@ -53,20 +53,4 @@ router.get('/getNews', (req, res) => {
     })
 });
 
-//schedule.scheduleJob('0 0 * * *', Checkup);
-
-function Checkup(){
-    var sql = "delete from NewsFeed where expiryDate < CURRENT_TIMESTAMP";
-    con.query(sql, (err, result) => {
-        if(err){
-            console.log(err);
-        }
-        else{
-            console.log(result);
-        }
-    })
-}
-
-
-
 module.exports = router;
