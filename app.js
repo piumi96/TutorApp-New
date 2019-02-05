@@ -29,7 +29,7 @@ const chatRoute = require('./api/routes/chat');
 const boostOfferRoutes = require('./api/routes/boostOffer');
 const boostRoutes = require('./api/routes/boostProfile');
 const newsFeedRoute = require('./api/routes/newsFeed');
-const newSearchRoute = require('./api/routes/newsearch');
+const newSearchRoute = require('./api/routes/newSearch');
 const passportSetup = require('./config/passport-setup');
 
 const app = express();
