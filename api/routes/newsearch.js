@@ -183,9 +183,9 @@ router.post('/newsearch', (req, res) => {
                             if (err) {
                                 res.json({
                                     success: false,
-                                    gold: null,
-                                    silver: null,
-                                    bronze: null,
+                                    gold: [],
+                                    silver: [],
+                                    bronze: [],
                                     nonBoosted: nonBoost
                                 });
                             }
@@ -239,9 +239,9 @@ router.post('/newsearch', (req, res) => {
                             if (err) {
                                 res.json({
                                     success: false,
-                                    gold: null,
-                                    silver: null,
-                                    bronze: null,
+                                    gold: [],
+                                    silver: [],
+                                    bronze: [],
                                     nonBoosted: nonBoost
                                 });
                             }
@@ -294,9 +294,9 @@ router.post('/newsearch', (req, res) => {
                             if (err) {
                                 res.json({
                                     success: false,
-                                    gold: null,
-                                    silver: null,
-                                    bronze: null,
+                                    gold: [],
+                                    silver: [],
+                                    bronze: [],
                                     nonBoosted: nonBoost
                                 });
                             }
