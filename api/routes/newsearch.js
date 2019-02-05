@@ -10,7 +10,7 @@ router.post('/newsearch', (req, res) => {
     var end = (req.body.id + 1) * 7;
 
 
-    if (district === "all" && subject == "all") {
+    if (district == "all" && subject == "all") {
         var sql = "select Tutor.*, ProfileBoost.package from ProfileBoost LEFT JOIN Tutor on Tutor.email=ProfileBoost.email where acc_status='1' order by priority desc";
         var sql3 = "select * from Tutor where acc_status='1' AND priority<=500 order by priority desc";
     }
