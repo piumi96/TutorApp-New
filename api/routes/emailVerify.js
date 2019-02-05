@@ -10,11 +10,11 @@ router.post('/verify', (req, res) => {
     
     if(role=='tutor'){
         var sql = "select token from Tutor where email='"+email+"'";
-        var sql2 = "update Tutor set confirmed = 1";
+        var sql2 = "update Tutor set confirmed = 1 where email='"+email+"'";
     }
     else if(role=='student'){
         var sql = "select token from Student where email='"+email+"'";
-        var sql2 = "update Student set confirmed = 1";
+        var sql2 = "update Student set confirmed = 1 where email='" + email + "'";
     }
 
     con.query(sql, (err, result) => {
