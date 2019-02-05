@@ -82,8 +82,61 @@ app.use('/', boostRoutes);
 app.use('/', newsFeedRoute);
 app.use('/', newSearchRoute);
 
-schedule.scheduleJob('59 * * * *', HourlyPriorityReduction);
+schedule.scheduleJob('0 0 * * *', BoostExpiryDailyCheckup);
+schedule.scheduleJob('0 * * * *', HourlyPriorityReduction);
+schedule.scheduleJob('0 0 * * *', BoostOfferDailyCheckup);
+schedule.scheduleJob('0 0 * * *', NewsFeedCheckup);
+schedule.scheduleJob('0 0 * * *', RateDailyCheckup);
 
+app.use((req, res, next)=>{
+    const error = {
+        message: 'Not found',
+        status: 404
+    };
+});
+
+app.use((error, req, res, next)=>{
+    res.status(error.status || 500);
+    res.json({
+        error: {
+            message: error.message
+        }
+    });
+});  
+
+
+//schedule functions
+////daily boost expiry schedule
+function BoostExpiryDailyCheckup() {
+    var sql4 = "select * from ProfileBoost where ProfileBoost.expiryDate < CURRENT_TIMESTAMP";
+
+    con.query(sql4, (err, result) => {
+        console.log(result);
+        if (err) {
+            console.log(err);
+        }
+        else {
+            for (var i = 0; i < result.length; i++) {
+                var sql5 = "delete from ProfileBoost where ProfileBoost.email = '" + result[i].email + "'";
+                var sql6 = "update Tutor set Tutor.priority=200 where Tutor.email = '" + result[i].email + "'";
+
+                con.query(sql5, (err) => {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        con.query(sql6, (err) => {
+                            if (err) {
+                                console.log(err);
+                            }
+                        });
+                    }
+                });
+            }
+        }
+    });
+}
+
+///hourly schedule for re-setting reach count and priority reductions
 function HourlyPriorityReduction() {
     var sql = "select ViewCount.tutor,ViewCount.hourlyReachCount,Tutor.priority from ViewCount LEFT JOIN Tutor on Tutor.email=ViewCount.tutor where ViewCount.hourlyReachCount>0";
 
@@ -128,20 +181,65 @@ function HourlyPriorityReduction() {
     });
 }
 
-app.use((req, res, next)=>{
-    const error = {
-        message: 'Not found',
-        status: 404
-    };
-});
-
-app.use((error, req, res, next)=>{
-    res.status(error.status || 500);
-    res.json({
-        error: {
-            message: error.message
+//Remove expired boost offers 
+function BoostOfferDailyCheckup() {
+    var sql = "select * from BoostOffers where CURRENT_TIMESTAMP() > expirydate";
+    con.query(sql, (err, result) => {
+        if (err) {
+            console.log(err);
         }
-    });
-});  
+        else {
+            for (var i = 0; i < result.length; i++) {
+                var discount = result[i].discount;
+                var oldPrice = result[i].price;
+                var newPrice = (oldPrice * 100) / (100 - discount);
+
+                var sql1 = "update BoostOffers set discount='0', price='" + newPrice + "' where package='" + result[i].package + "'";
+                con.query(sql1, (err, response) => {
+                    if (err) throw err;
+                    console.log(response);
+                })
+            }
+        }
+    })
+}
+
+//update rate in tutor table daily
+function RateDailyCheckup() {
+    var sql = "select email, avg(rating) as newRate from Tutor right join Rate on Tutor.email=Rate.tutor group by Tutor.email";
+
+    con.query(sql, (err, result) => {
+        if (err) {
+            console.log(err);
+        }
+        else {
+            console.log(result);
+            for (var i = 0; i < result.length; i++) {
+                var sql1 = "update Tutor set rate = '" + result[i].newRate + "' where email='" + result[i].email + "'";
+                con.query(sql1, (err, response) => {
+                    if (err) {
+                        console.log(err);
+                    }
+                    else {
+                        console.log(response);
+                    }
+                })
+            }
+        }
+    })
+}
+
+//remove 6 month old news feed
+function NewsFeedCheckup() {
+    var sql = "delete from NewsFeed where expiryDate < CURRENT_TIMESTAMP";
+    con.query(sql, (err, result) => {
+        if (err) {
+            console.log(err);
+        }
+        else {
+            console.log(result);
+        }
+    })
+}
 
 module.exports = app;
