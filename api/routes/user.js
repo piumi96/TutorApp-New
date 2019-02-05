@@ -483,7 +483,8 @@ router.post('/login', (req, res) => {
                                             token: token,
                                             user: user,
                                             block: false,
-                                            confirmed: true
+                                            confirmed: true,
+                                            
                                         });
                                     }
                                     else if(!response){
@@ -507,7 +508,8 @@ router.post('/login', (req, res) => {
                                             success: false,
                                             token: null,
                                             block: false,
-                                            confirmed: true
+                                            confirmed: true,
+                                            
                                         })
                                     }
     
@@ -522,6 +524,7 @@ router.post('/login', (req, res) => {
                             block: false,
                             confirmed: false,
                             email: email
+                           
                         });
                     }
                 }

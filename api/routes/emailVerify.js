@@ -35,6 +35,7 @@ router.post('/verify', (req, res) => {
                         });
                     }
                     else{
+                        console.log(response);
                         res.json({
                             success: true
                         });
