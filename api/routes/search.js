@@ -7,16 +7,16 @@ router.post('/search', (req, res) => {
     var subject = req.body.subject;
 
     if (district === "all" && subject == "all") {
-        var sql = "select Tutor.*, ProfileBoost.package, ProfileBoost.boostPriority from Tutor LEFT JOIN ProfileBoost on Tutor.email=ProfileBoost.email where acc_status='1' order by boostPriority desc";
+        var sql = "select Tutor.*, ProfileBoost.package, ProfileBoost.boostPriority from Tutor LEFT JOIN ProfileBoost on Tutor.email=ProfileBoost.email where acc_status='1'";
     }
     else if (subject == "all" && district != "all") {
-        var sql = "select Tutor.*, ProfileBoost.package, ProfileBoost.boostPriority from Tutor LEFT JOIN ProfileBoost on Tutor.email=ProfileBoost.email where Location like '%" + district + "%' AND acc_status='1' order by boostPriority desc";
+        var sql = "select Tutor.*, ProfileBoost.package, ProfileBoost.boostPriority from Tutor LEFT JOIN ProfileBoost on Tutor.email=ProfileBoost.email where Location like '%" + district + "%' AND acc_status='1'";
     }
     else if (district == "all" && subject != "all") {
-        var sql = "select Tutor.*, ProfileBoost.package, ProfileBoost.boostPriority from Tutor LEFT JOIN ProfileBoost on Tutor.email=ProfileBoost.email where Subject like '%" + subject + "%' AND acc_status='1' order by boostPriority desc";
+        var sql = "select Tutor.*, ProfileBoost.package, ProfileBoost.boostPriority from Tutor LEFT JOIN ProfileBoost on Tutor.email=ProfileBoost.email where Subject like '%" + subject + "%' AND acc_status='1'";
     }
     else if (subject != "all" && district != "all") {
-        var sql = "select Tutor.*, ProfileBoost.package, ProfileBoost.boostPriority from Tutor LEFT JOIN ProfileBoost on Tutor.email=ProfileBoost.email where Location like '%" + district + "%' AND Subject like '%" + subject + "%' AND acc_status='1' order by boostPriority desc";
+        var sql = "select Tutor.*, ProfileBoost.package, ProfileBoost.boostPriority from Tutor LEFT JOIN ProfileBoost on Tutor.email=ProfileBoost.email where Location like '%" + district + "%' AND Subject like '%" + subject + "%' AND acc_status='1'";
     }
 
     con.query(sql, function (err, result) {
@@ -29,67 +29,22 @@ router.post('/search', (req, res) => {
         else {
 
             var user = [];
-            var platinumCount, goldCount, silverCount;
-            platinumCount = goldCount = silverCount = 1;
+            var goldCount, silverCount, bronzeCount;
+            goldCount = silverCount = bronzeCount = 1;
             var j = 0;
 
             for (var i = 0; i < result.length; i++) {
-                var sql2 = "update ProfileBoost set boostPriority = boostPriority-1 where email='" + result[i].email + "'";
+                var sql2 = "update ViewCount set hourlyReachCount = hourlyReachCount + 1 where tutor = '" + result[i].email + "'";
                 // console.log(result[i].package);
 
-                if (result[i].package == 'platinum' && platinumCount < 4) {
-
-                    // platinum profiles
-                    user[j] = {
-                        fname: result[i].FirstName,
-                        lname: result[i].LastName,
-                        email: result[i].email,
-                        package: 'platinum',
-                        location: '',
-                        subject: '',
-                        mobile: '',
-                        rate: '',
-                        imgUrl: '',
-                        price: '',
-                        available: ''
-
-                    }
-                    if (result[i].Location) {
-                        user[j].location = result[i].Location;
-                    }
-                    if (result[i].Mobile) {
-                        user[j].mobile = result[i].Mobile;
-                    }
-                    if (result[i].Subject) {
-                        user[j].subject = result[i].Subject;
-                    }
-                    if (result[i].Rate) {
-                        user[j].rate = result[i].Rate;
-                    }
-                    if (result[i].ImgUrl) {
-                        user[j].imgUrl = result[i].ImgUrl;
-                    }
-                    if (result[i].Price) {
-                        user[j].price = result[i].Price;
-                    }
-                    if (result[i].Available_time) {
-                        user[j].available = result[i].Available_time;
-                    }
-                    platinumCount++;
-                    j++;
-
-                    con.query(sql2, function (err) {
-                        if (err) throw err;
-                    });
-
-                } else if (result[i].package == 'gold' && goldCount < 3) {
+                if (result[i].package == 'gold' && goldCount < 4) {
 
                     //Gold profiles
                     user[j] = {
                         fname: result[i].FirstName,
                         lname: result[i].LastName,
                         email: result[i].email,
-                        package: 'gold',
+                        package: result[i].package,
                         location: '',
                         subject: '',
                         mobile: '',
@@ -120,22 +75,25 @@ router.post('/search', (req, res) => {
                     if (result[i].Available_time) {
                         user[j].available = result[i].Available_time;
                     }
-
                     goldCount++;
                     j++;
 
-                    con.query(sql2, function (err, result) {
-                        if (err) throw err;
+                    con.query(sql2, function (err) {
+                        if (err) {
+                            res.json({
+                                success: false
+                            });
+                        }
                     });
 
-                } else if (result[i].package == 'silver' && silverCount < 2) {
+                } else if (result[i].package == 'silver' && silverCount < 3) {
 
-                    //silver profiles
+                    //Silver profiles
                     user[j] = {
                         fname: result[i].FirstName,
                         lname: result[i].LastName,
                         email: result[i].email,
-                        package: 'silver',
+                        package: result[i],
                         location: '',
                         subject: '',
                         mobile: '',
@@ -170,11 +128,66 @@ router.post('/search', (req, res) => {
                     silverCount++;
                     j++;
 
-                    con.query(sql2, function (err, result) {
-                        if (err) throw err;
+                    con.query(sql2, function (err) {
+                        if (err) {
+                            res.json({
+                                success: false
+                            });
+                        }
                     });
 
-                } else if (result[i].package != 'platinum' && result[i].package != 'gold' && result[i].package != 'silver') {
+                } else if (result[i].package == 'bronze' && bronzeCount < 2) {
+
+                    //bronze profiles
+                    user[j] = {
+                        fname: result[i].FirstName,
+                        lname: result[i].LastName,
+                        email: result[i].email,
+                        package: result[i].package,
+                        location: '',
+                        subject: '',
+                        mobile: '',
+                        rate: '',
+                        imgUrl: '',
+                        price: '',
+                        available: ''
+
+                    }
+                    if (result[i].Location) {
+                        user[j].location = result[i].Location;
+                    }
+                    if (result[i].Mobile) {
+                        user[j].mobile = result[i].Mobile;
+                    }
+                    if (result[i].Subject) {
+                        user[j].subject = result[i].Subject;
+                    }
+                    if (result[i].Rate) {
+                        user[j].rate = result[i].Rate;
+                    }
+                    if (result[i].ImgUrl) {
+                        user[j].imgUrl = result[i].ImgUrl;
+                    }
+                    if (result[i].Price) {
+                        user[j].price = result[i].Price;
+                    }
+                    if (result[i].Available_time) {
+                        user[j].available = result[i].Available_time;
+                    }
+
+                    bronzeCount++;
+                    j++;
+
+                    con.query(sql2, function (err) {
+                        if (err) {
+                            res.json({
+                                success: false
+                            });
+                        }
+
+                    });
+
+                } else if (result[i].package != 'gold' && result[i].package != 'silver' && result[i].package != 'bronze') {
 
                     user[j] = {
                         fname: result[i].FirstName,
