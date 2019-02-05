@@ -37,7 +37,7 @@ router.post('/newsearch', (req, res) => {
 
     ////getting non-boosted profiles////
     con.query(sql3, (err, result2) => {
-       // console.log(result2);
+        console.log(result2);
         if (err) {
             res.json({
                 success: false,
