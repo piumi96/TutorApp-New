@@ -46,7 +46,7 @@ app.use(bodyParser.json({ limit: '50mb' }));
 con.connect((err) => {
     if(err){
         console.log(err);
-    };
+    }
     else{
         console.log('Database connected');  
     }
