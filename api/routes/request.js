@@ -157,7 +157,7 @@ router.post('/cancelRequest', (req, res) => {
 
 router.post('/getAcceptedStudents', (req, res) => {
     var tutor = req.body.tutor;
-    var sql = "select reqID, name, email, ImgUrl, mobile, Requests.location, Requests.subject, day, Requests.status, Requests.tutor from Student, Requests where Requests.student = Student.email and Requests.status='ACCEPTED' and Requests.tutor='"+tutor+"' and Requests.show='1'";
+    var sql = "select reqID, name, email, ImgUrl, mobile, Requests.location, Requests.subject, day, Requests.status, Requests.tutor from Student, Requests where Requests.student = Student.email and Requests.status='ACCEPTED' and Requests.tutor='"+tutor+"' and Requests.showR='1'";
 
     con.query(sql, (err, result) => {
         if(err){
@@ -180,7 +180,7 @@ router.post('/getAcceptedStudents', (req, res) => {
 
 router.post('/unshowRequest', (req, res) => {
     var id = req. body.id;
-    var sql = "update Requests set Requests.show = '0' where reqID = '"+id+"'";
+    var sql = "update Requests set Requests.showR = '0' where reqID = '"+id+"'";
 
     con.query(sql, (err, result) => {
         if(err){
@@ -199,7 +199,7 @@ router.post('/unshowRequest', (req, res) => {
 
 router.post('/showRequest', (req, res) => {
     var id = req.body.id;
-    var sql = "update Requests set Requests.show = '1' where reqID = '" + id + "'";
+    var sql = "update Requests set Requests.showR = '1' where reqID = '" + id + "'";
 
     con.query(sql, (err, result) => {
         if (err) {
@@ -220,7 +220,7 @@ router.post('/showRequest', (req, res) => {
 
 router.post('/getRemovedRequests', (req, res) => {
     var tutor = req.body.tutor;
-    var sql = "select reqID, name, email, ImgUrl, mobile, Requests.location, Requests.subject, day, Requests.status, Requests.tutor from Student, Requests where Requests.student = Student.email and Requests.status='ACCEPTED' and Requests.tutor='" + tutor + "' and Requests.show = '0'";
+    var sql = "select reqID, name, email, ImgUrl, mobile, Requests.location, Requests.subject, day, Requests.status, Requests.tutor from Student, Requests where Requests.student = Student.email and Requests.status='ACCEPTED' and Requests.tutor='" + tutor + "' and Requests.showR = '0'";
 
     con.query(sql, (err, result) => {
         if (err) {

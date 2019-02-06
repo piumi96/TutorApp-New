@@ -10,11 +10,19 @@ module.exports = {
         clientSecret: '4522170290825fc4f9c1d965327d47a3'
     },
 
-    db: {
+    /* db: {
         host: 'db4free.net',
         user: 'hackerbuddy',
         password: '497ae52b',
         database: 'tutionmaster'
+    },
+    */
+
+    db: {
+        host: 'remotemysql.com',
+        user: 'uVvxLdwZ0T',
+        password: 'XBwU6mDpYH',
+        database: 'uVvxLdwZ0T'
     },
 
     awsdb: {

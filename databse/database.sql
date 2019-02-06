@@ -39,8 +39,7 @@ create table ProfileBoost(
 	email varchar(100),
 	package varchar(20),
 	startDate date,
-	expiryDate date,
-	boostPriority int
+	expiryDate date
 );
 
 create table Rate(
@@ -59,7 +58,7 @@ create table Requests(
 		location varchar(50),
 		subject varchar(50),
 		status varchar(50),
-		show boolean default '1'
+		showR boolean default '1'
 );
 
 create table Review(
@@ -108,12 +107,12 @@ create table Tutor(
 		Location varchar(30),
 		Mobile varchar(10),
 		Subject varchar(30),
-		Rate float,
+		Rate float default '0',
 		ImgUrl varchar(200),
 		Price float,
 		Available_time date,
 		acc_status boolean default '1',
-		priority int default '0'
+		priority int default '500'
 );
 
 create table ViewCount(
@@ -122,13 +121,3 @@ create table ViewCount(
 	dailyReachCount int default '0'
 );
 
-delete from Achievements;
-delete from NewsFeed;
-delete from ProfileBoost;
-delete from Rate;
-delete from Requests;
-delete from Review;
-delete from Student;
-delete from Suggestions;
-delete from Tutor;
-delete from ViewCount;
