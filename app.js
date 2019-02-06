@@ -249,7 +249,7 @@ function NewsFeedCheckup() {
 
 //request update
 function RequestCheckup() {
-    var sql = "update Requests set studentShow='0' where (TIMESTAMPADD(MONTH, 6, Requests.sent_date)) > CURRENT_TIMESTAMP";
+    var sql = "update Requests set showR='0' where (TIMESTAMPADD(MONTH, 6, Requests.sent_date)) > CURRENT_TIMESTAMP";
     con.query(sql, (err, result) => {
         if (err) {
             console.log(err);
